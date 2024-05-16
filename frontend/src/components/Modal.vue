@@ -15,11 +15,9 @@ const {
   pw,
   pwCheck,
   name,
-  token,
-  doSignIn,
-  doSignUp,
+  // token,
   doChangePassword,
-  doWithdraw,
+  // doWithdraw,
   setId,
   setPw,
   setPwCheck,
@@ -34,6 +32,16 @@ defineProps({
 
 const modalClose = () => {
   emit("modalClose");
+};
+
+const doSignIn = () => {
+  userStore.doSignIn();
+  modalClose();
+};
+
+const doSignUp = () => {
+  userStore.doSignUp();
+  modalClose();
 };
 </script>
 

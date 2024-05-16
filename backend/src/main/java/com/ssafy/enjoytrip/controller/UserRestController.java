@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.controller;
 
+import com.ssafy.enjoytrip.model.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,25 +13,22 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/user")
 public class UserRestController {
-    private UserService userService;
+    private final AuthService authService;
+    private final UserService userService;
 
-    public UserRestController(UserService userService) {
+    public UserRestController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody User user, HttpSession session) {
-
-        User result = userService.selectUserById(user);
-
-        if (result == null) {
-            return ResponseEntity.status(401).body("Unauthorized"); // 401 Unauthorized
+    public ResponseEntity<?> signIn(@RequestBody User user) {
+        String token = authService.signIn(user);
+        if (token == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
         }
-
-        session.setAttribute("user", result);
-
-        return ResponseEntity.ok(result); // 200 OK
+        return ResponseEntity.ok(token);
     }
 
     @GetMapping("/signout")
@@ -40,7 +38,7 @@ public class UserRestController {
         return ResponseEntity.ok().build(); // 200 OK
     }
 
-    @PostMapping
+    @PostMapping(("/signup"))
     public ResponseEntity<?> signUP(@RequestBody User user) {
         User result = userService.addUser(user);
 

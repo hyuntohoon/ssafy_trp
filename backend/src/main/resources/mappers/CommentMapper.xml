@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.model.dao.CommentDao">
+
+    <insert id="addComment" useGeneratedKeys="true" keyProperty="commentId">
+        INSERT INTO comment (postId, userId, content, createTimeStamp, updateTimeStamp, likes)
+        VALUES (#{postId}, #{userId}, #{content}, #{createTimeStamp}, #{updateTimeStamp}, #{likes})
+    </insert>
+
+    <select id="getAllComments" resultType="com.ssafy.enjoytrip.model.dto.Comment">
+        SELECT * FROM comment
+    </select>
+
+    <select id="getCommentById" parameterType="int" resultType="com.ssafy.enjoytrip.model.dto.Comment">
+        SELECT * FROM comment WHERE commentId = #{commentId}
+    </select>
+
+    <delete id="deleteComment" parameterType="int">
+        DELETE FROM comment WHERE commentId = #{commentId}
+    </delete>
+
+    <update id="updateComment">
+        UPDATE comment
+        SET postId = #{comment.postId},
+            userId = #{comment.userId},
+            content = #{comment.content},
+            updateTimeStamp = #{comment.updateTimeStamp},
+            likes = #{comment.likes}
+        WHERE commentId = #{commentId}
+    </update>
+
+    <!-- deleteAllComments 메서드 추가 -->
+    <delete id="deleteAllComments">
+        DELETE FROM comment
+    </delete>
+</mapper>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>enjoy trip</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            crossorigin="anonymous"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="./resource/css/style.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+        />
+    </head>
+
+    <body>
+        <div class="pb-5" id="main">
+            <div class="container">
+                <div id="nav"></div>
+                <div class="row">
+                    <div class="col-lg-6" style="padding: 10px">
+                        <div
+                            class="blur-box"
+                            style="
+                                align-items: flex-start;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                            "
+                        >
+                            <div class="site-intro">
+                                <h1>검색으로 찾아보기</h1>
+                                <p>지역, 유형, 키워드로 여행지를 찾아보세요.</p>
+                            </div>
+                            <div class="input-group mb-3">
+                                <button
+                                    class="glass-btn"
+                                    style="width: 50px; height: 50px"
+                                    type="button"
+                                    id="button-keyword"
+                                >
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6" style="padding: 10px">
+                        <div
+                            class="blur-box"
+                            style="
+                                align-items: flex-start;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                            "
+                        >
+                            <div class="site-intro">
+                                <h1>나만의 여행 코스 만들기</h1>
+                                <p>
+                                    여행지를 선택하고 나만의 여행 코스를
+                                    만들어보세요.
+                                </p>
+                            </div>
+                            <div class="input-group mb-3">
+                                <button
+                                    class="glass-btn"
+                                    style="width: 50px; height: 50px"
+                                    type="button"
+                                    id="button-course"
+                                >
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- search bar -->
+                    <div id="search"></div>
+
+                    <!-- map -->
+                    <div
+                        id="map"
+                        style="height: 500px"
+                        class="blur-box main-box container hidden"
+                    >
+                        <!-- <div
+                            id="map"
+                            style="
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 10px;
+                            "
+                        > -->
+                        <!-- </div> -->
+                    </div>
+
+                    <!-- search result -->
+                    <div id="search-result" class="hidden">
+                        <button
+                            id="toggle-map"
+                            class="glass-btn"
+                            style="
+                                width: 100%;
+                                margin-top: 10px;
+                                margin-left: 0px;
+                            "
+                        >
+                            지도 보기/숨기기
+                        </button>
+                        <div
+                            style="border-radius: 20px"
+                            class="blur-box main-box container"
+                        >
+                            <div class="row" id="search-result-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- course -->
+                    <div id="course" class="hidden">
+                        <div class="blur-box main-box container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h1>나만의 여행 코스</h1>
+                                    <div class="input-group mb-3">
+                                        <select
+                                            id="course-select"
+                                            class="form-select glass-select"
+                                            style="margin-left: 0px"
+                                            aria-label="Default select example"
+                                        >
+                                            <option value="0" selected>
+                                                현재 선택된 여행지
+                                            </option></select
+                                        ><input
+                                            id="course-name"
+                                            class="form-control glass-input"
+                                            type="text"
+                                            placeholder="코스 이름"
+                                            aria-label="코스 이름"
+                                        /><button
+                                            class="glass-btn-colored"
+                                            style="
+                                                background-color: rgba(
+                                                    255,
+                                                    0,
+                                                    0,
+                                                    0.508
+                                                );
+                                            "
+                                            type="button"
+                                            id="button-addon2"
+                                            onclick="removeCourse();"
+                                        >
+                                            삭제
+                                        </button>
+                                        <button
+                                            class="glass-btn-colored"
+                                            type="button"
+                                            id="button-addon2"
+                                            onclick="saveCourse();"
+                                        >
+                                            저장
+                                        </button>
+                                    </div>
+                                    <div class="glass-box mb-3">
+                                        <div class="row" id="course-list">
+                                            <div class="col-lg-12">
+                                                <p style="color: white">
+                                                    저장된 여행지가 없습니다.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- vertical spacer -->
+                    <div style="height: 200px; width: 50vh"></div>
+                </div>
+            </div>
+
+            <!-- background img -->
+            <div class="background-holder" id="background-holder">
+                <img
+                    src="./resource/assets/wallpaper.jpg"
+                    id="background-image"
+                    alt="travel"
+                />
+                <div id="cover-left"></div>
+                <div id="cover-right"></div>
+                <div id="cover-bottom"></div>
+                <div id="cover-top"></div>
+            </div>
+
+            <!-- footer -->
+            <div class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="footer-item">
+                                <h1>Enjoy Trip</h1>
+                                <p>당신의 여행을 더 즐겁게</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="footer-item">
+                                <h1>문의하기</h1>
+                                <p>이메일: ssafy@ssafy.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal-->
+        <div class="box" id="modal"></div>
+
+        <!-- toast-->
+        <div
+            class="toast-container position-fixed bottom-0 end-0 p-3"
+            id="toast"
+        >
+            <div
+                id="liveToast"
+                class="toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+            >
+                <div class="toast-header">
+                    <strong id="toast-title" class="me-auto"></strong>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div id="toast-body" class="toast-body"></div>
+            </div>
+        </div>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ab026851bf080d822a7fe40ad6043c2e&libraries=services,clusterer,drawing"
+        ></script>
+        <script type="module" src="./resource/js/app.js"></script>
+    </body>
+</html>

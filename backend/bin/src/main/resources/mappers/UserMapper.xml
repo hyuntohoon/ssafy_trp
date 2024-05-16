@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.model.dao.UserDao">
+
+    <!-- Insert a user -->
+    <insert id="signUp" parameterType="com.ssafy.enjoytrip.model.dto.User">
+        INSERT INTO users (id, pw, name, salt)
+        VALUES (#{id}, #{pw}, #{name}, #{salt})
+    </insert>
+
+    <!-- Select a user by ID -->
+    <select id="signIn" parameterType="com.ssafy.enjoytrip.model.dto.User" resultType="com.ssafy.enjoytrip.model.dto.User">
+        SELECT id, name, pw, salt FROM users WHERE id = #{id}
+    </select>
+
+    <!-- Check if ID exists -->
+    <select id="checkId" resultType="boolean">
+        SELECT COUNT(*) FROM users WHERE id = #{id}
+    </select>
+
+    <!-- Update password -->
+    <update id="changePW" parameterType="com.ssafy.enjoytrip.model.dto.User">
+        UPDATE users SET pw = #{pw} WHERE name = #{name} AND id = #{id}
+    </update>
+
+    <!-- Delete a user -->
+    <delete id="delete" parameterType="com.ssafy.enjoytrip.model.dto.User">
+        DELETE FROM users WHERE id = #{id} AND name = #{name}
+    </delete>
+
+</mapper>

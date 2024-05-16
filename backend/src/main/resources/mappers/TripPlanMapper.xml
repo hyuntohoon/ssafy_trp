@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.model.dao.TripPlanDao">
+
+    <!-- Insert TripPlan -->
+    <insert id="setTripPlan" parameterType="com.ssafy.enjoytrip.model.dto.TripPlan">
+        INSERT INTO trip_plan (name, route, user_id) 
+        VALUES (#{name}, #{route}, #{userId})
+    </insert>
+
+    <!-- Delete TripPlan -->
+    <delete id="delTripPlan" parameterType="int">
+        DELETE FROM trip_plan WHERE id = #{id}
+    </delete>
+
+    <!-- Update TripPlan -->
+    <update id="updateTripPlan" parameterType="com.ssafy.enjoytrip.model.dto.TripPlan">
+        UPDATE trip_plan
+        SET name = #{name}, route = #{route}, user_id = #{userId}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Select TripPlans by UserId -->
+    <select id="getTripPlan" parameterType="java.lang.String" resultType="com.ssafy.enjoytrip.model.dto.TripPlan">
+        SELECT id, name, route, user_id 
+        FROM trip_plan 
+        WHERE user_id = #{userId}
+    </select>
+
+</mapper>

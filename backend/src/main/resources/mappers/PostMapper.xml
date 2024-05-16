@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.model.dao.PostDao">
+
+    <!-- Create a new post -->
+    <insert id="createPost" parameterType="com.ssafy.enjoytrip.model.dto.Post">
+        INSERT INTO post (UserID, Title, Content)
+        VALUES (#{userId}, #{title}, #{content}) 
+    </insert>
+
+    <!-- Retrieve a post by its ID -->
+    <select id="getPost" parameterType="java.lang.String" resultType="com.ssafy.enjoytrip.model.dto.Post">
+        SELECT PostID AS postId, UserID AS userId, Title AS title, Content AS content, CreateTimeStamp AS createTimeStamp, UpdateTimeStamp AS updateTimeStamp
+        FROM post
+        WHERE PostID = #{postId}
+    </select>
+
+    <!-- Retrieve all posts -->
+    <select id="getAllPosts" resultType="com.ssafy.enjoytrip.model.dto.Post">
+        SELECT PostID AS postId, UserID AS userId, Title AS title, Content AS content, CreateTimeStamp AS createTimeStamp, UpdateTimeStamp AS updateTimeStamp
+        FROM post
+    </select>
+
+    <select id="findAllPosts" parameterType="map" resultType="com.ssafy.enjoytrip.model.dto.Post">
+        SELECT * FROM post
+        ORDER BY postId
+        <choose>
+            <when test="order != null and order.equals('ASC')">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+
+    <!-- Update a post -->
+    <update id="updatePost" parameterType="com.ssafy.enjoytrip.model.dto.Post">
+        UPDATE post
+        SET Title = #{title}, Content = #{content}
+        WHERE PostID = #{postId}
+    </update>
+
+    <!-- Delete a post by its ID -->
+    <delete id="deletePost" parameterType="java.lang.String">
+        DELETE FROM post
+        WHERE PostID = #{postId}
+    </delete>
+
+</mapper>

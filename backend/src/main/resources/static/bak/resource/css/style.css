@@ -1,0 +1,468 @@
+/* FILEPATH: /c:/SSAFY/personal/PJT_FE/style.css */
+
+/* Reset default styles */
+
+/* Set a default font family and size */
+
+/* Add some basic styling */
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+p {
+    line-height: 1.5;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    background-color: rgb(0, 0, 0);
+    color: black;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* make body scrollbar design */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.34);
+}
+
+#main {
+    overflow: hidden;
+    min-height: 100vh;
+    padding-bottom: 10vh;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+#background-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    min-height: 100rem;
+    max-height: 100vh;
+    min-width: 100rem;
+    max-width: 100vw;
+    z-index: -1;
+    transform: translateX(-50%);
+}
+
+div.background-holder {
+    position: fixed;
+    left: 50%;
+    height: 100rem;
+    top: 0;
+    z-index: -1;
+    min-height: 100vh;
+    max-height: 100vh;
+    min-width: 100vw;
+    max-width: initial;
+    overflow: hidden;
+    transform: translateX(-50%);
+}
+
+#cover-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15%;
+    height: 100%;
+    background: linear-gradient(to right, rgb(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+#cover-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15%;
+    height: 100%;
+    background: linear-gradient(to left, rgb(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+#cover-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 15%;
+    background: linear-gradient(to top, rgb(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+#cover-top {
+    width: 100vw;
+    height: 15%;
+    background: linear-gradient(to bottom, rgb(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+div.blur-box {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.296);
+    border-radius: 20px;
+    margin-top: 2vh;
+    padding: 20px;
+    animation: slide-fade-in-from-bottom 0.5s ease-in-out 0s 1 normal forwards
+        running;
+}
+
+div.glass-box {
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    margin-top: 2vh;
+    padding: 20px;
+}
+
+@keyframes slide-fade-in-from-bottom {
+    0% {
+        transform: translateY(20%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+div.header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+div.button-wrap {
+    display: flex;
+    justify-content: space-between;
+}
+
+button.glass-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    color: white;
+    font-weight: 100;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+}
+
+/* hover animation */
+button.glass-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    transition: 0.3s;
+}
+
+button.glass-btn:active {
+    background-color: rgba(0, 0, 0, 0.9);
+    transition: 0.1s;
+}
+
+button.glass-btn-colored {
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    color: white;
+    font-weight: 100;
+    font-size: 1rem;
+    background-color: rgba(92, 156, 116, 0.5);
+    border: none;
+}
+
+/* hover animation */
+button.glass-btn-colored:hover {
+    background-color: rgba(92, 156, 116, 0.7);
+    transition: 0.3s;
+}
+
+button.glass-btn-colored:active {
+    background-color: rgba(92, 156, 116, 0.9);
+    transition: 0.1s;
+}
+
+/* glass select */
+select.glass-select {
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    margin-left: 0.5rem;
+    color: white;
+    font-weight: 100;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+}
+
+/* glass input */
+input.glass-input {
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    margin-left: 0.5rem;
+    color: white;
+    font-weight: 100;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+}
+
+input.glass-input::placeholder {
+    color: white;
+}
+
+input.glass-input:enabled {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.map-img {
+    width: 100%;
+    height: 100%;
+}
+
+.map-search-wrap {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: start;
+}
+
+.blurOn {
+    animation: focus-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.blurOff {
+    animation: focus-out 1s forwards;
+}
+
+@keyframes focus-in {
+    0% {
+        -webkit-filter: blur(0px);
+    }
+
+    100% {
+        -webkit-filter: blur(5px);
+    }
+}
+
+@keyframes focus-out {
+    0% {
+        -webkit-filter: blur(5px);
+    }
+
+    100% {
+        -webkit-filter: blur(0px);
+    }
+}
+
+.box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    #background-image {
+        height: 100rem;
+    }
+
+    div.background-holder {
+        height: 100rem;
+    }
+
+    .box {
+        width: 80%;
+    }
+}
+
+.mypage-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+}
+
+.result-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.result-text-holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+    text-align: start;
+    padding-right: 10px;
+}
+
+.result-img-holder {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+}
+
+.result-img {
+    width: 100px;
+    height: 100px;
+}
+
+.search-result-wrapper {
+    padding: 10px;
+    animation: slide-fade-in-from-bottom 0.5s ease-in-out 0s 1 normal forwards
+        running;
+}
+
+#search-result-list {
+    max-height: 100vh;
+    overflow-y: scroll;
+}
+
+.loader {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    margin: 3em;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+    animation: 1s infinite ease-in-out;
+}
+
+.loader:before,
+.loader:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.loader-black {
+    background-color: #2f5d39;
+}
+
+.loader-1 {
+    animation-name: loader1;
+}
+
+@keyframes loader1 {
+    from {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+.text-button {
+    color: #666;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.text-button:hover {
+    color: #333;
+}
+
+.text-button-active {
+    color: #333;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.arrow-button {
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 10px;
+}
+
+.arrow-button:hover {
+    color: #333;
+}
+
+.arrow-button-active {
+    cursor: pointer;
+    color: #333;
+}
+
+.course-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 10px;
+}
+
+.course-item-img {
+    width: 100px;
+    height: 100px;
+}
+
+.course-item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+    text-align: start;
+    padding-right: 10px;
+}

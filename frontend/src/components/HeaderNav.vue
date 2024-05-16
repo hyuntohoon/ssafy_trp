@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { computed } from "vue";
 import { useRouter } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
@@ -10,7 +10,7 @@ import BeforeLoginGroup from "@/components/nav/BeforeLoginGroup.vue";
 const userStore = useUserStore();
 const router = useRouter();
 
-const { isLoggedIn, doSignOut } = userStore;
+const isLoggedIn = computed(() => userStore.isLoggedIn);
 
 const emit = defineEmits(["headerNavEvent"]);
 
@@ -19,7 +19,7 @@ const event = async (data) => {
     emit("headerNavEvent", data);
   } else {
     console.log("logout");
-    await doSignOut();
+    await userStore.doSignOut();
   }
 };
 

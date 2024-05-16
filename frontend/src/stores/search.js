@@ -62,7 +62,7 @@ export const useSearchStore = defineStore(
         }
       } catch (error) {
         console.error(error);
-        return "fail";
+        return [];
       }
     };
 
@@ -85,7 +85,7 @@ export const useSearchStore = defineStore(
         }
       } catch (error) {
         console.error(error);
-        return "fail";
+        return [];
       }
     };
 
@@ -103,7 +103,7 @@ export const useSearchStore = defineStore(
         }
       } catch (error) {
         console.error(error);
-        return "fail";
+        return [];
       }
     };
 

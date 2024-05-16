@@ -9,7 +9,7 @@ import com.ssafy.enjoytrip.model.dto.TripPlan;
 @Mapper
 public interface TripPlanDao {
 
-	public boolean setTripPlan(TripPlan tripPlan);
+	public int setTripPlan(TripPlan tripPlan);
 
 	public List<TripPlan> getTripPlan(String userid);
 
@@ -17,4 +17,5 @@ public interface TripPlanDao {
 
 	public boolean updateTripPlan(TripPlan tripPlan);
 
+	void addPlaceToTripPlan(int id, int contentId);
 }

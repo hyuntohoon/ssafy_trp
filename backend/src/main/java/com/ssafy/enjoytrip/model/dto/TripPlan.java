@@ -1,33 +1,21 @@
 package com.ssafy.enjoytrip.model.dto;
 
+import java.util.List;
+
 public class TripPlan {
 	private int id;
 	private String name;
-	private String route;
 	private String userId;
+	private List<AttractionInfo> places;
 
 	@Override
 	public String toString() {
-		// json
-		return "{\"id\":" + id + ", \"name\":\"" + name + "\", \"route\":" + route + ", \"userId\":\"" + userId
-				+ "\"}";
-	}
-
-	public TripPlan() {
-		super();
-	}
-
-	public TripPlan(int id, String name, String route, String userId) {
-		this.id = id;
-		this.name = name;
-		this.route = route;
-		this.userId = userId;
-	}
-
-	public TripPlan(String name, String route, String userId) {
-		this.name = name;
-		this.route = route;
-		this.userId = userId;
+		return "TripPlan{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", userId='" + userId + '\'' +
+				", places=" + places +
+				'}';
 	}
 
 	public int getId() {
@@ -46,14 +34,6 @@ public class TripPlan {
 		this.name = name;
 	}
 
-	public String getRoute() {
-		return route;
-	}
-
-	public void setRoute(String route) {
-		this.route = route;
-	}
-
 	public String getUserId() {
 		return userId;
 	}
@@ -61,10 +41,19 @@ public class TripPlan {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	 public boolean isValid() {
-	        return name != null && !name.isEmpty() &&
-	               route != null && !route.isEmpty() &&
-	               userId != null;
-	    }
+
+	public List<AttractionInfo> getPlaces() {
+		return places;
+	}
+
+	public void setPlaces(List<AttractionInfo> places) {
+		this.places = places;
+	}
+
+	public TripPlan(int id, String name, String userId, List<AttractionInfo> places) {
+		this.id = id;
+		this.name = name;
+		this.userId = userId;
+		this.places = places;
+	}
 }

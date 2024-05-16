@@ -2,10 +2,12 @@ package com.ssafy.enjoytrip.model.service;
 
 import java.util.List;
 
+import com.ssafy.enjoytrip.model.dto.AttractionInfo;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.enjoytrip.model.dao.TripPlanDao;
 import com.ssafy.enjoytrip.model.dto.TripPlan;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TripPlanServiceImpl implements TripPlanService {
@@ -16,9 +18,18 @@ public class TripPlanServiceImpl implements TripPlanService {
 		this.tripPlanDao = tripPlanDao;
 	}
 
-	@Override
+	@Transactional
 	public boolean setTripPlan(TripPlan tripPlan) {
-		return tripPlanDao.setTripPlan(tripPlan);
+		// TripPlan 저장
+		int rowsAffected = tripPlanDao.setTripPlan(tripPlan);
+		if (rowsAffected > 0) {
+			// TripPlan과 관련된 장소 저장
+			for (AttractionInfo attractionInfo : tripPlan.getPlaces()) {
+				tripPlanDao.addPlaceToTripPlan(tripPlan.getId(), attractionInfo.getContentId());
+			}
+			return true;
+		}
+		return false;
 	}
 
 	@Override

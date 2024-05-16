@@ -4,8 +4,14 @@
 
     <!-- Insert TripPlan -->
     <insert id="setTripPlan" parameterType="com.ssafy.enjoytrip.model.dto.TripPlan">
-        INSERT INTO trip_plan (name, route, user_id) 
-        VALUES (#{name}, #{route}, #{userId})
+        INSERT INTO trip_plan (name, user_id)
+        VALUES (#{name}, #{userId})
+    </insert>
+
+    <!-- Insert relation between TripPlan and Place -->
+    <insert id="addPlaceToTripPlan" parameterType="map">
+        INSERT INTO trip_plan_place (trip_plan_id, content_id)
+        VALUES (#{tripPlanId}, #{contentId})
     </insert>
 
     <!-- Delete TripPlan -->
@@ -16,15 +22,23 @@
     <!-- Update TripPlan -->
     <update id="updateTripPlan" parameterType="com.ssafy.enjoytrip.model.dto.TripPlan">
         UPDATE trip_plan
-        SET name = #{name}, route = #{route}, user_id = #{userId}
+        SET name = #{name}, user_id = #{userId}
         WHERE id = #{id}
     </update>
 
     <!-- Select TripPlans by UserId -->
     <select id="getTripPlan" parameterType="java.lang.String" resultType="com.ssafy.enjoytrip.model.dto.TripPlan">
-        SELECT id, name, route, user_id 
-        FROM trip_plan 
+        SELECT id, name, user_id
+        FROM trip_plan
         WHERE user_id = #{userId}
+    </select>
+
+    <!-- Select places for a TripPlan -->
+    <select id="getPlacesForTripPlan" parameterType="int" resultType="com.ssafy.enjoytrip.model.dto.AttractionInfo">
+        SELECT ai.*
+        FROM attraction_info ai
+                 JOIN trip_plan_place tpp ON ai.content_id = tpp.content_id
+        WHERE tpp.trip_plan_id = #{tripPlanId}
     </select>
 
 </mapper>

@@ -4,15 +4,19 @@ import axios from "axios";
 
 const { VITE_API_BASE_URL } = import.meta.env;
 
-const localAxios = () => {
-  const instance = axios.create({
-    baseURL: VITE_API_BASE_URL,
-    headers: {
-      "Content-Type": "application/json;charset=urf-8",
-    },
-  });
+let instance = axios.create({
+  baseURL: VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json;charset=urf-8",
+  },
+});
 
+const localAxios = () => {
   return instance;
 };
 
-export { localAxios };
+const setAuth = (token) => {
+  instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+};
+
+export { localAxios, setAuth };

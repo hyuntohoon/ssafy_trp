@@ -1,5 +1,6 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
+import { setAuth } from "@/utils/http-commons";
 
 import { signIn, signOut, signUp, changePassword, withdraw } from "@/api/user";
 
@@ -11,6 +12,9 @@ export const useUserStore = defineStore(
     const pwCheck = ref(null);
     const name = ref(null);
     const token = ref(null);
+
+    // Getters
+    const isLoggedIn = computed(() => token.value !== null);
 
     // Setters
     const setId = (value) => (id.value = value);
@@ -24,6 +28,7 @@ export const useUserStore = defineStore(
         const response = await signIn(id.value, pw.value);
         if (response.status === 200) {
           token.value = response.data;
+          setAuth(token.value);
           pw.value = null;
           console.log(token.value);
           return true;
@@ -113,6 +118,8 @@ export const useUserStore = defineStore(
       pwCheck,
       name,
       token,
+
+      isLoggedIn,
 
       setId,
       setPw,

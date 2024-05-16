@@ -11,9 +11,9 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ssafy</groupId>
-	<artifactId>pjt07_buk04_11_09</artifactId>
+	<artifactId>final_buk04_11_09</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>pjt07_buk04_11_09</name>
+	<name>final_buk04_11_09</name>
 	<description>Hello project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
@@ -92,10 +92,6 @@
 			<artifactId>h2</artifactId>
 			<version>2.2.224</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId></groupId>
-			<artifactId></artifactId>
 		</dependency>
 	</dependencies>
 

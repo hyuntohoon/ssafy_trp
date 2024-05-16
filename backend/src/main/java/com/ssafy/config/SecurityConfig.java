@@ -27,10 +27,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/signin", "/user/signup").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().permitAll()
+                ) // 모든 접근 허용
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/user/signin", "/user/signup").permitAll()
+//                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -24,7 +24,6 @@ public class AreaServiceImpl implements AreaService {
 
 	@Override
 	public List<Gugun> getGugunList(int sidoCode) {
-		System.out.println(areaDao.getGugunList(sidoCode));
 		return areaDao.getGugunList(sidoCode);
 	}
 

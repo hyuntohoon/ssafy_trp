@@ -28,7 +28,8 @@ public class UserServiceImpl implements UserService {
 
         user.setPw(hashedPw);
         user.setSalt(salt);
-        return userDao.addUser(user);
+        userDao.addUser(user);
+        return userDao.selectUserById(user);
     }
 
 

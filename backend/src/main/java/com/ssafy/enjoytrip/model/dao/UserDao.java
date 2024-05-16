@@ -7,7 +7,7 @@ import com.ssafy.enjoytrip.model.dto.User;
 @Mapper
 public interface UserDao {
 
-	public User addUser(User user);
+	public int addUser(User user);
 
 	public User selectUserById(User user);
 

@@ -89,12 +89,29 @@ export const useSearchStore = defineStore(
       }
     };
 
-    const search = () => {
-      const sidoCode = sidoData.value.find((item) => item.sidoName === sido.value).sidoCode;
-      const gugunCode = gugunData.value.find((item) => item.gugunName === gugun.value).gugunCode;
-      const typeCode = typeData.value.find((item) => item.typeName === type.value).typeCode;
+    const search = async () => {
+      let sidoCode = null;
+      sidoData.value.forEach((item) => {
+        if (item.sidoName === sido.value) {
+          sidoCode = item.sidoCode;
+        }
+      });
+      let gugunCode = null;
+      gugunData.value.forEach((item) => {
+        if (item.gugunName === gugun.value) {
+          gugunCode = item.gugunCode;
+        }
+      });
+      let typeCode = null;
+      typeData.value.forEach((item) => {
+        if (item.typeName === type.value) {
+          typeCode = item.typeCode;
+        }
+      });
       try {
-        const response = getAttractions(sidoCode, gugunCode, typeCode, keyword.value);
+        console.log(sidoCode, gugunCode, typeCode, keyword.value);
+        const response = await getAttractions(sidoCode, gugunCode, typeCode, keyword.value);
+        console.log(response);
         if (response.status === 200) {
           console.log(response.data);
           return response.data;

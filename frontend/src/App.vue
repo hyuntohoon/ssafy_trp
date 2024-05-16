@@ -27,7 +27,7 @@ const modalClose = () => {
       <RouterView />
     </div>
     <Wallpaper />
-    <Modal v-if="modalShow" :modal="modal" @modalClose="modalClose" />
+    <Modal style="z-index: 1" v-if="modalShow" :modal="modal" @modalClose="modalClose" />
     <div style="height: 200px; width: 50vh"></div>
     <Footer />
   </div>

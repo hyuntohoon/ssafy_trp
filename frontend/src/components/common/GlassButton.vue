@@ -18,42 +18,40 @@ defineProps({
 button.glass-btn {
   padding: 0.5rem 1rem;
   border-radius: 30px;
-  color: white;
-  font-weight: 100;
+  font-weight: bold;
   font-size: 1rem;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--secondary-color);
   border: none;
 }
 
 /* hover animation */
 button.glass-btn:hover {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: var(--secondary-color-dark-9);
   transition: 0.3s;
 }
 
 button.glass-btn:active {
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: var(--secondary-color-dark-7);
   transition: 0.1s;
 }
 
 button.glass-btn-colored {
   padding: 0.5rem 1rem;
   border-radius: 30px;
-  color: white;
-  font-weight: 100;
+  font-weight: bold;
   font-size: 1rem;
-  background-color: rgba(92, 156, 116, 0.5);
+  background-color: var(--accent-color);
   border: none;
 }
 
 /* hover animation */
 button.glass-btn-colored:hover {
-  background-color: rgba(92, 156, 116, 0.7);
+  background-color: var(--accent-color-dark-9);
   transition: 0.3s;
 }
 
 button.glass-btn-colored:active {
-  background-color: rgba(92, 156, 116, 0.9);
+  background-color: var(--accent-color-dark-7);
   transition: 0.1s;
 }
 </style>

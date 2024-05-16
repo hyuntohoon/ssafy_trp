@@ -24,12 +24,75 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  /* background-color: #87bfff; */
-  /* gradient */
-  background: linear-gradient(0deg, #5e9add, #5ad589);
+  background: linear-gradient(0deg, var(--primary-color), var(--secondary-color));
 }
 
 ::-webkit-scrollbar-track {
   /* border-radius: 10px; */
   background-color: rgba(0, 0, 0, 0.34);
+}
+
+/* color settings global var */
+:root {
+  --primary-color-dark-1: #111417;
+  --primary-color-dark-2: #22282f;
+  --primary-color-dark-3: #333c47;
+  --primary-color-dark-4: #44515f;
+  --primary-color-dark-5: #566577;
+  --primary-color-dark-6: #67798e;
+  --primary-color-dark-7: #788ea6;
+  --primary-color-dark-8: #89a2be;
+  --primary-color-dark-9: #9ab6d6;
+  --primary-color: #accbee;
+  --primary-color-light-1: #b4d0ef;
+  --primary-color-light-2: #bcd5f1;
+  --primary-color-light-3: #c4daf3;
+  --primary-color-light-4: #cddff4;
+  --primary-color-light-5: #d5e5f6;
+  --primary-color-light-6: #ddeaf8;
+  --primary-color-light-7: #e6eff9;
+  --primary-color-light-8: #eef4fb;
+  --primary-color-light-9: #f6f9fd;
+
+  --secondary-color-dark-1: #141711;
+  --secondary-color-dark-2: #282f22;
+  --secondary-color-dark-3: #3c4733;
+  --secondary-color-dark-4: #515f44;
+  --secondary-color-dark-5: #657756;
+  --secondary-color-dark-6: #798e67;
+  --secondary-color-dark-7: #8ea678;
+  --secondary-color-dark-8: #a2be89;
+  --secondary-color-dark-9: #b6d69a;
+  --secondary-color: #cbeeac;
+  --secondary-color-light-1: #d0efb4;
+  --secondary-color-light-2: #d5f1bc;
+  --secondary-color-light-3: #daf3c4;
+  --secondary-color-light-4: #dff4cd;
+  --secondary-color-light-5: #e5f6d5;
+  --secondary-color-light-6: #eaf8dd;
+  --secondary-color-light-7: #eff9e6;
+  --secondary-color-light-8: #f4fbee;
+  --secondary-color-light-9: #f9fdf6;
+
+  --accent-color: #eeaccb;
+
+  --accent-color-dark-1: #171114;
+  --accent-color-dark-2: #2f2228;
+  --accent-color-dark-3: #47333c;
+  --accent-color-dark-4: #5f4451;
+  --accent-color-dark-5: #775665;
+  --accent-color-dark-6: #8e6779;
+  --accent-color-dark-7: #a6788e;
+  --accent-color-dark-8: #be89a2;
+  --accent-color-dark-9: #d69ab6;
+  --accent-color: #eeaccb;
+  --accent-color-light-1: #efb4d0;
+  --accent-color-light-2: #f1bcd5;
+  --accent-color-light-3: #f3c4da;
+  --accent-color-light-4: #f4cddf;
+  --accent-color-light-5: #f6d5e5;
+  --accent-color-light-6: #f8ddea;
+  --accent-color-light-7: #f9e6ef;
+  --accent-color-light-8: #fbeef4;
+  --accent-color-light-9: #fdf6f9;
 }

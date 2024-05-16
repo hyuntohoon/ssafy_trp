@@ -6,19 +6,29 @@
     <!-- Create a new post -->
     <insert id="createPost" parameterType="com.ssafy.enjoytrip.model.dto.Post">
         INSERT INTO post (UserID, Title, Content)
-        VALUES (#{userId}, #{title}, #{content}) 
+        VALUES (#{userId}, #{title}, #{content})
     </insert>
 
     <!-- Retrieve a post by its ID -->
     <select id="getPost" parameterType="java.lang.String" resultType="com.ssafy.enjoytrip.model.dto.Post">
-        SELECT PostID AS postId, UserID AS userId, Title AS title, Content AS content, CreateTimeStamp AS createTimeStamp, UpdateTimeStamp AS updateTimeStamp
+        SELECT PostID          AS postId,
+               UserID          AS userId,
+               Title           AS title,
+               Content         AS content,
+               CreateTimeStamp AS createTimeStamp,
+               UpdateTimeStamp AS updateTimeStamp
         FROM post
         WHERE PostID = #{postId}
     </select>
 
     <!-- Retrieve all posts -->
     <select id="getAllPosts" resultType="com.ssafy.enjoytrip.model.dto.Post">
-        SELECT PostID AS postId, UserID AS userId, Title AS title, Content AS content, CreateTimeStamp AS createTimeStamp, UpdateTimeStamp AS updateTimeStamp
+        SELECT PostID          AS postId,
+               UserID          AS userId,
+               Title           AS title,
+               Content         AS content,
+               CreateTimeStamp AS createTimeStamp,
+               UpdateTimeStamp AS updateTimeStamp
         FROM post
     </select>
 
@@ -36,18 +46,34 @@
     </select>
 
 
-
     <!-- Update a post -->
     <update id="updatePost" parameterType="com.ssafy.enjoytrip.model.dto.Post">
         UPDATE post
-        SET Title = #{title}, Content = #{content}
+        SET Title   = #{title},
+            Content = #{content}
         WHERE PostID = #{postId}
     </update>
 
     <!-- Delete a post by its ID -->
     <delete id="deletePost" parameterType="java.lang.String">
-        DELETE FROM post
+        DELETE
+        FROM post
         WHERE PostID = #{postId}
     </delete>
 
+    <select id="searchPosts" resultType="com.ssafy.enjoytrip.model.dto.Post">
+        SELECT * FROM post
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="userID != null and userID != ''">
+            AND userID LIKE CONCAT('%', #{userID}, '%')
+        </if>
+        <if test="content != null and content != ''">
+            AND content LIKE CONCAT('%', #{content}, '%')
+        </if>
+        ORDER BY CreateTimeStamp DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
 </mapper>

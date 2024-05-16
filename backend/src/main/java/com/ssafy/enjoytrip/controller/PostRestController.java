@@ -79,4 +79,17 @@ public class PostRestController {
         List<Post> posts = postService.getPosts(order, page, pageSize);
         return ResponseEntity.ok(posts);
     }
+
+    // 게시글 검색
+    @GetMapping("/search")
+    public ResponseEntity<List<Post>> searchPosts(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String UserID,
+            @RequestParam(required = false) String content,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        System.out.println(UserID);
+        List<Post> posts = postService.searchPosts(title, UserID, content, page, pageSize);
+        return ResponseEntity.ok(posts);
+    }
 }

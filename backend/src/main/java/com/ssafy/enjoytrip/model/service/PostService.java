@@ -16,4 +16,6 @@ public interface PostService {
     public List<Post> getAllPosts();
 
     public List<Post> getPosts(String order, int page, int numItems);
+
+    public List<Post> searchPosts(String title, String UserID, String content, int page, int pageSize);
 }

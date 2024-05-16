@@ -1,10 +1,39 @@
 <script setup>
-import { KakaoMap } from "vue3-kakao-maps";
+import { ref } from "vue";
+import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
 const coordinate = {
   lat: 37.566826,
   lng: 126.9786567,
 };
+
+const markers = ref([
+  {
+    lat: 37.566826,
+    lng: 126.9786567,
+    title: "서울특별시청",
+  },
+  {
+    lat: 37.566826,
+    lng: 126.9786567,
+    title: "서울특별시청",
+  },
+  {
+    lat: 37.566826,
+    lng: 126.9786567,
+    title: "서울특별시청",
+  },
+  {
+    lat: 37.566826,
+    lng: 126.9786567,
+    title: "서울특별시청",
+  },
+  {
+    lat: 37.566826,
+    lng: 126.9786567,
+    title: "서울특별시청",
+  },
+]);
 </script>
 
 <template>
@@ -15,6 +44,11 @@ const coordinate = {
     :lat="coordinate.lat"
     :lng="coordinate.lng"
     :draggable="true">
+    <KakaoMapMarker
+      v-for="(marker, index) in markers"
+      :key="index"
+      :lat="marker.lat"
+      :lng="marker.lng"></KakaoMapMarker>
   </KakaoMap>
 </template>
 

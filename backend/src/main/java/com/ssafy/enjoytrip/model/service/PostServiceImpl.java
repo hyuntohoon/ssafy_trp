@@ -47,4 +47,11 @@ public class PostServiceImpl implements PostService{
         RowBounds rowBounds = new RowBounds(offset, numItems);
         return postDao.findAllPosts(order, rowBounds);
     }
+
+    @Override
+    public List<Post> searchPosts(String title, String UserID, String content, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        System.out.println(UserID);
+        return postDao.searchPosts(title, UserID, content, offset, pageSize);
+    }
 }

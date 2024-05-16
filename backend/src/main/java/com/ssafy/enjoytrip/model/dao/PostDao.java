@@ -19,5 +19,7 @@ public interface PostDao {
 
     public List<Post> getAllPosts();
 
-    List<Post> findAllPosts(@Param("order") String order, RowBounds rowBounds);
+    public List<Post> findAllPosts(@Param("order") String order, RowBounds rowBounds);
+
+    public List<Post> searchPosts(String title, String userID, String content, int offset, int pageSize);
 }

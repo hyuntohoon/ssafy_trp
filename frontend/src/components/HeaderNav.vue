@@ -3,7 +3,6 @@ import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
-import { signOut } from "@/api/user";
 
 import AfterLoginGroup from "@/components/nav/AfterLoginGroup.vue";
 import BeforeLoginGroup from "@/components/nav/BeforeLoginGroup.vue";
@@ -11,34 +10,16 @@ import BeforeLoginGroup from "@/components/nav/BeforeLoginGroup.vue";
 const userStore = useUserStore();
 const router = useRouter();
 
-const isLoggedIn = ref(userStore.isLoggedIn);
-
-watch(
-  () => userStore.isLoggedIn,
-  (value) => {
-    isLoggedIn.value = value;
-  }
-);
+const { isLoggedIn, doSignOut } = userStore;
 
 const emit = defineEmits(["headerNavEvent"]);
 
-const event = (data) => {
+const event = async (data) => {
   if (data !== "logout") {
     emit("headerNavEvent", data);
   } else {
-    const success = (response) => {
-      if (response.status !== 200) {
-        alert("문제가 발생했습니다.");
-        return;
-      } else {
-        userStore.userId = null;
-        userStore.userName = null;
-      }
-    };
-    const fail = (error) => {
-      alert("문제가 발생했습니다 : " + error);
-    };
-    signOut(success, fail);
+    console.log("logout");
+    await doSignOut();
   }
 };
 
@@ -64,8 +45,7 @@ const returnHome = () => {
   border-radius: 20px;
   margin: 2vh 0;
   padding: 20px;
-  animation: slide-fade-in-from-bottom 0.5s ease-in-out 0s 1 normal forwards
-    running;
+  animation: slide-fade-in-from-bottom 0.5s ease-in-out 0s 1 normal forwards running;
 }
 .header-box {
   display: flex;

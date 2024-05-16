@@ -15,9 +15,10 @@ import BoardEdit from "@/components/board/BoardEdit.vue";
 import { useUserStore } from "@/stores/user";
 
 const onlyAuthUser = (to, from, next) => {
-  const userStore = useUserStore();
-  if (!userStore.getAccessToken) {
+  const { token } = useUserStore();
+  if (!token.value) {
     alert("로그인이 필요합니다.");
+    next({ name: "home" });
     return;
   }
   next();

@@ -41,7 +41,7 @@ public class TripPlanRestController {
     }
 
     @PostMapping
-    public ResponseEntity<TripPlan> setTripPlan(@RequestBody TripPlanRequest tripPlanRequest) {
+    public ResponseEntity<TripPlan> createTripPlan(@RequestBody TripPlanRequest tripPlanRequest) {
         TripPlan tripPlan = tripPlanService.setTripPlan(tripPlanRequest.getName(), tripPlanRequest.getUserId(), tripPlanRequest.getAttractionIds());
         if (tripPlan == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -59,7 +59,7 @@ public class TripPlanRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delTripPlan(@PathVariable int id) {
+    public ResponseEntity<Void> deleteTripPlan(@PathVariable int id) {
         boolean deleted = tripPlanService.delTripPlan(id);
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.controller;
 
+import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,19 +10,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
 import com.ssafy.enjoytrip.model.dto.TripPlan;
+import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.service.TripPlanService;
 
-@RestController
-@RequestMapping("/tripplan") 
-public class TripPlanRestController {
-	private TripPlanService tripPlanService;
+import java.util.List;
 
-	public TripPlanRestController(TripPlanService tripPlanService) {
-		this.tripPlanService = tripPlanService;
-	}
+@RestController
+@RequestMapping("/tripplan")
+public class TripPlanRestController {
+    private TripPlanService tripPlanService;
+
+    public TripPlanRestController(TripPlanService tripPlanService) {
+        this.tripPlanService = tripPlanService;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<TripPlanWithPlaces> getTripPlanById(@PathVariable int id) {

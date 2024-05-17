@@ -3,13 +3,13 @@ package com.ssafy.enjoytrip.controller;
 import com.ssafy.enjoytrip.model.dto.TripPlan;
 import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
-import com.ssafy.enjoytrip.model.dto.AttractionInfo;
 import com.ssafy.enjoytrip.model.service.TripPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tripplan")
@@ -23,27 +23,47 @@ public class TripPlanRestController {
     }
 
     @GetMapping("/{id}")
-    public TripPlanWithPlaces getTripPlanById(@PathVariable int id) {
-        return tripPlanService.getTripPlanById(id);
+    public ResponseEntity<TripPlanWithPlaces> getTripPlanById(@PathVariable int id) {
+        TripPlanWithPlaces tripPlan = tripPlanService.getTripPlanById(id);
+        if (tripPlan == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(tripPlan);
     }
 
     @GetMapping("/user/{userId}")
-    public List<TripPlanWithPlaces> getTripPlansWithPlacesByUserId(@PathVariable String userId) {
-        return tripPlanService.getTripPlansWithPlacesByUserId(userId);
+    public ResponseEntity<List<TripPlanWithPlaces>> getTripPlansWithPlacesByUserId(@PathVariable String userId) {
+        List<TripPlanWithPlaces> tripPlans = tripPlanService.getTripPlansWithPlacesByUserId(userId);
+        if (tripPlans == null || tripPlans.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(tripPlans);
     }
 
     @PostMapping
-    public TripPlan setTripPlan(@RequestBody TripPlanRequest tripPlanRequest) {
-        return tripPlanService.setTripPlan(tripPlanRequest.getName(), tripPlanRequest.getUserId(), tripPlanRequest.getAttractionIds());
+    public ResponseEntity<TripPlan> setTripPlan(@RequestBody TripPlanRequest tripPlanRequest) {
+        TripPlan tripPlan = tripPlanService.setTripPlan(tripPlanRequest.getName(), tripPlanRequest.getUserId(), tripPlanRequest.getAttractionIds());
+        if (tripPlan == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(tripPlan);
     }
 
     @PutMapping("/{id}")
-    public boolean updateTripPlan(@PathVariable int id, @RequestBody TripPlanRequest tripPlanRequest) {
-        return tripPlanService.updateTripPlan(id, tripPlanRequest);
+    public ResponseEntity<Void> updateTripPlan(@PathVariable int id, @RequestBody TripPlanRequest tripPlanRequest) {
+        boolean updated = tripPlanService.updateTripPlan(id, tripPlanRequest);
+        if (!updated) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public boolean delTripPlan(@PathVariable int id) {
-        return tripPlanService.delTripPlan(id);
+    public ResponseEntity<Void> delTripPlan(@PathVariable int id) {
+        boolean deleted = tripPlanService.delTripPlan(id);
+        if (!deleted) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok().build();
     }
 }

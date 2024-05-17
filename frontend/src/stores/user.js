@@ -1,6 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { setAuth } from "@/utils/http-commons";
+import Swal from "sweetalert2";
 
 import { signIn, signOut, signUp, changePassword, withdraw } from "@/api/user";
 
@@ -33,9 +34,14 @@ export const useUserStore = defineStore(
           console.log(token.value);
           return true;
         } else {
-          return false;
+          throw new Error();
         }
       } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "로그인 실패",
+          text: "아이디와 비밀번호를 확인해주세요.",
+        });
         return false;
       }
     };
@@ -47,9 +53,14 @@ export const useUserStore = defineStore(
           flush();
           return true;
         } else {
-          return false;
+          throw new Error();
         }
       } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "로그아웃 실패",
+          text: "다시 시도해주세요.",
+        });
         return false;
       }
     };
@@ -57,7 +68,11 @@ export const useUserStore = defineStore(
     const doSignUp = async () => {
       console.log("signUp");
       if (pw.value !== pwCheck.value) {
-        return false;
+        Swal.fire({
+          icon: "warning",
+          title: "비밀번호가 일치하지 않습니다.",
+          text: "다시 확인해주세요.",
+        });
       }
 
       try {
@@ -66,9 +81,14 @@ export const useUserStore = defineStore(
           flush();
           return true;
         } else {
-          return false;
+          throw new Error();
         }
       } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "회원가입 실패",
+          text: "다시 시도해주세요.",
+        });
         return false;
       }
     };
@@ -84,9 +104,14 @@ export const useUserStore = defineStore(
           flush();
           return true;
         } else {
-          return false;
+          throw new Error();
         }
       } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "비밀번호 변경 실패",
+          text: "다시 시도해주세요.",
+        });
         return false;
       }
     };
@@ -98,9 +123,14 @@ export const useUserStore = defineStore(
           flush();
           return true;
         } else {
-          return false;
+          throw new Error();
         }
       } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "회원탈퇴 실패",
+          text: "다시 시도해주세요.",
+        });
         return false;
       }
     };

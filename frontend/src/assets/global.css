@@ -18,6 +18,11 @@ body {
   position: relative;
 }
 
+body.swal2-shown > [aria-hidden="true"] {
+  transition: 0.1s filter;
+  filter: blur(3px);
+}
+
 /* make body scrollbar design */
 ::-webkit-scrollbar {
   width: 10px;

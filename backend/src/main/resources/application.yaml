@@ -15,7 +15,7 @@ spring:
       auto-commit: true
 
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/ssafytrip?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+      jdbc-url: jdbc:mysql://192.168.204.102:3306/ssafytrip?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
       username: ssafy
       password: ssafy
 

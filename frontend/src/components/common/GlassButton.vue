@@ -20,18 +20,19 @@ button.glass-btn {
   border-radius: 30px;
   font-weight: bold;
   font-size: 1rem;
-  background-color: var(--secondary-color);
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
   border: none;
 }
 
 /* hover animation */
 button.glass-btn:hover {
-  background-color: var(--secondary-color-dark-9);
+  background-color: rgba(0, 0, 0, 0.7);
   transition: 0.3s;
 }
 
 button.glass-btn:active {
-  background-color: var(--secondary-color-dark-7);
+  background-color: rgba(0, 0, 0, 0.9);
   transition: 0.1s;
 }
 
@@ -40,18 +41,18 @@ button.glass-btn-colored {
   border-radius: 30px;
   font-weight: bold;
   font-size: 1rem;
-  background-color: var(--accent-color);
+  background-color: rgba(105, 255, 218, 0.5);
   border: none;
 }
 
 /* hover animation */
 button.glass-btn-colored:hover {
-  background-color: var(--accent-color-dark-9);
+  background-color: rgba(105, 255, 218, 0.7);
   transition: 0.3s;
 }
 
 button.glass-btn-colored:active {
-  background-color: var(--accent-color-dark-7);
+  background-color: rgba(105, 255, 218, 0.9);
   transition: 0.1s;
 }
 </style>

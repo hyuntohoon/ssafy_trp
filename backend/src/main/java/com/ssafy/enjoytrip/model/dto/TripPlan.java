@@ -1,12 +1,17 @@
 package com.ssafy.enjoytrip.model.dto;
 
-import java.util.List;
-
 public class TripPlan {
 	private int id;
 	private String name;
 	private String userId;
-	private List<AttractionInfo> places;
+
+	public TripPlan(int id, String name, String userId) {
+		this.id = id;
+		this.name = name;
+		this.userId = userId;
+	}
+
+	public TripPlan() {}
 
 	@Override
 	public String toString() {
@@ -14,7 +19,6 @@ public class TripPlan {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", userId='" + userId + '\'' +
-				", places=" + places +
 				'}';
 	}
 
@@ -40,20 +44,5 @@ public class TripPlan {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public List<AttractionInfo> getPlaces() {
-		return places;
-	}
-
-	public void setPlaces(List<AttractionInfo> places) {
-		this.places = places;
-	}
-
-	public TripPlan(int id, String name, String userId, List<AttractionInfo> places) {
-		this.id = id;
-		this.name = name;
-		this.userId = userId;
-		this.places = places;
 	}
 }

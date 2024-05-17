@@ -2,49 +2,69 @@ package com.ssafy.enjoytrip.model.service;
 
 import java.util.List;
 
-import com.ssafy.enjoytrip.model.dto.AttractionInfo;
+import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
+import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.enjoytrip.model.dao.TripPlanDao;
 import com.ssafy.enjoytrip.model.dto.TripPlan;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TripPlanServiceImpl implements TripPlanService {
 
-	private TripPlanDao tripPlanDao;
+	private final TripPlanDao tripPlanDao;
 
 	public TripPlanServiceImpl(TripPlanDao tripPlanDao) {
 		this.tripPlanDao = tripPlanDao;
 	}
 
+	@Override
 	@Transactional
-	public boolean setTripPlan(TripPlan tripPlan) {
-		// TripPlan 저장
-		int rowsAffected = tripPlanDao.setTripPlan(tripPlan);
-		if (rowsAffected > 0) {
-			// TripPlan과 관련된 장소 저장
-			for (AttractionInfo attractionInfo : tripPlan.getPlaces()) {
-				tripPlanDao.addPlaceToTripPlan(tripPlan.getId(), attractionInfo.getContentId());
-			}
-			return true;
+	public TripPlanWithPlaces getTripPlanById(int id) {
+		List<TripPlanWithPlaces> tripPlans = tripPlanDao.getTripPlanById(id);
+		if (!tripPlans.isEmpty()) {
+			return tripPlans.get(0);
 		}
-		return false;
+		return null;
 	}
 
 	@Override
-	public List<TripPlan> getTripPlan(String userId) {
-		return tripPlanDao.getTripPlan(userId);
+	@Transactional
+	public List<TripPlanWithPlaces> getTripPlansWithPlacesByUserId(String userId) {
+		return tripPlanDao.getTripPlansWithPlacesByUserId(userId);
 	}
 
 	@Override
-	public boolean updateTripPlan(TripPlan tripPlan) {
-		return tripPlanDao.updateTripPlan(tripPlan);
+	@Transactional
+	public TripPlan setTripPlan(String name, String userId, List<Integer> attractionIds) {
+		TripPlan tripPlan = new TripPlan();
+		tripPlan.setName(name);
+		tripPlan.setUserId(userId);
+		tripPlanDao.setTripPlan(tripPlan);
+		int tripPlanId = tripPlan.getId();
+		for (int order = 0; order < attractionIds.size(); order++) {
+			int attractionId = attractionIds.get(order);
+			tripPlanDao.addPlaceToTripPlan(tripPlanId, attractionId, order);
+		}
+		return tripPlan;
+	}
+
+	@Override
+	@Transactional
+	public boolean updateTripPlan(int id, TripPlanRequest tripPlanRequest) {
+		tripPlanDao.updateTripPlan(id, tripPlanRequest.getName(), tripPlanRequest.getUserId());
+		tripPlanDao.deletePlacesFromTripPlan(id);
+		for (int order = 0; order < tripPlanRequest.getAttractionIds().size(); order++) {
+			int attractionId = tripPlanRequest.getAttractionIds().get(order);
+			tripPlanDao.addPlaceToTripPlan(id, attractionId, order);
+		}
+		return true;
 	}
 
 	@Override
 	public boolean delTripPlan(int id) {
-		return delTripPlan(id);
+		tripPlanDao.delTripPlan(id);
+		return true;
 	}
-
 }

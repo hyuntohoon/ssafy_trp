@@ -9,11 +9,14 @@ import { writeBoard } from "@/api/board";
 import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
+
+import { storeToRefs } from "pinia";
+const userId = storeToRefs(userStore).id;
+
 const router = useRouter();
 
-const userId = ref(userStore.getUserId);
-
 const article = ref({
+  userId: userId.value,
   title: "",
   content: "",
 });
@@ -34,13 +37,7 @@ const write = () => {
     alert("문제가 발생했습니다 : " + error);
     console.log(error);
   };
-  writeBoard(
-    userId.value,
-    article.value.title,
-    article.value.content,
-    success,
-    fail
-  );
+  writeBoard(userId.value, article.value.title, article.value.content, success, fail);
 };
 </script>
 
@@ -50,14 +47,12 @@ const write = () => {
     <GlassInput
       placeHolder="제목을 입력하세요"
       :value="article.title"
-      @input="article.title = $event.target.value"
-    />
+      @input="article.title = $event.target.value" />
     <div style="margin-bottom: 1rem"></div>
     <GlassTextArea
       placeHolder="내용을 입력하세요"
       :value="article.content"
-      @input="article.content = $event.target.value"
-    />
+      @input="article.content = $event.target.value" />
     <div style="margin-bottom: 1rem"></div>
     <GlassButton @click="write">
       <template v-slot:content>

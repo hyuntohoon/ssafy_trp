@@ -59,7 +59,11 @@ public class TripPlanRestController {
     }
 
     @DeleteMapping("/{id}")
-    public boolean delTripPlan(@PathVariable int id) {
-        return tripPlanService.delTripPlan(id);
+    public ResponseEntity<Void> delTripPlan(@PathVariable int id) {
+        boolean deleted = tripPlanService.delTripPlan(id);
+        if (!deleted) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok().build();
     }
 }

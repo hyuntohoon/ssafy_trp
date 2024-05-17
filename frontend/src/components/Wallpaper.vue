@@ -49,7 +49,7 @@ body {
 .wrapper {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -62,7 +62,7 @@ body {
 .wave {
   width: 200vw;
   height: 400vh;
-  position: absolute;
+  position: fixed;
   top: 290vh;
   left: 50%;
   margin-left: -100%;

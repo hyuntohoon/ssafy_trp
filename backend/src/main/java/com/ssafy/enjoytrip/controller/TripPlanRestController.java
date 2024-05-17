@@ -53,16 +53,16 @@ public class TripPlanRestController {
         }
     }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateTripPlan(@PathVariable int id, @RequestBody TripPlan tripPlan) {
-		tripPlan.setId(id);
-		boolean result = tripPlanService.updateTripPlan(tripPlan);
-		if (result) {
-			return ResponseEntity.ok(result); // 200
-		} else {
-			return ResponseEntity.noContent().build(); // 204
-		}
-	}
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTripPlan(@PathVariable int id, @RequestBody TripPlan tripPlan) {
+        tripPlan.setId(id);
+        boolean result = tripPlanService.updateTripPlan(tripPlan);
+        if (result) {
+            return ResponseEntity.ok(result); // 200
+        } else {
+            return ResponseEntity.noContent().build(); // 204
+        }
+    }
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delTripPlan(@PathVariable int id) {

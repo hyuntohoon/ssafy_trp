@@ -23,15 +23,16 @@ public class TripPlanRestController {
 		this.tripPlanService = tripPlanService;
 	}
 
-	@GetMapping("/{userId}")
-	public ResponseEntity<?> getTripPlan(@PathVariable String userId) {
-		List<TripPlan> tripPlans = tripPlanService.getTripPlan(userId);
-		if (!tripPlans.isEmpty()) {
-			return ResponseEntity.ok(tripPlans); // 200
-		} else {
-			return ResponseEntity.noContent().build(); // 204
-		}
-	}
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TripPlanWithPlaces>> getTripPlansByUserId(@PathVariable String userId) {
+        List<TripPlanWithPlaces> getTripPlansByUserId = tripPlanService.getTripPlansWithPlacesByUserId(userId);
+        if (getTripPlansByUserId != null && !getTripPlansByUserId.isEmpty()) {
+            return ResponseEntity.ok(getTripPlansByUserId);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 
 	@PostMapping("")
 	public ResponseEntity<TripPlan> setTripPlan(@RequestBody TripPlan tripPlan) {

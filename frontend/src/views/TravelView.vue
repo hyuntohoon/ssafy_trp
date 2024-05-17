@@ -3,6 +3,7 @@ import TravelMap from "@/components/travel/TravelMap.vue";
 import SearchArea from "@/components/travel/SearchArea.vue";
 import SearchInput from "@/components/travel/SearchInput.vue";
 import SearchResult from "@/components/travel/SearchResult.vue";
+import TemporalCourse from "@/components/travel/TemporalCourse.vue";
 
 import Navigator from "@/components/Navigator.vue";
 </script>
@@ -24,6 +25,7 @@ import Navigator from "@/components/Navigator.vue";
         <SearchResult />
       </div>
     </div>
+    <TemporalCourse />
   </div>
 </template>
 

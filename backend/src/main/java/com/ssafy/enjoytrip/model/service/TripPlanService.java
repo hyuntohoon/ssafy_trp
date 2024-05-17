@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.model.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ssafy.enjoytrip.model.dto.TripPlan;
 import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
@@ -13,7 +14,7 @@ public interface TripPlanService {
 
     public boolean updateTripPlan(int id, TripPlanRequest tripPlanRequest);
 
-    TripPlanWithPlaces getTripPlanById(int id);
+    Optional<TripPlanWithPlaces> getTripPlanById(int id);
 
     List<TripPlanWithPlaces> getTripPlansWithPlacesByUserId(String userId);
 }

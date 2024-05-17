@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tripplan")
@@ -24,11 +25,11 @@ public class TripPlanRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TripPlanWithPlaces> getTripPlanById(@PathVariable int id) {
-        TripPlanWithPlaces tripPlan = tripPlanService.getTripPlanById(id);
+        Optional<TripPlanWithPlaces> tripPlan = tripPlanService.getTripPlanById(id);
         if (tripPlan == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return ResponseEntity.ok(tripPlan);
+        return  ResponseEntity.ok(tripPlan.get());
     }
 
     @GetMapping("/user/{userId}")

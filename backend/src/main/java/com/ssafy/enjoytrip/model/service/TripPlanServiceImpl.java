@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.model.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
@@ -21,12 +22,12 @@ public class TripPlanServiceImpl implements TripPlanService {
 
 	@Override
 	@Transactional
-	public TripPlanWithPlaces getTripPlanById(int id) {
+	public Optional<TripPlanWithPlaces> getTripPlanById(int id) {
 		List<TripPlanWithPlaces> tripPlans = tripPlanDao.getTripPlanById(id);
-		if (!tripPlans.isEmpty()) {
-			return tripPlans.get(0);
+		if (tripPlans.isEmpty()) {
+			return Optional.empty();
 		}
-		return null;
+		return Optional.of(tripPlans.get(0));
 	}
 
 	@Override
@@ -42,11 +43,7 @@ public class TripPlanServiceImpl implements TripPlanService {
 		tripPlan.setName(name);
 		tripPlan.setUserId(userId);
 		tripPlanDao.setTripPlan(tripPlan);
-		int tripPlanId = tripPlan.getId();
-		for (int order = 0; order < attractionIds.size(); order++) {
-			int attractionId = attractionIds.get(order);
-			tripPlanDao.addPlaceToTripPlan(tripPlanId, attractionId, order);
-		}
+		addPlacesToTripPlan(tripPlan.getId(), attractionIds);
 		return tripPlan;
 	}
 
@@ -55,16 +52,21 @@ public class TripPlanServiceImpl implements TripPlanService {
 	public boolean updateTripPlan(int id, TripPlanRequest tripPlanRequest) {
 		tripPlanDao.updateTripPlan(id, tripPlanRequest.getName(), tripPlanRequest.getUserId());
 		tripPlanDao.deletePlacesFromTripPlan(id);
-		for (int order = 0; order < tripPlanRequest.getAttractionIds().size(); order++) {
-			int attractionId = tripPlanRequest.getAttractionIds().get(order);
-			tripPlanDao.addPlaceToTripPlan(id, attractionId, order);
-		}
+		addPlacesToTripPlan(id, tripPlanRequest.getAttractionIds());
 		return true;
 	}
 
 	@Override
+	@Transactional
 	public boolean delTripPlan(int id) {
 		tripPlanDao.delTripPlan(id);
 		return true;
+	}
+
+	private void addPlacesToTripPlan(int tripPlanId, List<Integer> attractionIds) {
+		for (int order = 0; order < attractionIds.size(); order++) {
+			int attractionId = attractionIds.get(order);
+			tripPlanDao.addPlaceToTripPlan(tripPlanId, attractionId, order);
+		}
 	}
 }

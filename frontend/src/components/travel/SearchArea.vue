@@ -1,29 +1,27 @@
 <script setup>
 import { ref } from "vue";
 import GlassSelect from "@/components/common/GlassSelect.vue";
+
+const errorMsg = ref("");
+
 import { useSearchStore } from "@/stores/search";
 const storeSearch = useSearchStore();
-const { sido, setSido, fetchSido, gugun, setGugun, fetchGugun, type, typeNames, setType, flush } =
-  storeSearch;
+import { storeToRefs } from "pinia";
 
-const sidoOptions = ref([]);
-const gugunOptions = ref([]);
+const { sido, sidoNames, gugunNames, gugun, type, typeNames } = storeToRefs(storeSearch);
+const { fetchSido, fetchGugun, flush } = storeSearch;
 
-sidoOptions.value = await fetchSido();
+await fetchSido();
 flush();
 
 const changeSido = async (data) => {
-  setSido(data);
+  sido.value = data;
   const res = await fetchGugun();
-  gugunOptions.value = res;
-};
-
-const changeGugun = (data) => {
-  setGugun(data);
-};
-
-const changeType = (data) => {
-  setType(data);
+  if (!res) {
+    errorMsg.value = "데이터를 불러오는데 실패했습니다.";
+  } else {
+    errorMsg.value = "";
+  }
 };
 </script>
 
@@ -34,18 +32,18 @@ const changeType = (data) => {
       placeHolder="시/도 선택"
       :value="sido"
       @change="changeSido($event.target.value)"
-      :options="sidoOptions" />
+      :options="sidoNames" />
     <GlassSelect
       style="margin-right: 0.5rem"
       placeHolder="구/군 선택"
       :value="gugun"
-      @change="changeGugun($event.target.value)"
-      :options="gugunOptions" />
+      @change="gugun = $event.target.value"
+      :options="gugunNames" />
     <GlassSelect
       style="margin-right: 0.5rem"
       placeHolder="타입 선택"
       :value="type"
-      @change="changeType($event.target.value)"
+      @change="type = $event.target.value"
       :options="typeNames" />
   </div>
 </template>

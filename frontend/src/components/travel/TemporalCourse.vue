@@ -10,7 +10,9 @@ const routeStore = useRouteStore();
 import { storeToRefs } from "pinia";
 const { focus } = storeToRefs(searchStore);
 const { placeList } = storeToRefs(routeStore);
-console.log(placeList.value);
+const { postPlace, flush } = routeStore;
+
+import Swal from "sweetalert2";
 
 const moveFocus = (data) => {
   focus.value = { lat: data.latitude, lng: data.longitude, level: 3 };
@@ -23,12 +25,57 @@ const removePlace = (data) => {
   }
   placeList.value.splice(index, 1);
 };
+
+const doPost = () => {
+  // prompt swal that gets name of the course
+  Swal.fire({
+    title: "코스 이름을 입력하세요",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off",
+    },
+    showCancelButton: true,
+    confirmButtonText: "저장",
+    showLoaderOnConfirm: true,
+    preConfirm: async (name) => {
+      const res = await postPlace(name);
+      return res;
+    },
+    allowOutsideClick: () => !Swal.isLoading(),
+  }).then((result) => {
+    if (result) {
+      Swal.fire({
+        title: "저장 완료",
+        icon: "success",
+      });
+    } else {
+      Swal.fire({
+        title: "저장 실패",
+        icon: "error",
+      });
+    }
+  });
+};
 </script>
 
 <template>
   <div class="wrap">
-    <h2>임시 코스</h2>
-    <h5><i class="bi bi-plus-circle" /> 아이콘을 눌러 코스에 장소를 추가하세요</h5>
+    <div class="nav-wrap">
+      <div class="text">
+        <h2>임시 코스</h2>
+        <h5><i class="bi bi-plus-circle" /> 아이콘을 눌러 코스에 장소를 추가하세요</h5>
+      </div>
+      <div class="action-wrap">
+        <button id="save" @click="doPost">
+          <span>임시 코스 저장 </span>
+          <i class="bi bi-save"></i>
+        </button>
+        <button id="flush" @click="flush">
+          <span>임시 코스 삭제 </span>
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
     <hr />
     <span v-if="placeList.length === 0">코스에 장소가 없습니다.</span>
     <div class="row">
@@ -63,8 +110,15 @@ const removePlace = (data) => {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.nav-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 button {
-  background-color: #fff;
+  background-color: transparent;
   border: none;
   cursor: pointer;
   font-size: 1.5rem;
@@ -72,7 +126,7 @@ button {
 
 button:hover {
   color: var(--accent-color);
-  transition: color 0.3s;
+  transition: color 0.5s;
 }
 
 button:active {
@@ -83,6 +137,40 @@ button:active {
   display: flex;
   justify-content: end;
   margin-top: 1rem;
+}
+
+.action-wrap {
+  display: flex;
+  align-items: center;
+}
+
+#flush {
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color-dark-8);
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+#flush:hover {
+  background-color: var(--accent-color);
+  color: white;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+#save {
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color-dark-8);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+#save:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transition: background-color 0.5s, color 0.5s;
 }
 
 @keyframes scale-in-center {

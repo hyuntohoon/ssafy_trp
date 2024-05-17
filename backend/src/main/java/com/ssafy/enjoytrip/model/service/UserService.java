@@ -3,15 +3,18 @@ package com.ssafy.enjoytrip.model.service;
 import com.ssafy.enjoytrip.model.dto.User;
 
 public interface UserService {
-  public User addUser(User user);
+    User addUser(User user);
 
-  public User selectUserById(User user);
+    User selectUserById(User user);
 
-  public boolean checkId(String id);
+    boolean checkId(String id);
 
-  public boolean changePW(User user, String pw);
+    boolean changePW(User user, String pw);
 
-  public boolean delete(User user);
+    boolean delete(User user);
 
-  public void deleteAllUsers();
+    void deleteAllUsers();  // 테스트를 위한 메서드
+
+    // 임시 비밀번호 생성을 위한 메서드 추가
+    String generateTemporaryPassword(String userId, String name);
 }

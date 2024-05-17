@@ -1,21 +1,23 @@
 package com.ssafy.enjoytrip.model.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-
 import com.ssafy.enjoytrip.model.dto.User;
 
 @Mapper
 public interface UserDao {
 
-	public int addUser(User user);
+    int addUser(User user);
 
-	public User selectUserById(User user);
+    User selectUserById(User user);
 
-	public boolean checkId(String id);
+    boolean checkId(String id);
 
-	public boolean changePW(User user);
+    boolean changePW(User user);
 
-	public boolean delete(User user);
+    boolean delete(User user);
 
-    public void deleteAllUsers();
+    void deleteAllUsers();
+
+    // 임시 비밀번호 생성을 위한 메서드 추가
+    User findByUserIdAndName(String userId, String name);
 }

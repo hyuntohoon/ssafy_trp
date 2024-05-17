@@ -32,8 +32,6 @@ public class UserServiceImpl implements UserService {
         return userDao.selectUserById(user);
     }
 
-
-
     @Override
     public User selectUserById(User user) {
         User result = userDao.selectUserById(user);
@@ -42,11 +40,8 @@ public class UserServiceImpl implements UserService {
         }
 
         clearSensitiveData(result);
-        // 인증이 성공적이면 사용자 객체 반환
         return result;
     }
-
-
 
     @Override
     public boolean checkId(String id) {
@@ -55,8 +50,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean changePW(User user, String pw) {
-        user.setPw(pw);
-		return userDao.changePW(user);
+        String salt = user.getSalt();
+        String hashedPw = hashUtil.hash(pw, salt);
+        user.setPw(hashedPw);
+        return userDao.changePW(user);
     }
 
     @Override
@@ -68,6 +65,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteAllUsers() {
         userDao.deleteAllUsers();
+    }
+
+    @Override
+    public String generateTemporaryPassword(String userId, String name) {
+        User user = userDao.findByUserIdAndName(userId, name);
+        if (user == null) {
+            return null;
+        }
+
+        String temporaryPassword = makeRandomPassword();
+        changePW(user, temporaryPassword);
+
+        return temporaryPassword;
     }
 
     private boolean isValidPassword(User inputUser, User storedUser) {
@@ -83,11 +93,11 @@ public class UserServiceImpl implements UserService {
     private String makeRandomSalt() {
         StringBuilder saltBuilder = new StringBuilder();
         Random random = new Random();
-        final int length = 20; // 솔트의 길이
-        final int alphabetRange = 26; // 알파벳 문자 범위 (A-Z, a-z)
-        final int asciiLowerA = 97; // 'a'의 ASCII 값
-        final int asciiUpperA = 65; // 'A'의 ASCII 값
-        final int numberRange = 10; // 숫자 범위 (0-9)
+        final int length = 20;
+        final int alphabetRange = 26;
+        final int asciiLowerA = 97;
+        final int asciiUpperA = 65;
+        final int numberRange = 10;
 
         for (int i = 0; i < length; i++) {
             int rIndex = random.nextInt(3);
@@ -104,5 +114,31 @@ public class UserServiceImpl implements UserService {
             }
         }
         return saltBuilder.toString();
+    }
+
+    private String makeRandomPassword() {
+        StringBuilder passwordBuilder = new StringBuilder();
+        Random random = new Random();
+        final int length = 10;
+        final int alphabetRange = 26;
+        final int asciiLowerA = 97;
+        final int asciiUpperA = 65;
+        final int numberRange = 10;
+
+        for (int i = 0; i < length; i++) {
+            int rIndex = random.nextInt(3);
+            switch (rIndex) {
+                case 0:
+                    passwordBuilder.append((char) (random.nextInt(alphabetRange) + asciiLowerA));
+                    break;
+                case 1:
+                    passwordBuilder.append((char) (random.nextInt(alphabetRange) + asciiUpperA));
+                    break;
+                case 2:
+                    passwordBuilder.append(random.nextInt(numberRange));
+                    break;
+            }
+        }
+        return passwordBuilder.toString();
     }
 }

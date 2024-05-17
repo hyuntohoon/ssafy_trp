@@ -14,8 +14,8 @@
     </select>
 
     <!-- Check if ID exists -->
-    <select id="checkId" resultType="boolean">
-        SELECT COUNT(*) FROM users WHERE id = #{id}
+    <select id="checkId" parameterType="string" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM users WHERE id = #{id}
     </select>
 
     <!-- Update password -->
@@ -28,8 +28,13 @@
         DELETE FROM users WHERE id = #{id} AND name = #{name}
     </delete>
 
-    <!-- deleteAllUsers 메서드 추가 -->
+    <!-- Delete all users -->
     <delete id="deleteAllUsers">
         DELETE FROM users
     </delete>
+
+    <!-- Find user by userId and name -->
+    <select id="findByUserIdAndName" parameterType="map" resultType="com.ssafy.enjoytrip.model.dto.User">
+        SELECT id, name, pw, salt FROM users WHERE id = #{userId} AND name = #{name}
+    </select>
 </mapper>

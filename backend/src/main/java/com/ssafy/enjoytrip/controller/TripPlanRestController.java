@@ -64,13 +64,13 @@ public class TripPlanRestController {
         }
     }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delTripPlan(@PathVariable int id) {
-		boolean result = tripPlanService.delTripPlan(id);
-		if (result) {
-			return ResponseEntity.ok(result); // 200
-		} else {
-			return ResponseEntity.noContent().build(); // 204
-		}
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delTripPlan(@PathVariable int id) {
+        boolean result = tripPlanService.delTripPlan(id);
+        if (result) {
+            return ResponseEntity.ok(result); // 200
+        } else {
+            return ResponseEntity.noContent().build(); // 204
+        }
+    }
 }

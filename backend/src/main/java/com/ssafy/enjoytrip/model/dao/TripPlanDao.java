@@ -12,7 +12,7 @@ public interface TripPlanDao {
 
 	@Insert("INSERT INTO trip_plan (name, user_id) VALUES (#{name}, #{userId})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
-	void setTripPlan(TripPlan tripPlan);
+	void insertTripPlan(TripPlan tripPlan);
 
 	@Select("SELECT tp.id AS tp_id, tp.name AS tp_name, tp.user_id AS tp_user_id, " +
 			"ai.content_id AS ai_content_id, ai.content_type_id AS ai_content_type_id, ai.title AS ai_title, ai.addr1 AS ai_addr1, ai.addr2 AS ai_addr2, ai.zipcode AS ai_zipcode, ai.tel AS ai_tel, ai.first_image AS ai_first_image, ai.first_image2 AS ai_first_image2, ai.readcount AS ai_readcount, ai.sido_code AS ai_sido_code, ai.gugun_code AS ai_gugun_code, ai.latitude AS ai_latitude, ai.longitude AS ai_longitude, ai.mlevel AS ai_mlevel, " +
@@ -28,15 +28,7 @@ public interface TripPlanDao {
 			@Result(property = "userId", column = "tp_user_id"),
 			@Result(property = "places", column = "tp_id", many = @Many(select = "getAttractionInfoByTripPlanId"))
 	})
-	List<TripPlanWithPlaces> getTripPlanById(int id);
-
-	@Select("SELECT ai.content_id, ai.content_type_id, ai.title, ai.addr1, ai.addr2, ai.zipcode, ai.tel, ai.first_image, ai.first_image2, ai.readcount, ai.sido_code, ai.gugun_code, ai.latitude, ai.longitude, ai.mlevel, " +
-			"tpp.order AS tpp_order " +
-			"FROM attraction_info ai " +
-			"JOIN trip_plan_place tpp ON ai.content_id = tpp.content_id " +
-			"WHERE tpp.trip_plan_id = #{tripPlanId} " +
-			"ORDER BY tpp.order ASC")
-	List<AttractionInfo> getAttractionInfoByTripPlanId(int tripPlanId);
+	List<TripPlanWithPlaces> selectTripPlanById(int id);
 
 	@Select("SELECT tp.id AS tp_id, tp.name AS tp_name, tp.user_id AS tp_user_id " +
 			"FROM trip_plan tp " +
@@ -47,10 +39,18 @@ public interface TripPlanDao {
 			@Result(property = "userId", column = "tp_user_id"),
 			@Result(property = "places", column = "tp_id", many = @Many(select = "getAttractionInfoByTripPlanId"))
 	})
-	List<TripPlanWithPlaces> getTripPlansWithPlacesByUserId(String userId);
+	List<TripPlanWithPlaces> selectTripPlansWithPlacesByUserId(String userId);
+
+	@Select("SELECT ai.content_id, ai.content_type_id, ai.title, ai.addr1, ai.addr2, ai.zipcode, ai.tel, ai.first_image, ai.first_image2, ai.readcount, ai.sido_code, ai.gugun_code, ai.latitude, ai.longitude, ai.mlevel, " +
+			"tpp.order AS tpp_order " +
+			"FROM attraction_info ai " +
+			"JOIN trip_plan_place tpp ON ai.content_id = tpp.content_id " +
+			"WHERE tpp.trip_plan_id = #{tripPlanId} " +
+			"ORDER BY tpp.order ASC")
+	List<AttractionInfo> getAttractionInfoByTripPlanId(int tripPlanId);
 
 	@Delete("DELETE FROM trip_plan WHERE id = #{id}")
-	void delTripPlan(int id);
+	void deleteTripPlanById(int id);
 
 	@Update("UPDATE trip_plan SET name = #{name}, user_id = #{userId} WHERE id = #{id}")
 	void updateTripPlan(@Param("id") int id, @Param("name") String name, @Param("userId") String userId);

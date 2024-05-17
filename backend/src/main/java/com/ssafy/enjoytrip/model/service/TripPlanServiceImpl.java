@@ -23,26 +23,22 @@ public class TripPlanServiceImpl implements TripPlanService {
 	@Override
 	@Transactional
 	public Optional<TripPlanWithPlaces> getTripPlanById(int id) {
-		List<TripPlanWithPlaces> tripPlans = tripPlanDao.getTripPlanById(id);
-		if (tripPlans.isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(tripPlans.get(0));
+		return tripPlanDao.selectTripPlanById(id).stream().findFirst();
 	}
 
 	@Override
 	@Transactional
 	public List<TripPlanWithPlaces> getTripPlansWithPlacesByUserId(String userId) {
-		return tripPlanDao.getTripPlansWithPlacesByUserId(userId);
+		return tripPlanDao.selectTripPlansWithPlacesByUserId(userId);
 	}
 
 	@Override
 	@Transactional
-	public TripPlan setTripPlan(String name, String userId, List<Integer> attractionIds) {
+	public TripPlan createTripPlan(String name, String userId, List<Integer> attractionIds) {
 		TripPlan tripPlan = new TripPlan();
 		tripPlan.setName(name);
 		tripPlan.setUserId(userId);
-		tripPlanDao.setTripPlan(tripPlan);
+		tripPlanDao.insertTripPlan(tripPlan);
 		addPlacesToTripPlan(tripPlan.getId(), attractionIds);
 		return tripPlan;
 	}
@@ -58,8 +54,8 @@ public class TripPlanServiceImpl implements TripPlanService {
 
 	@Override
 	@Transactional
-	public boolean delTripPlan(int id) {
-		tripPlanDao.delTripPlan(id);
+	public boolean deleteTripPlan(int id) {
+		tripPlanDao.deleteTripPlanById(id);
 		return true;
 	}
 

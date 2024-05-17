@@ -43,15 +43,15 @@ public class TripPlanRestController {
         }
     }
 
-	@PostMapping("")
-	public ResponseEntity<TripPlan> setTripPlan(@RequestBody TripPlan tripPlan) {
-		boolean result = tripPlanService.setTripPlan(tripPlan);
-		if (result) {
-			return ResponseEntity.ok(tripPlan); // 200 OK with body
-		} else {
-			return ResponseEntity.noContent().build(); // 204 No Content
-		}
-	}
+    @PostMapping("")
+    public ResponseEntity<TripPlan> setTripPlan(@RequestBody TripPlanRequest tripPlanRequest) {
+        TripPlan tripPlan = tripPlanService.setTripPlan(tripPlanRequest.getName(), tripPlanRequest.getUserId(), tripPlanRequest.getAttractionIds());
+        if (tripPlan != null) {
+            return ResponseEntity.ok(tripPlan); // 200 OK with body
+        } else {
+            return ResponseEntity.noContent().build(); // 204 No Content
+        }
+    }
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateTripPlan(@PathVariable int id, @RequestBody TripPlan tripPlan) {

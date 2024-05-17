@@ -10,7 +10,9 @@ import BeforeLoginGroup from "@/components/nav/BeforeLoginGroup.vue";
 const userStore = useUserStore();
 const router = useRouter();
 
-const isLoggedIn = computed(() => userStore.isLoggedIn);
+import { storeToRefs } from "pinia";
+
+const { isLoggedIn } = storeToRefs(userStore);
 
 const emit = defineEmits(["headerNavEvent"]);
 

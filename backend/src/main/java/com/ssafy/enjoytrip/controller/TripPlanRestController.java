@@ -23,6 +23,15 @@ public class TripPlanRestController {
 		this.tripPlanService = tripPlanService;
 	}
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TripPlanWithPlaces> getTripPlanById(@PathVariable int id) {
+        TripPlanWithPlaces tripPlanWithPlaces = tripPlanService.getTripPlanById(id);
+        if (tripPlanWithPlaces != null) {
+            return ResponseEntity.ok(tripPlanWithPlaces);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<TripPlanWithPlaces>> getTripPlansByUserId(@PathVariable String userId) {

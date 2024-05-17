@@ -18,6 +18,45 @@ public class AttractionInfo {
   private double longitude;
   private String mlevel;
 
+  @Override
+  public String toString() {
+    return "AttractionInfo{" +
+            "contentId=" + contentId +
+            ", contentTypeId=" + contentTypeId +
+            ", title='" + title + '\'' +
+            ", addr1='" + addr1 + '\'' +
+            ", addr2='" + addr2 + '\'' +
+            ", zipcode='" + zipcode + '\'' +
+            ", tel='" + tel + '\'' +
+            ", firstImage='" + firstImage + '\'' +
+            ", firstImage2='" + firstImage2 + '\'' +
+            ", readcount=" + readcount +
+            ", sidoCode=" + sidoCode +
+            ", gugunCode=" + gugunCode +
+            ", latitude=" + latitude +
+            ", longitude=" + longitude +
+            ", mlevel='" + mlevel + '\'' +
+            '}';
+  }
+
+  public AttractionInfo(int contentId, int contentTypeId, String title, String addr1, String addr2, String zipcode, String tel, String firstImage, String firstImage2, int readcount, int sidoCode, int gugunCode, double latitude, double longitude, String mlevel) {
+    this.contentId = contentId;
+    this.contentTypeId = contentTypeId;
+    this.title = title;
+    this.addr1 = addr1;
+    this.addr2 = addr2;
+    this.zipcode = zipcode;
+    this.tel = tel;
+    this.firstImage = firstImage;
+    this.firstImage2 = firstImage2;
+    this.readcount = readcount;
+    this.sidoCode = sidoCode;
+    this.gugunCode = gugunCode;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.mlevel = mlevel;
+  }
+
   public int getContentId() {
     return contentId;
   }
@@ -137,14 +176,4 @@ public class AttractionInfo {
   public void setMlevel(String mlevel) {
     this.mlevel = mlevel;
   }
-
-  @Override
-  public String toString() {
-    return "AttractionInfoModel [contentId=" + contentId + ", contentTypeId=" + contentTypeId + ", title=" + title
-        + ", addr1=" + addr1 + ", addr2=" + addr2 + ", zipcode=" + zipcode + ", tel=" + tel + ", firstImage="
-        + firstImage + ", firstImage2=" + firstImage2 + ", readcount=" + readcount + ", sidoCode=" + sidoCode
-        + ", gugunCode=" + gugunCode + ", latitude=" + latitude + ", longitude=" + longitude + ", mlevel=" + mlevel
-        + "]";
-  }
-
 }

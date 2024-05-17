@@ -1,30 +1,55 @@
 <script setup>
-import SearchResultItem from "@/components/travel/SearchResultItem.vue";
-import { useSearchStore } from "@/stores/search";
+import PlaceCard from "@/components/common/PlaceCard.vue";
 
+import { useSearchStore } from "@/stores/search";
 const searchStore = useSearchStore();
+
+import { useRouteStore } from "@/stores/route";
+const routeStore = useRouteStore();
 
 import { storeToRefs } from "pinia";
 
-const { resultData } = storeToRefs(searchStore);
+const { resultData, focus } = storeToRefs(searchStore);
+const { placeList } = storeToRefs(routeStore);
+
+const moveFocus = (data) => {
+  focus.value = { lat: data.latitude, lng: data.longitude, level: 3 };
+};
+
+const addPlace = (data) => {
+  if (placeList.value.some((place) => place.contentId === data.contentId)) {
+    return;
+  }
+  placeList.value.push(data);
+};
+
+const checkPlace = (data) => {
+  return placeList.value.some((place) => place.contentId === data.contentId);
+};
 </script>
 
 <template>
   <div class="search-result">
     <h2 v-if="resultData.length === 0">검색 결과가 없습니다.</h2>
-    <SearchResultItem v-for="data in resultData" :key="data.id" :result="data" />
-    <!-- <ul>
-      <li v-for="result in resultData" :key="result.id">
-        <p>{{ result.addr1 }}</p>
-        <p>{{ result.addr2 }}</p>
-        <p>{{ result.zipcode }}</p>
-        <p>{{ result.title }}</p>
-        <p>{{ result.type }}</p>
-        <p>{{ result.tel }}</p>
-        <p>{{ result.latitude }}</p>
-        <p>{{ result.longitude }}</p>
-      </li>
-    </ul> -->
+    <PlaceCard
+      v-for="result in resultData"
+      :key="result.contentId"
+      :data="result"
+      :color="checkPlace(result)">
+      <template v-slot:actions>
+        <div class="button-wrap">
+          <button @click="moveFocus(result)">
+            <i class="bi bi-geo-alt"></i>
+          </button>
+          <button>
+            <i class="bi bi-heart"></i>
+          </button>
+          <button @click="addPlace(result)">
+            <i class="bi bi-plus-circle"></i>
+          </button>
+        </div>
+      </template>
+    </PlaceCard>
   </div>
 </template>
 
@@ -34,9 +59,32 @@ const { resultData } = storeToRefs(searchStore);
   background-color: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   padding: 1rem;
+  width: 25vw;
   border-radius: 10px;
   height: 54.7vh;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+button:hover {
+  color: var(--accent-color);
+  transition: color 0.3s;
+}
+
+button:active {
+  color: var(--accent-color-dark-8);
+}
+
+.button-wrap {
+  display: flex;
+  justify-content: end;
+  margin-top: 1rem;
 }
 </style>

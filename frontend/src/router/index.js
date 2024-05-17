@@ -13,9 +13,10 @@ import BoardResult from "@/components/board/BoardResult.vue";
 import BoardEdit from "@/components/board/BoardEdit.vue";
 
 import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 
 const onlyAuthUser = (to, from, next) => {
-  const { token } = useUserStore();
+  const { token } = storeToRefs(useUserStore());
   if (!token.value) {
     alert("로그인이 필요합니다.");
     next({ name: "home" });

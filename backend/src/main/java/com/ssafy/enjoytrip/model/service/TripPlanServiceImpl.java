@@ -18,6 +18,15 @@ public class TripPlanServiceImpl implements TripPlanService {
 		this.tripPlanDao = tripPlanDao;
 	}
 
+
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<TripPlanWithPlaces> getTripPlansWithPlacesByUserId(String userId) {
+		return tripPlanDao.getTripPlansWithPlacesByUserId(userId);
+	}
+
+	@Override
 	@Transactional
 	public boolean setTripPlan(TripPlan tripPlan) {
 		// TripPlan 저장

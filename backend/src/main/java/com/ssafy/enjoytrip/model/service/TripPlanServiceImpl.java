@@ -18,7 +18,11 @@ public class TripPlanServiceImpl implements TripPlanService {
 		this.tripPlanDao = tripPlanDao;
 	}
 
-
+	@Override
+	@Transactional(readOnly = true)
+	public TripPlanWithPlaces getTripPlanById(int id) {
+		return tripPlanDao.getTripPlanById(id);
+	}
 
 	@Override
 	@Transactional(readOnly = true)

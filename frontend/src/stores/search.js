@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { getSido, getGugun, getAttractions } from "@/api/search";
+import Swal from "sweetalert2";
 
 export const useSearchStore = defineStore("search", () => {
   const sido = ref(null);
@@ -48,7 +49,10 @@ export const useSearchStore = defineStore("search", () => {
         throw new Error(response.status);
       }
     } catch (error) {
-      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "시/도 정보를 불러오는데 실패했습니다.",
+      });
       return "fail";
     }
   };
@@ -72,7 +76,10 @@ export const useSearchStore = defineStore("search", () => {
         throw new Error(response.status);
       }
     } catch (error) {
-      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "구/군 정보를 불러오는데 실패했습니다.",
+      });
       return "fail";
     }
   };
@@ -107,7 +114,10 @@ export const useSearchStore = defineStore("search", () => {
         throw new Error(response.status);
       }
     } catch (error) {
-      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "검색 결과를 불러오는데 실패했습니다.",
+      });
       return "fail";
     }
   };

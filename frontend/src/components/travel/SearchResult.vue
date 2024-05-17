@@ -23,6 +23,14 @@ const addPlace = (data) => {
   placeList.value.push(data);
 };
 
+const removePlace = (data) => {
+  const index = placeList.value.findIndex((place) => place.contentId === data.contentId);
+  if (index === -1) {
+    return;
+  }
+  placeList.value.splice(index, 1);
+};
+
 const checkPlace = (data) => {
   return placeList.value.some((place) => place.contentId === data.contentId);
 };
@@ -44,8 +52,11 @@ const checkPlace = (data) => {
           <button>
             <i class="bi bi-heart"></i>
           </button>
-          <button @click="addPlace(result)">
+          <button @click="addPlace(result)" v-if="!checkPlace(result)">
             <i class="bi bi-plus-circle"></i>
+          </button>
+          <button @click="removePlace(result)" v-else>
+            <i class="bi bi-x-circle"></i>
           </button>
         </div>
       </template>

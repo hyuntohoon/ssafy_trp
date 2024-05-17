@@ -26,4 +26,13 @@ useKakao(VITE_API_KAKAO_API_KEY);
 app.use(pinia);
 app.use(router);
 
+import { useUserStore } from "./stores/user";
+const userStore = useUserStore();
+
+import { storeToRefs } from "pinia";
+import { setAuth } from "./utils/http-commons";
+const { token } = storeToRefs(userStore);
+
+setAuth(token.value);
+
 app.mount("#app");

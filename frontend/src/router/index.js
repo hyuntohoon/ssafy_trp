@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import Swal from "sweetalert2";
 
 import HomeView from "../views/HomeView.vue";
 
@@ -18,7 +19,11 @@ import { storeToRefs } from "pinia";
 const onlyAuthUser = (to, from, next) => {
   const { token } = storeToRefs(useUserStore());
   if (!token.value) {
-    alert("로그인이 필요합니다.");
+    Swal.fire({
+      icon: "warning",
+      title: "로그인이 필요합니다.",
+      text: "상단의 로그인 버튼을 눌러주세요.",
+    });
     next({ name: "home" });
     return;
   }
@@ -37,6 +42,7 @@ const router = createRouter({
       path: "/travel",
       name: "travel",
       component: TravelView,
+      beforeEnter: onlyAuthUser,
     },
     {
       path: "/course",
@@ -48,6 +54,7 @@ const router = createRouter({
       name: "board",
       component: BoardView,
       redirect: { name: "board-list" },
+      beforeEnter: onlyAuthUser,
       children: [
         {
           path: "list",
@@ -58,7 +65,6 @@ const router = createRouter({
           path: "create",
           name: "board-create",
           component: BoardCreate,
-          beforeEnter: onlyAuthUser,
         },
         {
           path: "detail/:id",
@@ -74,7 +80,6 @@ const router = createRouter({
           path: "edit/:id",
           name: "board-edit",
           component: BoardEdit,
-          beforeEnter: onlyAuthUser,
         },
       ],
     },

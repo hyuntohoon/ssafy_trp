@@ -2,7 +2,7 @@ package com.ssafy.enjoytrip.model.service;
 
 import java.util.List;
 
-import com.ssafy.enjoytrip.model.dto.AttractionInfo;
+import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +20,17 @@ public class TripPlanServiceImpl implements TripPlanService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
 	public TripPlanWithPlaces getTripPlanById(int id) {
-		return tripPlanDao.getTripPlanById(id);
+		List<TripPlanWithPlaces> tripPlans = tripPlanDao.getTripPlanById(id);
+		if (!tripPlans.isEmpty()) {
+			return tripPlans.get(0);
+		}
+		return null;
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
 	public List<TripPlanWithPlaces> getTripPlansWithPlacesByUserId(String userId) {
 		return tripPlanDao.getTripPlansWithPlacesByUserId(userId);
 	}
@@ -37,26 +41,30 @@ public class TripPlanServiceImpl implements TripPlanService {
 		TripPlan tripPlan = new TripPlan();
 		tripPlan.setName(name);
 		tripPlan.setUserId(userId);
-
-		// TripPlan 저장
 		tripPlanDao.setTripPlan(tripPlan);
-		int tripPlanId = tripPlan.getId(); // 새로 생성된 TripPlan의 ID
-
-		for (Integer attractionId : attractionIds) {
-			tripPlanDao.addPlaceToTripPlan(tripPlanId, attractionId);
+		int tripPlanId = tripPlan.getId();
+		for (int order = 0; order < attractionIds.size(); order++) {
+			int attractionId = attractionIds.get(order);
+			tripPlanDao.addPlaceToTripPlan(tripPlanId, attractionId, order);
 		}
 		return tripPlan;
 	}
 
 	@Override
 	@Transactional
-	public boolean updateTripPlan(TripPlan tripPlan) {
-		return false;
+	public boolean updateTripPlan(int id, TripPlanRequest tripPlanRequest) {
+		tripPlanDao.updateTripPlan(id, tripPlanRequest.getName(), tripPlanRequest.getUserId());
+		tripPlanDao.deletePlacesFromTripPlan(id);
+		for (int order = 0; order < tripPlanRequest.getAttractionIds().size(); order++) {
+			int attractionId = tripPlanRequest.getAttractionIds().get(order);
+			tripPlanDao.addPlaceToTripPlan(id, attractionId, order);
+		}
+		return true;
 	}
 
 	@Override
-	@Transactional
 	public boolean delTripPlan(int id) {
-		return false;
+		tripPlanDao.delTripPlan(id);
+		return true;
 	}
 }

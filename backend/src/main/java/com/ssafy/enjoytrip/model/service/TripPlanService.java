@@ -3,6 +3,7 @@ package com.ssafy.enjoytrip.model.service;
 import java.util.List;
 
 import com.ssafy.enjoytrip.model.dto.TripPlan;
+import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
 
 public interface TripPlanService {
@@ -10,7 +11,7 @@ public interface TripPlanService {
 
     boolean delTripPlan(int id);
 
-    boolean updateTripPlan(TripPlan tripPlan);
+    public boolean updateTripPlan(int id, TripPlanRequest tripPlanRequest);
 
     TripPlanWithPlaces getTripPlanById(int id);
 

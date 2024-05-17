@@ -19,7 +19,8 @@
     "sweetalert2": "^11.11.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
-    "vue3-kakao-maps": "^2.3.5"
+    "vue3-kakao-maps": "^2.3.5",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

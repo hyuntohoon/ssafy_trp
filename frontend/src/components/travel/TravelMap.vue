@@ -1,12 +1,16 @@
 <script setup>
 import { ref, watch } from "vue";
-import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
+import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from "vue3-kakao-maps";
 
 import { useSearchStore } from "@/stores/search";
+import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
 
 const searchStore = useSearchStore();
+const routeStore = useRouteStore();
 const { resultData, focus } = storeToRefs(searchStore);
+const { getLatLngList } = storeToRefs(routeStore);
+console.log(getLatLngList.value);
 
 const currentFocus = ref(null);
 
@@ -92,6 +96,11 @@ watch(resultData, () => {
       }"
       @mouseOverKakaoMapMarker="mouseOver(result.contentId)"
       @mouseOutKakaoMapMarker="mouseOut" />
+    <KakaoMapPolyline
+      :latLngList="getLatLngList"
+      :endArrow="true"
+      :strokeWeight="6"
+      :strokeOpacity="1" />
   </KakaoMap>
 </template>
 

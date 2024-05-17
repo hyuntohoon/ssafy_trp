@@ -24,10 +24,17 @@ const modalClose = () => {
   <div>
     <div class="container main">
       <HeaderNav @headerNavEvent="modalEvent" />
-      <RouterView />
+      <router-view v-slot="{ Component }">
+        <transition name="scale" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </div>
     <Wallpaper />
-    <Modal style="z-index: 1" v-if="modalShow" :modal="modal" @modalClose="modalClose" />
+    <!-- <Modal style="z-index: 1" v-if="modalShow" :modal="modal" @modalClose="modalClose" /> -->
+    <transition name="fade">
+      <Modal style="z-index: 1" v-if="modalShow" :modal="modal" @modalClose="modalClose" />
+    </transition>
     <div style="height: 200px; width: 50vh"></div>
     <Footer />
   </div>
@@ -57,5 +64,26 @@ body {
   overflow: hidden;
   min-height: 100vh;
   padding-bottom: 10vh;
+}
+
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.3s ease;
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

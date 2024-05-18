@@ -5,8 +5,8 @@
 
     <!-- Create a new post -->
     <insert id="createPost" parameterType="com.ssafy.enjoytrip.model.dto.Post">
-        INSERT INTO post (UserID, Title, Content)
-        VALUES (#{userId}, #{title}, #{content})
+        INSERT INTO post (UserID, Title, Content, content_id, photo)
+        VALUES (#{userId}, #{title}, #{content}, #{content_id}, #{photo})
     </insert>
 
     <!-- Retrieve a post by its ID -->
@@ -16,7 +16,9 @@
                Title           AS title,
                Content         AS content,
                CreateTimeStamp AS createTimeStamp,
-               UpdateTimeStamp AS updateTimeStamp
+               UpdateTimeStamp AS updateTimeStamp,
+               content_id      AS content_id,
+               photo           AS photo
         FROM post
         WHERE PostID = #{postId}
     </select>
@@ -28,13 +30,23 @@
                Title           AS title,
                Content         AS content,
                CreateTimeStamp AS createTimeStamp,
-               UpdateTimeStamp AS updateTimeStamp
+               UpdateTimeStamp AS updateTimeStamp,
+               content_id      AS content_id,
+               photo           AS photo
         FROM post
     </select>
 
     <select id="findAllPosts" parameterType="map" resultType="com.ssafy.enjoytrip.model.dto.Post">
-        SELECT * FROM post
-        ORDER BY postId
+        SELECT PostID          AS postId,
+        UserID          AS userId,
+        Title           AS title,
+        Content         AS content,
+        CreateTimeStamp AS createTimeStamp,
+        UpdateTimeStamp AS updateTimeStamp,
+        content_id      AS content_id,
+        photo           AS photo
+        FROM post
+        ORDER BY PostID
         <choose>
             <when test="order != null and order.equals('ASC')">
                 ASC
@@ -45,12 +57,13 @@
         </choose>
     </select>
 
-
     <!-- Update a post -->
     <update id="updatePost" parameterType="com.ssafy.enjoytrip.model.dto.Post">
         UPDATE post
-        SET Title   = #{title},
-            Content = #{content}
+        SET Title      = #{title},
+            Content    = #{content},
+            content_id = #{content_id},
+            photo      = #{photo}
         WHERE PostID = #{postId}
     </update>
 
@@ -61,19 +74,29 @@
         WHERE PostID = #{postId}
     </delete>
 
+    <!-- Search posts with optional filters -->
     <select id="searchPosts" resultType="com.ssafy.enjoytrip.model.dto.Post">
-        SELECT * FROM post
+        SELECT PostID          AS postId,
+        UserID          AS userId,
+        Title           AS title,
+        Content         AS content,
+        CreateTimeStamp AS createTimeStamp,
+        UpdateTimeStamp AS updateTimeStamp,
+        content_id      AS content_id,
+        photo           AS photo
+        FROM post
         WHERE 1=1
         <if test="title != null and title != ''">
-            AND title LIKE CONCAT('%', #{title}, '%')
+            AND Title LIKE CONCAT('%', #{title}, '%')
         </if>
-        <if test="userID != null and userID != ''">
-            AND userID LIKE CONCAT('%', #{userID}, '%')
+        <if test="userId != null and userId != ''">
+            AND UserID LIKE CONCAT('%', #{userId}, '%')
         </if>
         <if test="content != null and content != ''">
-            AND content LIKE CONCAT('%', #{content}, '%')
+            AND Content LIKE CONCAT('%', #{content}, '%')
         </if>
         ORDER BY CreateTimeStamp DESC
         LIMIT #{offset}, #{pageSize}
     </select>
+
 </mapper>

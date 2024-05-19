@@ -1,21 +1,21 @@
 package com.ssafy.enjoytrip.model.service;
 
-import com.ssafy.enjoytrip.model.dto.Post;
+import com.ssafy.enjoytrip.model.entity.Post;
 
 import java.util.List;
 
 public interface PostService {
-    public boolean createPost(Post post);
+    boolean createPost(Post post);
 
-    public Post getPost(String postId);
+    Post getPost(Integer postId);
 
-    public boolean deletePost(String postId);
+    boolean deletePost(Integer postId);
 
-    public boolean updatePost(Post post);
+    boolean updatePost(Post post);
 
-    public List<Post> getAllPosts();
+    List<Post> getAllPosts();
 
-    public List<Post> getPosts(String order, int page, int numItems);
+    List<Post> getPosts(String order, int page, int numItems);
 
-    public List<Post> searchPosts(String title, String UserID, String content, int page, int pageSize);
+    List<Post> searchPosts(String title, String userId, String content, int page, int pageSize);
 }

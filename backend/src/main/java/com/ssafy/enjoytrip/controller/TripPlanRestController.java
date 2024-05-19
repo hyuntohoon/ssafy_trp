@@ -1,6 +1,6 @@
 package com.ssafy.enjoytrip.controller;
 
-import com.ssafy.enjoytrip.model.dto.TripPlan;
+import com.ssafy.enjoytrip.model.entity.TripPlan;
 import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
 import com.ssafy.enjoytrip.model.service.TripPlanService;
@@ -44,7 +44,8 @@ public class TripPlanRestController {
 
     @PostMapping
     public ResponseEntity<TripPlan> createTripPlan(@RequestBody TripPlanRequest tripPlanRequest) {
-        TripPlan tripPlan = tripPlanService.createTripPlan(tripPlanRequest.getName(), tripPlanRequest.getUserId(), tripPlanRequest.getAttractionIds());
+       // TripPlan tripPlan = tripPlanService.createTripPlan(tripPlanRequest.getName(), tripPlanRequest.getUserId(), tripPlanRequest.getAttractionIds());
+       TripPlan tripPlan = tripPlanService.createTripPlan(tripPlanRequest.getName(),tripPlanRequest.getUserId(),tripPlanRequest.getAttractionIds());
         if (tripPlan == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

@@ -1,28 +1,67 @@
 package com.ssafy.config;
 
-import javax.sql.DataSource;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
 
 @Configuration
 public class DataBaseConfiguration {
 
-	@Bean
-	@ConfigurationProperties(prefix = "spring.datasource.hikari")
-	HikariConfig hikariConfig() {
-		HikariConfig hikariConfig = new HikariConfig();
-		return hikariConfig;
-	}
+	@Value("${spring.datasource.hikari.maximum-pool-size}")
+	private int maximumPoolSize;
+
+	@Value("${spring.datasource.hikari.minimum-idle}")
+	private int minimumIdle;
+
+	@Value("${spring.datasource.hikari.connection-timeout}")
+	private int connectionTimeout;
+
+	@Value("${spring.datasource.hikari.idle-timeout}")
+	private int idleTimeout;
+
+	@Value("${spring.datasource.hikari.max-lifetime}")
+	private int maxLifetime;
+
+	@Value("${spring.datasource.hikari.connection-init-sql}")
+	private String connectionInitSql;
+
+	@Value("${spring.datasource.hikari.validation-timeout}")
+	private int validationTimeout;
+
+	@Value("${spring.datasource.hikari.auto-commit}")
+	private boolean autoCommit;
+
+	@Value("${spring.datasource.driver-class-name}")
+	private String driverClassName;
+
+	@Value("${spring.datasource.url}")
+	private String url;
+
+	@Value("${spring.datasource.username}")
+	private String username;
+
+	@Value("${spring.datasource.password}")
+	private String password;
 
 	@Bean
-	DataSource dataSource() throws Exception {
-		DataSource dataSource = new HikariDataSource(hikariConfig());
-		return dataSource;
+	public DataSource dataSource() {
+		HikariConfig config = new HikariConfig();
+		config.setDriverClassName(driverClassName);
+		config.setJdbcUrl(url);
+		config.setUsername(username);
+		config.setPassword(password);
+		config.setMaximumPoolSize(maximumPoolSize);
+		config.setMinimumIdle(minimumIdle);
+		config.setConnectionTimeout(connectionTimeout);
+		config.setIdleTimeout(idleTimeout);
+		config.setMaxLifetime(maxLifetime);
+		config.setConnectionInitSql(connectionInitSql);
+		config.setValidationTimeout(validationTimeout);
+		config.setAutoCommit(autoCommit);
+		return new HikariDataSource(config);
 	}
-
 }

@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.ssafy.enjoytrip.model.dto.User;
+import com.ssafy.enjoytrip.model.entity.User;
 import com.ssafy.enjoytrip.model.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -41,7 +41,7 @@ public class UserRestController {
     @PostMapping(("/signup"))
     public ResponseEntity<?> signUP(@RequestBody User user) {
         User result = userService.addUser(user);
-
+        System.out.println(user);
         if (result == null) {
             return ResponseEntity.status(401).body("Unauthorized"); // 401 Unauthorized
         }

@@ -1,7 +1,7 @@
 package com.ssafy.enjoytrip.controller;
 
-import com.ssafy.enjoytrip.model.dto.Comment;
-import com.ssafy.enjoytrip.model.dto.User;
+import com.ssafy.enjoytrip.model.entity.Comment;
+import com.ssafy.enjoytrip.model.entity.User;
 import com.ssafy.enjoytrip.model.service.CommentService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class CommentRestController {
      public ResponseEntity<Comment> addComment(@RequestBody Comment comment,
      HttpSession session) {
      User user = (User) session.getAttribute("user");
-     comment.setUserId(user.getId());
+     comment.setUser(user);
      Comment newComment = commentService.addComment(comment);
 
      return ResponseEntity.ok(newComment);
@@ -49,7 +49,7 @@ public class CommentRestController {
          User user = (User) session.getAttribute("user");
          Comment existingComment = commentService.getCommentById(commentId);
 
-         if (existingComment == null || !user.getId().equals(existingComment.getUserId())) {
+         if (existingComment == null || !user.equals(existingComment.getUser())) {
              return ResponseEntity.notFound().build();
          }
 
@@ -63,7 +63,7 @@ public class CommentRestController {
         User user = (User) session.getAttribute("user");
         Comment comment = commentService.getCommentById(commentId);
 
-        if (comment == null || !user.getId().equals(comment.getUserId())) {
+        if (comment == null || !user.equals(comment.getUser())) {
             return ResponseEntity.notFound().build();
         }
 

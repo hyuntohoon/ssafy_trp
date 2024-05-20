@@ -1,20 +1,52 @@
 package com.ssafy.enjoytrip.model.service;
 
-import com.ssafy.enjoytrip.model.dto.User;
+import com.ssafy.enjoytrip.model.entity.User;
 
 public interface UserService {
-    User addUser(User user);
 
-    User selectUserById(User user);
+  /**
+   * Adds a new user to the database.
+   *
+   * @param user the user to add
+   * @return the added user with updated fields (e.g., generated ID)
+   */
+  User addUser(User user);
 
-    boolean checkId(String id);
+  /**
+   * Selects a user by their ID.
+   *
+   * @param user the user with the ID to look for
+   * @return the found user or null if not found or if the password is invalid
+   */
+  User selectUserById(User user);
 
-    boolean changePW(User user, String pw);
+  /**
+   * Checks if a user ID exists in the database.
+   *
+   * @param id the user ID to check
+   * @return true if the ID exists, false otherwise
+   */
+  boolean checkId(String id);
 
-    boolean delete(User user);
+  /**
+   * Changes the password for a user.
+   *
+   * @param user the user whose password is to be changed
+   * @param pw the new password
+   * @return true if the password was successfully changed, false otherwise
+   */
 
-    void deleteAllUsers();  // 테스트를 위한 메서드
-
-    // 임시 비밀번호 생성을 위한 메서드 추가
-    String generateTemporaryPassword(String userId, String name);
+  /**
+   * Deletes a user from the database.
+   *
+   * @param user the user to delete
+   * @return true if the user was successfully deleted, false otherwise
+   */
+  boolean delete(User user);
+  boolean changePW(User user, String newPassword);
+  /**
+   * Deletes all users from the database.
+   */
+  void deleteAllUsers();
+  String generateTemporaryPassword(String userId, String name);
 }

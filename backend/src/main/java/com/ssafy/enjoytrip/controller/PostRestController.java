@@ -1,6 +1,6 @@
 package com.ssafy.enjoytrip.controller;
 
-import com.ssafy.enjoytrip.model.dto.Post;
+import com.ssafy.enjoytrip.model.entity.Post;
 import com.ssafy.enjoytrip.model.service.PostService;
 
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class PostRestController {
 
     // 게시글 ID로 조회
     @GetMapping("/{postId}")
-    public ResponseEntity<?> getPost(@PathVariable String postId) {
+    public ResponseEntity<?> getPost(@PathVariable int postId) {
         Post post = postService.getPost(postId);
         if (post != null) {
             return ResponseEntity.ok(post);
@@ -62,7 +62,7 @@ public class PostRestController {
 
     // 게시글 삭제
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable String postId) {
+    public ResponseEntity<?> deletePost(@PathVariable int postId) {
 
         boolean isDeleted = postService.deletePost(postId);
         if (isDeleted) {

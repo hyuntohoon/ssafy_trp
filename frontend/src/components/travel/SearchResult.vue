@@ -10,29 +10,29 @@ const routeStore = useRouteStore();
 import { storeToRefs } from "pinia";
 
 const { resultData, focus } = storeToRefs(searchStore);
-const { placeList } = storeToRefs(routeStore);
+const { route } = storeToRefs(routeStore);
 
 const moveFocus = (data) => {
   focus.value = { lat: data.latitude, lng: data.longitude, level: 3 };
 };
 
 const addPlace = (data) => {
-  if (placeList.value.some((place) => place.contentId === data.contentId)) {
+  if (route.value.places.some((place) => place.contentId === data.contentId)) {
     return;
   }
-  placeList.value.push(data);
+  route.value.places.push(data);
 };
 
 const removePlace = (data) => {
-  const index = placeList.value.findIndex((place) => place.contentId === data.contentId);
+  const index = route.value.places.findIndex((place) => place.contentId === data.contentId);
   if (index === -1) {
     return;
   }
-  placeList.value.splice(index, 1);
+  route.value.places.splice(index, 1);
 };
 
 const checkPlace = (data) => {
-  return placeList.value.some((place) => place.contentId === data.contentId);
+  return route.value.places.some((place) => place.contentId === data.contentId);
 };
 </script>
 

@@ -1,11 +1,11 @@
 package com.ssafy.enjoytrip.model.dao;
 
 import com.ssafy.enjoytrip.model.dto.Comment;
-import org.apache.ibatis.annotations.Mapper;
+//import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper
+//@Mapper
 public interface CommentDao {
     Comment addComment(Comment comment);
 

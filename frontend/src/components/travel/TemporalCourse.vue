@@ -9,7 +9,7 @@ const routeStore = useRouteStore();
 
 import { storeToRefs } from "pinia";
 const { focus } = storeToRefs(searchStore);
-const { placeList } = storeToRefs(routeStore);
+const { route } = storeToRefs(routeStore);
 const { postPlace, flush } = routeStore;
 
 import Swal from "sweetalert2";
@@ -19,11 +19,28 @@ const moveFocus = (data) => {
 };
 
 const removePlace = (data) => {
-  const index = placeList.value.findIndex((place) => place.contentId === data.contentId);
+  const index = route.value.places.findIndex((place) => place.contentId === data.contentId);
   if (index === -1) {
     return;
   }
-  placeList.value.splice(index, 1);
+  route.value.places.splice(index, 1);
+};
+
+const flushPlaces = () => {
+  // confirm swal
+  Swal.fire({
+    title: "코스를 삭제하시겠습니까?",
+    text: "전체 코스가 삭제됩니다.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "삭제",
+    cancelButtonText: "취소",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      flush();
+      Swal.fire("삭제 완료", "", "success");
+    }
+  });
 };
 
 const doPost = () => {
@@ -36,23 +53,18 @@ const doPost = () => {
     },
     showCancelButton: true,
     confirmButtonText: "저장",
+    cancelButtonText: "취소",
     showLoaderOnConfirm: true,
     preConfirm: async (name) => {
       const res = await postPlace(name);
-      return res;
+      if (!res) {
+        Swal.showValidationMessage("코스 저장에 실패했습니다.");
+      }
     },
     allowOutsideClick: () => !Swal.isLoading(),
   }).then((result) => {
-    if (result) {
-      Swal.fire({
-        title: "저장 완료",
-        icon: "success",
-      });
-    } else {
-      Swal.fire({
-        title: "저장 실패",
-        icon: "error",
-      });
+    if (result.isConfirmed) {
+      Swal.fire("저장 완료", "", "success");
     }
   });
 };
@@ -70,16 +82,16 @@ const doPost = () => {
           <span>임시 코스 저장 </span>
           <i class="bi bi-save"></i>
         </button>
-        <button id="flush" @click="flush">
+        <button id="flush" @click="flushPlaces">
           <span>임시 코스 삭제 </span>
           <i class="bi bi-trash"></i>
         </button>
       </div>
     </div>
     <hr />
-    <span v-if="placeList.length === 0">코스에 장소가 없습니다.</span>
+    <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
     <div class="row">
-      <div class="col-6 card-wrap" v-for="place in placeList" :key="place.contentId">
+      <div class="col-6 card-wrap" v-for="place in route.places" :key="place.contentId">
         <PlaceCard :data="place">
           <template v-slot:actions>
             <div class="button-wrap">

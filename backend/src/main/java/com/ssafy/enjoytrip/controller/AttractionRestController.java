@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
-import com.ssafy.enjoytrip.model.dto.AttractionInfo;
+import com.ssafy.enjoytrip.model.entity.AttractionInfo;
 import com.ssafy.enjoytrip.model.service.AttractionService;
 
 @RestController

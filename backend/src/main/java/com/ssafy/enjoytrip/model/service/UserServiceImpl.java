@@ -1,93 +1,92 @@
 package com.ssafy.enjoytrip.model.service;
 
-import java.util.Random;
-
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
-
-import com.ssafy.enjoytrip.model.dao.UserDao;
-import com.ssafy.enjoytrip.model.dto.User;
+import com.ssafy.enjoytrip.model.entity.User;
+import com.ssafy.enjoytrip.model.repository.UserRepository;
 import com.ssafy.enjoytrip.utils.HashUtil;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     private final HashUtil hashUtil;
 
-    public UserServiceImpl(UserDao userDao, HashUtil hashUtil) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserRepository userRepository, HashUtil hashUtil) {
+        this.userRepository = userRepository;
         this.hashUtil = hashUtil;
     }
 
     @Override
+    @Transactional
     public User addUser(User user) {
         String salt = makeRandomSalt();
-
         String hashedPw = hashUtil.hash(user.getPw(), salt);
-
         user.setPw(hashedPw);
         user.setSalt(salt);
-        userDao.addUser(user);
-        return userDao.selectUserById(user);
+        return userRepository.save(user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User selectUserById(User user) {
-        User result = userDao.selectUserById(user);
-        if (result == null || !isValidPassword(user, result)) {
-            return null;
-        }
-
-        clearSensitiveData(result);
-        return result;
+        Optional<User> result = userRepository.findById(user.getId());
+        return result.filter(u -> isValidPassword(user, u)).orElse(null);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean checkId(String id) {
-        return userDao.checkId(id);
+        return userRepository.existsById(id);
     }
 
     @Override
-    public boolean changePW(User user, String pw) {
-        String salt = user.getSalt();
-        String hashedPw = hashUtil.hash(pw, salt);
-        user.setPw(hashedPw);
-        return userDao.changePW(user);
+    public boolean changePW(User user, String newPassword) {
+        user.setPw(newPassword);
+        userRepository.save(user);
+        return true;
     }
 
+
     @Override
+    @Transactional
     public boolean delete(User user) {
-        return userDao.delete(user);
+        Optional<User> optionalUser = userRepository.findById(user.getId());
+        if (optionalUser.isPresent()) {
+            userRepository.delete(optionalUser.get());
+            return true;
+        }
+        return false;
     }
 
-    @Profile("test")
     @Override
+    @Transactional
     public void deleteAllUsers() {
-        userDao.deleteAllUsers();
+        userRepository.deleteAll();
     }
 
     @Override
+    @Transactional
     public String generateTemporaryPassword(String userId, String name) {
-        User user = userDao.findByUserIdAndName(userId, name);
-        if (user == null) {
+        Optional<User> optionalUser = userRepository.findByIdAndName(userId, name);
+        if (optionalUser.isEmpty()) {
             return null;
         }
 
+        User user = optionalUser.get();
         String temporaryPassword = makeRandomPassword();
         changePW(user, temporaryPassword);
 
         return temporaryPassword;
     }
 
+
     private boolean isValidPassword(User inputUser, User storedUser) {
         String hashedPw = hashUtil.hash(inputUser.getPw(), storedUser.getSalt());
         return storedUser.getPw().equals(hashedPw);
-    }
-
-    private void clearSensitiveData(User user) {
-        user.setPw(null);
-        user.setSalt(null);
     }
 
     private String makeRandomSalt() {
@@ -141,4 +140,5 @@ public class UserServiceImpl implements UserService {
         }
         return passwordBuilder.toString();
     }
+
 }

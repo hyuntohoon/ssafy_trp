@@ -38,8 +38,8 @@ public class DataBaseConfiguration {
 	@Value("${spring.datasource.driver-class-name}")
 	private String driverClassName;
 
-	@Value("${spring.datasource.url}")
-	private String url;
+	@Value("${spring.datasource.jdbc-url}")
+	private String jdbcUrl;
 
 	@Value("${spring.datasource.username}")
 	private String username;
@@ -51,7 +51,7 @@ public class DataBaseConfiguration {
 	public DataSource dataSource() {
 		HikariConfig config = new HikariConfig();
 		config.setDriverClassName(driverClassName);
-		config.setJdbcUrl(url);
+		config.setJdbcUrl(jdbcUrl);
 		config.setUsername(username);
 		config.setPassword(password);
 		config.setMaximumPoolSize(maximumPoolSize);

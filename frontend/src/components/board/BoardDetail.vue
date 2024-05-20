@@ -1,18 +1,18 @@
 <script setup>
 import BoardArticle from "@/components/board/item/BoardArticle.vue";
-import BoardComment from "@/components/board/item/BoardComment.vue";
 
 import { ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 import { getBoard } from "@/api/board";
 
 const route = useRoute();
-const router = useRouter();
 
 const id = ref(route.params.id);
 
-const article = ref({});
+const article = ref({
+  user: {},
+});
 
 const success = (response) => {
   if (response.status !== 200) {
@@ -20,9 +20,7 @@ const success = (response) => {
     return;
   } else {
     article.value = response.data;
-    article.value.date = new Date(
-      article.value.createTimeStamp
-    ).toLocaleDateString();
+    article.value.date = new Date(article.value.createTimeStamp).toLocaleDateString();
   }
 };
 const fail = (error) => {
@@ -31,26 +29,26 @@ const fail = (error) => {
 
 getBoard(id.value, success, fail);
 
-const comments = ref([
-  {
-    id: 1,
-    writer: "작성자1",
-    content: "댓글1",
-    date: "2021-09-01",
-  },
-  {
-    id: 2,
-    writer: "작성자2",
-    content: "댓글2",
-    date: "2021-09-02",
-  },
-  {
-    id: 3,
-    writer: "작성자3",
-    content: "댓글3",
-    date: "2021-09-03",
-  },
-]);
+// const comments = ref([
+//   {
+//     id: 1,
+//     writer: "작성자1",
+//     content: "댓글1",
+//     date: "2021-09-01",
+//   },
+//   {
+//     id: 2,
+//     writer: "작성자2",
+//     content: "댓글2",
+//     date: "2021-09-02",
+//   },
+//   {
+//     id: 3,
+//     writer: "작성자3",
+//     content: "댓글3",
+//     date: "2021-09-03",
+//   },
+// ]);
 </script>
 
 <template>
@@ -60,5 +58,4 @@ const comments = ref([
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -61,7 +61,8 @@ export const useRouteStore = defineStore("route", () => {
     try {
       const response = await getTripPlans(userId);
       if (response.status === 200) {
-        routeList.value = response.data;
+        routeList.value = refineRouteList(response.data);
+        console.log(routeList.value);
         return true;
       } else {
         throw new Error(response.status);
@@ -69,6 +70,28 @@ export const useRouteStore = defineStore("route", () => {
     } catch (error) {
       return false;
     }
+  };
+
+  const refineRouteList = (original) => {
+    const map = {};
+    for (const place of original) {
+      let id = place.tripPlan.id;
+      if (!map[id]) {
+        map[id] = {
+          tripPlan: place.tripPlan,
+          places: [],
+        };
+      }
+      map[id].places.push(place.attractionInfo);
+    }
+
+    const result = [];
+    for (const key in map) {
+      map[key].places.sort((a, b) => a.order - b.order);
+      result.push(map[key]);
+    }
+
+    return result;
   };
 
   const flush = () => {

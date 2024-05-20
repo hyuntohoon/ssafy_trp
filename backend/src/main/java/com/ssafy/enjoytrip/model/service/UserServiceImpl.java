@@ -44,18 +44,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public boolean changePW(User user, String pw) {
-        Optional<User> optionalUser = userRepository.findById(user.getId());
-        if (optionalUser.isPresent()) {
-            User existingUser = optionalUser.get();
-            String hashedPw = hashUtil.hash(pw, existingUser.getSalt());
-            existingUser.setPw(hashedPw);
-            userRepository.save(existingUser);
-            return true;
-        }
-        return false;
+    public boolean changePW(User user, String newPassword) {
+        user.setPw(newPassword);
+        userRepository.save(user);
+        return true;
     }
+
 
     @Override
     @Transactional
@@ -73,6 +67,22 @@ public class UserServiceImpl implements UserService {
     public void deleteAllUsers() {
         userRepository.deleteAll();
     }
+
+    @Override
+    @Transactional
+    public String generateTemporaryPassword(String userId, String name) {
+        Optional<User> optionalUser = userRepository.findByIdAndName(userId, name);
+        if (optionalUser.isEmpty()) {
+            return null;
+        }
+
+        User user = optionalUser.get();
+        String temporaryPassword = makeRandomPassword();
+        changePW(user, temporaryPassword);
+
+        return temporaryPassword;
+    }
+
 
     private boolean isValidPassword(User inputUser, User storedUser) {
         String hashedPw = hashUtil.hash(inputUser.getPw(), storedUser.getSalt());
@@ -104,4 +114,31 @@ public class UserServiceImpl implements UserService {
         }
         return saltBuilder.toString();
     }
+
+    private String makeRandomPassword() {
+        StringBuilder passwordBuilder = new StringBuilder();
+        Random random = new Random();
+        final int length = 10;
+        final int alphabetRange = 26;
+        final int asciiLowerA = 97;
+        final int asciiUpperA = 65;
+        final int numberRange = 10;
+
+        for (int i = 0; i < length; i++) {
+            int rIndex = random.nextInt(3);
+            switch (rIndex) {
+                case 0:
+                    passwordBuilder.append((char) (random.nextInt(alphabetRange) + asciiLowerA));
+                    break;
+                case 1:
+                    passwordBuilder.append((char) (random.nextInt(alphabetRange) + asciiUpperA));
+                    break;
+                case 2:
+                    passwordBuilder.append(random.nextInt(numberRange));
+                    break;
+            }
+        }
+        return passwordBuilder.toString();
+    }
+
 }

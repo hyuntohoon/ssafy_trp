@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
   article: Object,
 });
 </script>
@@ -9,8 +9,15 @@ const props = defineProps({
     <div class="info-wrap">
       <h3>{{ article.title }}</h3>
       <div class="info">
-        <span style="margin-right: 1rem">작성자 : {{ article.userId }}</span>
-        <span style="margin-right: 1rem">작성일 : {{ article.date }}</span>
+        <span style="margin-right: 1rem"
+          >작성자 : {{ article.user.name }} ({{ article.user.id }})</span
+        >
+        <span style="margin-right: 1rem"
+          >작성일 : {{ new Date(article.createTimeStamp).toLocaleDateString() }}</span
+        >
+        <span v-if="article.updateTimeStamp !== article.createTimeStamp"
+          >수정일 : {{ new Date(article.updateTimeStamp).toLocaleDateString() }}</span
+        >
       </div>
     </div>
     <div class="content-wrap">

@@ -104,9 +104,7 @@ export const useSearchStore = defineStore("search", () => {
       }
     });
     try {
-      console.log(sidoCode, gugunCode, typeCode, keyword.value);
       const response = await getAttractions(sidoCode, gugunCode, typeCode, keyword.value);
-      console.log(response);
       if (response.status === 200) {
         resultData.value = response.data;
         return "success";

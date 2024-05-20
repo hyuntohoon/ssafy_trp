@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import GlassSelect from "@/components/common/GlassSelect.vue";
 
 const errorMsg = ref("");
@@ -11,8 +11,15 @@ import { storeToRefs } from "pinia";
 const { sido, sidoNames, gugunNames, gugun, type, typeNames } = storeToRefs(storeSearch);
 const { fetchSido, fetchGugun, flush } = storeSearch;
 
-await fetchSido();
-flush();
+onMounted(async () => {
+  const res = await fetchSido();
+  flush();
+  if (!res) {
+    errorMsg.value = "데이터를 불러오는데 실패했습니다.";
+  } else {
+    errorMsg.value = "";
+  }
+});
 
 const changeSido = async (data) => {
   sido.value = data;

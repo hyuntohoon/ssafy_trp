@@ -2,16 +2,14 @@
 import { ref, watch } from "vue";
 import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from "vue3-kakao-maps";
 
-import { useSearchStore } from "@/stores/search";
 import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
 
-const searchStore = useSearchStore();
 const routeStore = useRouteStore();
-const { resultData, focus } = storeToRefs(searchStore);
-const { getLatLngList } = storeToRefs(routeStore);
+const { getLatLngList, route } = storeToRefs(routeStore);
 
 const currentFocus = ref(null);
+const focus = ref({ lat: 37.5665, lng: 126.978, level: 8 });
 
 const mouseOver = (marker) => {
   currentFocus.value = marker;
@@ -21,13 +19,12 @@ const mouseOut = () => {
   currentFocus.value = null;
 };
 
-// check resultData change, if change, update focus with avg lat, lng
-watch(resultData, () => {
-  if (resultData.value.length > 0) {
-    let minLat = resultData.value[0].latitude;
-    let maxLat = resultData.value[0].latitude;
-    let minLng = resultData.value[0].longitude;
-    let maxLng = resultData.value[0].longitude;
+watch(route, () => {
+  if (route.value.places.length > 0) {
+    let minLat = route.value.places[0].latitude;
+    let maxLat = route.value.places[0].latitude;
+    let minLng = route.value.places[0].longitude;
+    let maxLng = route.value.places[0].longitude;
     let level = 8;
     const distance = Math.sqrt(Math.pow(maxLat - minLat, 2) + Math.pow(maxLng - minLng, 2));
     if (distance < 0.1) focus.value.level = 8;
@@ -39,11 +36,13 @@ watch(resultData, () => {
     else if (distance < 16) focus.value.level = 2;
     else if (distance < 32) focus.value.level = 1;
     const lat =
-      resultData.value.reduce((acc, cur) => acc + cur.latitude, 0) / resultData.value.length;
+      route.value.places.reduce((acc, cur) => acc + cur.latitude, 0) /
+      route.value.places.value.length;
     const lng =
-      resultData.value.reduce((acc, cur) => acc + cur.longitude, 0) / resultData.value.length;
+      route.value.places.reduce((acc, cur) => acc + cur.longitude, 0) /
+      route.value.places.value.length;
     // get proper level by distance
-    resultData.value.forEach((result) => {
+    route.value.places.forEach((result) => {
       if (result.latitude < minLat) minLat = result.latitude;
       if (result.latitude > maxLat) maxLat = result.latitude;
       if (result.longitude < minLng) minLng = result.longitude;
@@ -64,7 +63,7 @@ watch(resultData, () => {
     :level="focus.level"
     :draggable="true">
     <KakaoMapMarker
-      v-for="result in resultData"
+      v-for="result in route.places"
       :key="result.id"
       :lat="result.latitude"
       :lng="result.longitude"

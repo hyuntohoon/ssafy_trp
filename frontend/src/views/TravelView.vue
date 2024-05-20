@@ -19,7 +19,7 @@ import Navigator from "@/components/Navigator.vue";
       <TravelMap />
       <div>
         <div class="search-wrap">
-          <Suspense><SearchArea /></Suspense>
+          <SearchArea />
           <SearchInput />
         </div>
         <SearchResult />

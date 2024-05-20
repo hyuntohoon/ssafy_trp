@@ -1,5 +1,6 @@
 <script setup>
 import PlaceCard from "@/components/common/PlaceCard.vue";
+import draggable from "vuedraggable";
 
 import { useSearchStore } from "@/stores/search";
 const searchStore = useSearchStore();
@@ -75,7 +76,10 @@ const doPost = () => {
     <div class="nav-wrap">
       <div class="text">
         <h2>임시 코스</h2>
-        <h5><i class="bi bi-plus-circle" /> 아이콘을 눌러 코스에 장소를 추가하세요</h5>
+        <h5>
+          <i class="bi bi-plus-circle" /> 아이콘을 눌러 코스에 장소를 추가하고, 드래그하여 순서를
+          변경할 수 있습니다.
+        </h5>
       </div>
       <div class="action-wrap">
         <button id="save" @click="doPost">
@@ -91,23 +95,36 @@ const doPost = () => {
     <hr />
     <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
     <div class="row">
-      <div class="col-6 card-wrap" v-for="place in route.places" :key="place.contentId">
-        <PlaceCard :data="place">
-          <template v-slot:actions>
-            <div class="button-wrap">
-              <button @click="moveFocus(place)">
-                <i class="bi bi-geo-alt"></i>
-              </button>
-              <button>
-                <i class="bi bi-heart"></i>
-              </button>
-              <button @click="removePlace(place)">
-                <i class="bi bi-x-circle"></i>
-              </button>
-            </div>
-          </template>
-        </PlaceCard>
-      </div>
+      <draggable
+        class="row card-wrap"
+        v-model="route.places"
+        item-key="contentId"
+        @start="drag = true"
+        @end="drag = false">
+        <template #item="{ element }">
+          <div class="col-6">
+            <PlaceCard :data="element">
+              <template v-slot:actions>
+                <div style="display: flex; justify-content: space-between; align-items: end">
+                  <!-- show index of this element -->
+                  <div class="number-icon">{{ route.places.indexOf(element) + 1 }}</div>
+                  <div class="button-wrap">
+                    <button @click="moveFocus(element)">
+                      <i class="bi bi-geo-alt"></i>
+                    </button>
+                    <button>
+                      <i class="bi bi-heart"></i>
+                    </button>
+                    <button @click="removePlace(element)">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </PlaceCard>
+          </div>
+        </template>
+      </draggable>
     </div>
   </div>
 </template>
@@ -209,5 +226,16 @@ button:active {
 
 .card-wrap {
   animation: scale-in-center 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.number-icon {
+  width: 30px;
+  height: 30px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
 }
 </style>

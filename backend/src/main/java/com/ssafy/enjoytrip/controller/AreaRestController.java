@@ -1,5 +1,7 @@
 package com.ssafy.enjoytrip.controller;
 
+import com.ssafy.enjoytrip.model.entity.Sido;
+import com.ssafy.enjoytrip.model.entity.Gugun;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import com.ssafy.enjoytrip.model.dto.Gugun;
-import com.ssafy.enjoytrip.model.dto.Sido;
 import com.ssafy.enjoytrip.model.service.AreaService;
 
 @RestController
@@ -33,7 +33,7 @@ public class AreaRestController {
 
     @GetMapping("/gugun/{sidocode}")
     public ResponseEntity<List<Gugun>> getGugun(@PathVariable("sidocode") int sidoCode) {
-        List<Gugun> list = areaService.getGugunList(sidoCode);
+        List<Gugun> list = areaService.getGugunListBySidoCode(sidoCode);
         if (list != null && !list.isEmpty()) {
             return ResponseEntity.ok(list); // 200 OK with body
         } else {

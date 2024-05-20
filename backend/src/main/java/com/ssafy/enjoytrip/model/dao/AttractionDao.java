@@ -2,11 +2,11 @@ package com.ssafy.enjoytrip.model.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
+//import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.enjoytrip.model.dto.AttractionInfo;
 
-@Mapper
+//@Mapper
 public interface AttractionDao {
 
   List<AttractionInfo> getAttractionList(String sidoCode, String gugunCode, String type,

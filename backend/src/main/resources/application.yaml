@@ -4,6 +4,11 @@ spring:
       prefix: /WEB-INF/views/
       suffix: .jsp
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://127.0.0.1:3306/ssafytrip?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: ssafy
+    password: ssafy
+
     hikari:
       maximum-pool-size: 10
       minimum-idle: 10
@@ -14,16 +19,14 @@ spring:
       validation-timeout: 2000
       auto-commit: true
 
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://192.168.204.102:3306/ssafytrip?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
-      username: ssafy
-      password: ssafy
-
-mybatis:
-  type-aliases-package: com.ssafy.enjoytrip.model.dto
-  mapper-locations: classpath:mappers/**/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
+  jpa:
+    hibernate:
+      ddl-auto: update # 이 설정은 실제 운영에서는 적절히 변경 필요 (none, validate, update, create, create-drop)
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 server:
   port: 80

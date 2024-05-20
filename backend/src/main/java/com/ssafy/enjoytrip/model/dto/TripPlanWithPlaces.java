@@ -1,63 +1,40 @@
 package com.ssafy.enjoytrip.model.dto;
 
+import com.ssafy.enjoytrip.model.entity.TripPlan;
+import com.ssafy.enjoytrip.model.entity.TripPlanPlace;
+
 import java.util.List;
 
 public class TripPlanWithPlaces {
-    private int id;
-    private String name;
-    private String userId;
-    private List<AttractionInfo> places;
+    private TripPlan tripPlan;
+    private List<TripPlanPlace> places;
+
+    public TripPlanWithPlaces(TripPlan tripPlan, List<TripPlanPlace> places) {
+        this.tripPlan = tripPlan;
+        this.places = places;
+    }
 
     @Override
     public String toString() {
         return "TripPlanWithPlaces{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", userId='" + userId + '\'' +
+                "tripPlan=" + tripPlan +
                 ", places=" + places +
                 '}';
     }
 
-    public TripPlanWithPlaces() {
+    public TripPlan getTripPlan() {
+        return tripPlan;
     }
 
-    public TripPlanWithPlaces(int id, String name, String userId, List<AttractionInfo> places) {
-        this.id = id;
-        this.name = name;
-        this.userId = userId;
-        this.places = places;
-    }
-// Getters and setters
-
-    public int getId() {
-        return id;
+    public void setTripPlan(TripPlan tripPlan) {
+        this.tripPlan = tripPlan;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public List<AttractionInfo> getPlaces() {
+    public List<TripPlanPlace> getPlaces() {
         return places;
     }
 
-    public void setPlaces(List<AttractionInfo> places) {
+    public void setPlaces(List<TripPlanPlace> places) {
         this.places = places;
     }
 }

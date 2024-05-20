@@ -26,6 +26,34 @@ const removePlace = (data) => {
   placeList.value.splice(index, 1);
 };
 
+const flushPlaces = () => {
+  // confirm swal
+  Swal.fire({
+    title: "코스를 삭제하시겠습니까?",
+    text: "전체 코스가 삭제됩니다.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "삭제",
+    showLoaderOnConfirm: true,
+    preConfirm: () => {
+      return flush();
+    },
+    allowOutsideClick: () => !Swal.isLoading(),
+  }).then((result) => {
+    if (result) {
+      Swal.fire({
+        title: "삭제 완료",
+        icon: "success",
+      });
+    } else {
+      Swal.fire({
+        title: "삭제 실패",
+        icon: "error",
+      });
+    }
+  });
+};
+
 const doPost = () => {
   // prompt swal that gets name of the course
   Swal.fire({
@@ -70,7 +98,7 @@ const doPost = () => {
           <span>임시 코스 저장 </span>
           <i class="bi bi-save"></i>
         </button>
-        <button id="flush" @click="flush">
+        <button id="flush" @click="flushPlaces">
           <span>임시 코스 삭제 </span>
           <i class="bi bi-trash"></i>
         </button>

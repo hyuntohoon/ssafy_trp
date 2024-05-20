@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,13 +70,28 @@ public class TripPlanServiceImpl implements TripPlanService {
 			tripPlan.setUserId(tripPlanRequest.getUserId());
 			tripPlanRepository.save(tripPlan);
 
-			// 기존 장소를 삭제하고 새로운 장소를 추가합니다.
+			// 기존 장소를 삭제합니다.
 			tripPlanPlaceRepository.deleteByTripPlanId(id);
-			addPlacesToTripPlan(tripPlan, tripPlanRequest.getAttractionIds());
+
+			// 새로운 장소를 추가합니다.
+			List<Integer> newAttractionIds = tripPlanRequest.getAttractionIds();
+			int order = 0; // 장소 순서를 설정하는 변수
+			for (Integer attractionId : newAttractionIds) {
+				TripPlanPlace newTripPlanPlace = new TripPlanPlace();
+				newTripPlanPlace.setTripPlan(tripPlan);
+				AttractionInfo attractionInfo = attractionInfoRepository.findById(attractionId)
+						.orElseThrow(() -> new IllegalArgumentException("Invalid attraction ID: " + attractionId));
+				newTripPlanPlace.setAttractionInfo(attractionInfo);
+				newTripPlanPlace.setOrder(order++);
+				tripPlanPlaceRepository.save(newTripPlanPlace);
+			}
+
 			return true;
 		}
 		return false;
 	}
+
+
 
 	@Override
 	@Transactional
@@ -155,28 +172,4 @@ public class TripPlanServiceImpl implements TripPlanService {
 		}).collect(Collectors.toList());
 	}
 
-//	public List<TripPlanWithPlacesDTO> getTripPlansByUserId(String userId) {
-//		List<TripPlan> tripPlans = tripPlanRepository.findByUserId(userId);
-//
-//		return tripPlans.stream().map(tripPlan -> {
-//			TripPlanDTO tripPlanDTO = new TripPlanDTO();
-//			tripPlanDTO.setId(tripPlan.getId());
-//			tripPlanDTO.setName(tripPlan.getName());
-//			tripPlanDTO.setUserId(tripPlan.getUserId());
-//
-//			List<PlaceDTO> places = tripPlan.getPlaces().stream().map(place -> {
-//				PlaceDTO placeDTO = new PlaceDTO();
-//				placeDTO.setTripPlan(null); // 중복 방지를 위해 null로 설정
-//				placeDTO.setAttractionInfo(place.getAttractionInfo());
-//				placeDTO.setOrder(place.getOrder());
-//				return placeDTO;
-//			}).collect(Collectors.toList());
-//
-//			TripPlanWithPlacesDTO tripPlanWithPlacesDTO = new TripPlanWithPlacesDTO();
-//			tripPlanWithPlacesDTO.setTripPlan(tripPlanDTO);
-//			tripPlanWithPlacesDTO.setPlaces(places);
-//
-//			return tripPlanWithPlacesDTO;
-//		}).collect(Collectors.toList());
-//	}
 }

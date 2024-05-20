@@ -44,7 +44,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean changePW(User user, String newPassword) {
-        user.setPw(newPassword);
+        String salt = user.getSalt();
+        String hashedPw = hashUtil.hash(newPassword, salt);
+        user.setPw(hashedPw);
+
         userRepository.save(user);
         return true;
     }
@@ -82,9 +85,12 @@ public class UserServiceImpl implements UserService {
         return temporaryPassword;
     }
 
-
-    private boolean isValidPassword(User inputUser, User storedUser) {
+    @Override
+    public boolean isValidPassword(User inputUser, User storedUser) {
+        // 해시된 비밀번호 생성
         String hashedPw = hashUtil.hash(inputUser.getPw(), storedUser.getSalt());
+
+        // 해시된 비밀번호와 저장된 비밀번호 비교
         return storedUser.getPw().equals(hashedPw);
     }
 

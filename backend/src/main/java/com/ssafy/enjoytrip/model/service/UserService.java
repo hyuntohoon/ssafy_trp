@@ -48,5 +48,6 @@ public interface UserService {
    * Deletes all users from the database.
    */
   void deleteAllUsers();
+  public boolean isValidPassword(User inputUser, User storedUser);
   String generateTemporaryPassword(String userId, String name);
 }

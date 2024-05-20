@@ -14,9 +14,11 @@ public class AuthService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    public String signIn(User user) {
-        User existingUser = userService.selectUserById(user);
-        if (existingUser != null) {
+    public String signIn(User inputUser) {
+        User existingUser = userService.selectUserById(inputUser);
+
+        // 유저가 존재하고 비밀번호가 유효한지 확인
+        if (existingUser != null && userService.isValidPassword(inputUser, existingUser)) {
             return jwtTokenUtil.generateToken(existingUser.getName());
         }
         return null;

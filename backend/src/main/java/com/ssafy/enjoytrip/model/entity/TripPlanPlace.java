@@ -2,43 +2,38 @@ package com.ssafy.enjoytrip.model.entity;
 
 import jakarta.persistence.*;
 
-@Table(name = "trip_plan_place")
+
 @Entity
+@Table(name = "trip_plan_place")
+@IdClass(TripPlanPlaceId.class)
 public class TripPlanPlace {
 
-    @EmbeddedId
-    private TripPlanPlaceId id;
-
+    @Id
     @ManyToOne
-    @MapsId("tripPlanId")
-    @JoinColumn(name = "tripPlanId")
+    @JoinColumn(name = "trip_plan_id", insertable = false, updatable = false)
     private TripPlan tripPlan;
 
+    @Id
     @ManyToOne
-    @MapsId("contentId")
-    @JoinColumn(name = "content_id")
+    @JoinColumn(name = "content_id", insertable = false, updatable = false)
     private AttractionInfo attractionInfo;
 
     @Column(name = "`order`")
     private Integer order;
 
-    public TripPlanPlace() {}
+    @Override
+    public String toString() {
+        return "TripPlanPlace{" +
+                "tripPlan=" + tripPlan +
+                ", attractionInfo=" + attractionInfo +
+                ", order=" + order +
+                '}';
+    }
 
     public TripPlanPlace(TripPlanPlaceId id, TripPlan tripPlan, AttractionInfo attractionInfo, Integer order) {
-        this.id = id;
         this.tripPlan = tripPlan;
         this.attractionInfo = attractionInfo;
         this.order = order;
-    }
-
-    // Getters and setters
-
-    public TripPlanPlaceId getId() {
-        return id;
-    }
-
-    public void setId(TripPlanPlaceId id) {
-        this.id = id;
     }
 
     public TripPlan getTripPlan() {
@@ -62,6 +57,15 @@ public class TripPlanPlace {
     }
 
     public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    public TripPlanPlace() {
+    }
+
+    public TripPlanPlace(TripPlan tripPlan, AttractionInfo attractionInfo, Integer order) {
+        this.tripPlan = tripPlan;
+        this.attractionInfo = attractionInfo;
         this.order = order;
     }
 }

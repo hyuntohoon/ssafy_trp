@@ -69,4 +69,14 @@ public class TripPlanRestController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{tripPlanId}/invite")
+    public ResponseEntity<?> inviteUserToTripPlan(@PathVariable Integer tripPlanId, @RequestParam String userId) {
+        try {
+            tripPlanService.inviteUserToTripPlan(tripPlanId, userId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }

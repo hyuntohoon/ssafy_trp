@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.controller;
 
+import com.ssafy.enjoytrip.model.dto.UserCreateDTO;
 import com.ssafy.enjoytrip.model.entity.User;
 import com.ssafy.enjoytrip.model.service.AuthService;
 import com.ssafy.enjoytrip.model.service.UserService;
@@ -36,7 +37,11 @@ public class UserRestController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody User user) {
+    public ResponseEntity<?> signUp(@RequestBody UserCreateDTO userCreate) {
+        User user = new User();
+        user.setId(userCreate.getId());
+        user.setPw(userCreate.getPw());
+        user.setName(userCreate.getName());
         User result = userService.addUser(user);
         if (result == null) {
             return ResponseEntity.status(401).body("Unauthorized"); // 401 Unauthorized

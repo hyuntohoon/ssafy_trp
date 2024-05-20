@@ -2,6 +2,8 @@ package com.ssafy.enjoytrip.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "trip_plan")
 public class TripPlan {
@@ -17,12 +19,21 @@ public class TripPlan {
     @Column(name = "user_id", nullable = false, length = 255)
     private String userId;
 
+    @ManyToMany
+    @JoinTable(
+            name = "trip_plan_users",
+            joinColumns = @JoinColumn(name = "trip_plan_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
+
     @Override
     public String toString() {
         return "TripPlan{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", userId='" + userId + '\'' +
+                ", users=" + users +
                 '}';
     }
 
@@ -50,12 +61,21 @@ public class TripPlan {
         this.userId = userId;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     public TripPlan() {
     }
 
-    public TripPlan(Integer id, String name, String userId) {
+    public TripPlan(Integer id, String name, String userId, List<User> users) {
         this.id = id;
         this.name = name;
         this.userId = userId;
+        this.users = users;
     }
 }

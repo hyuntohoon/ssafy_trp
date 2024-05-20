@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.controller;
 
+import com.ssafy.enjoytrip.model.dto.UpdatePasswordRequest;
 import com.ssafy.enjoytrip.model.dto.UserCreateDTO;
 import com.ssafy.enjoytrip.model.entity.User;
 import com.ssafy.enjoytrip.model.service.AuthService;
@@ -50,8 +51,17 @@ public class UserRestController {
     }
 
     @PutMapping("/password")
-    private ResponseEntity<?> updatePassword(User user, String newPassword) {
-        boolean result = userService.changePW(user, newPassword);
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request) {
+        User user = new User();
+        user.setId(request.getUserId());
+        System.out.println(user);
+        user = userService.selectUserById(user);
+        System.out.println(user);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        boolean result = userService.changePW(user, request.getNewPassword());
         if (result) {
             return ResponseEntity.ok().build(); // 200 OK
         } else {

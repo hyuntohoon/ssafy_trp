@@ -33,8 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User selectUserById(User user) {
-        Optional<User> result = userRepository.findById(user.getId());
-        return result.filter(u -> isValidPassword(user, u)).orElse(null);
+        return userRepository.findById(user.getId()).orElse(null);
     }
 
     @Override

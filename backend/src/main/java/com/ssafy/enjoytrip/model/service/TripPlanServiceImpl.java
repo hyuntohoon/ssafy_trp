@@ -69,15 +69,16 @@ public class TripPlanServiceImpl implements TripPlanService {
 			tripPlan.setName(tripPlanRequest.getName());
 			tripPlan.setUserId(tripPlanRequest.getUserId());
 			tripPlanRepository.save(tripPlan);
-
 			// 기존 장소를 삭제합니다.
 			tripPlanPlaceRepository.deleteByTripPlanId(id);
 
 			// 새로운 장소를 추가합니다.
 			List<Integer> newAttractionIds = tripPlanRequest.getAttractionIds();
 			int order = 0; // 장소 순서를 설정하는 변수
+			tripPlan.setId(id);
 			for (Integer attractionId : newAttractionIds) {
 				TripPlanPlace newTripPlanPlace = new TripPlanPlace();
+
 				newTripPlanPlace.setTripPlan(tripPlan);
 				AttractionInfo attractionInfo = attractionInfoRepository.findById(attractionId)
 						.orElseThrow(() -> new IllegalArgumentException("Invalid attraction ID: " + attractionId));

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { getBoardList } from "@/api/board";
 
@@ -48,12 +48,7 @@ const goDetail = (id) => {
         </tr>
       </thead>
       <tbody>
-        <tr
-          class="items"
-          v-for="item in data"
-          :key="item.id"
-          @click="goDetail(item.postId)"
-        >
+        <tr class="items" v-for="item in data" :key="item.id" @click="goDetail(item.postId)">
           <td>
             {{ item.postId }}
           </td>

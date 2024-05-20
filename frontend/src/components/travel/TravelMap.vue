@@ -10,7 +10,6 @@ const searchStore = useSearchStore();
 const routeStore = useRouteStore();
 const { resultData, focus } = storeToRefs(searchStore);
 const { getLatLngList } = storeToRefs(routeStore);
-console.log(getLatLngList.value);
 
 const currentFocus = ref(null);
 

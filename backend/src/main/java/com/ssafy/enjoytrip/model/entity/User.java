@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,13 +27,8 @@ public class User {
     @Column(name = "token", length = 1000)
     private String token;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id);
-    }
+    @ManyToMany(mappedBy = "users")
+    private List<TripPlan> tripPlans;
 
     @Override
     public String toString() {
@@ -42,6 +38,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", salt='" + salt + '\'' +
                 ", token='" + token + '\'' +
+                ", tripPlans=" + tripPlans +
                 '}';
     }
 
@@ -85,11 +82,20 @@ public class User {
         this.token = token;
     }
 
-    public User(String id, String pw, String name, String salt, String token) {
+    public List<TripPlan> getTripPlans() {
+        return tripPlans;
+    }
+
+    public void setTripPlans(List<TripPlan> tripPlans) {
+        this.tripPlans = tripPlans;
+    }
+
+    public User(String id, String pw, String name, String salt, String token, List<TripPlan> tripPlans) {
         this.id = id;
         this.pw = pw;
         this.name = name;
         this.salt = salt;
         this.token = token;
+        this.tripPlans = tripPlans;
     }
 }

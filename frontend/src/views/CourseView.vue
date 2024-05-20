@@ -2,6 +2,7 @@
 import Navigator from "@/components/Navigator.vue";
 import CourseMap from "@/components/course/CourseMap.vue";
 import CourseList from "@/components/course/CourseList.vue";
+import CourseDetail from "@/components/course/CourseDetail.vue";
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import CourseList from "@/components/course/CourseList.vue";
       <CourseMap />
       <CourseList />
     </div>
+    <CourseDetail />
   </div>
 </template>
 

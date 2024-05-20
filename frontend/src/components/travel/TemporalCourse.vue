@@ -10,8 +10,8 @@ const routeStore = useRouteStore();
 
 import { storeToRefs } from "pinia";
 const { focus } = storeToRefs(searchStore);
-const { route } = storeToRefs(routeStore);
-const { postPlace, flush } = routeStore;
+const { route, isEditing } = storeToRefs(routeStore);
+const { postPlace, putPlace, flush } = routeStore;
 
 import Swal from "sweetalert2";
 
@@ -69,25 +69,55 @@ const doPost = () => {
     }
   });
 };
+
+const doPut = () => {
+  // prompt swal that gets name of the course
+  Swal.fire({
+    title: "코스 이름을 입력하세요",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off",
+    },
+    showCancelButton: true,
+    confirmButtonText: "수정",
+    cancelButtonText: "취소",
+    showLoaderOnConfirm: true,
+    preConfirm: async (name) => {
+      const res = await putPlace(name);
+      if (!res) {
+        Swal.showValidationMessage("코스 수정에 실패했습니다.");
+      }
+    },
+    allowOutsideClick: () => !Swal.isLoading(),
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire("수정 완료", "", "success");
+    }
+  });
+};
 </script>
 
 <template>
   <div class="wrap">
     <div class="nav-wrap">
       <div class="text">
-        <h2>임시 코스</h2>
+        <h2>여행 계획</h2>
         <h5>
-          <i class="bi bi-plus-circle" /> 아이콘을 눌러 코스에 장소를 추가하고, 드래그하여 순서를
-          변경할 수 있습니다.
+          <i class="bi bi-plus-circle" /> 아이콘을 눌러 장소를 추가하고, 드래그하여 순서를 변경할 수
+          있습니다.
         </h5>
       </div>
       <div class="action-wrap">
-        <button id="save" @click="doPost">
-          <span>임시 코스 저장 </span>
+        <button id="save" @click="doPost" v-if="!isEditing">
+          <span>코스 저장 </span>
+          <i class="bi bi-save"></i>
+        </button>
+        <button id="save" @click="doPut" v-else>
+          <span>코스 수정 </span>
           <i class="bi bi-save"></i>
         </button>
         <button id="flush" @click="flushPlaces">
-          <span>임시 코스 삭제 </span>
+          <span>코스 삭제 </span>
           <i class="bi bi-trash"></i>
         </button>
       </div>

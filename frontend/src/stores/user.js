@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { setAuth } from "@/utils/http-commons";
 import Swal from "sweetalert2";
 
-import { signIn, signOut, signUp, changePassword, withdraw } from "@/api/user";
+import { signIn, signOut, signUp, changePassword } from "@/api/user";
 
 export const useUserStore = defineStore(
   "user",
@@ -99,7 +99,7 @@ export const useUserStore = defineStore(
       }
 
       try {
-        const response = await changePassword(pw.value);
+        const response = await changePassword(id.value, pw.value);
         if (response.status === 200) {
           flush();
           return true;
@@ -116,28 +116,10 @@ export const useUserStore = defineStore(
       }
     };
 
-    const doWithdraw = async () => {
-      try {
-        const response = await withdraw();
-        if (response.status === 200) {
-          flush();
-          return true;
-        } else {
-          throw new Error();
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "회원탈퇴 실패",
-          text: "다시 시도해주세요.",
-        });
-        return false;
-      }
-    };
-
     const flush = () => {
       id.value = null;
       pw.value = null;
+      pwCheck.value = null;
       name.value = null;
       token.value = null;
     };
@@ -160,7 +142,6 @@ export const useUserStore = defineStore(
       doSignOut,
       doSignUp,
       doChangePassword,
-      doWithdraw,
 
       flush,
     };

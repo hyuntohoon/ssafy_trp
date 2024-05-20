@@ -2,11 +2,16 @@
 import Card from "@/components/common/Card.vue";
 import GlassButton from "@/components/common/GlassButton.vue";
 
+import { useRouteStore } from "@/stores/route";
+import { useSearchStore } from "@/stores/search";
+
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const goTravel = () => {
+  useRouteStore().flush();
+  useSearchStore().flush();
   router.push({ name: "travel" });
 };
 

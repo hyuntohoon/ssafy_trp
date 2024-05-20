@@ -125,6 +125,9 @@ export const useSearchStore = defineStore("search", () => {
     gugun.value = null;
     type.value = null;
     keyword.value = null;
+
+    resultData.value = [];
+    focus.value = { lat: 37.56682, lng: 126.97865, level: 8 };
   };
 
   return {

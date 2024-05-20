@@ -6,12 +6,8 @@ export const signUp = (id, pw, name) => {
   return axios.post("/user", JSON.stringify({ id, pw, name }));
 };
 
-export const changePassword = (pw) => {
-  return axios.put("/user", JSON.stringify({ pw }));
-};
-
-export const withdraw = () => {
-  return axios.delete("/user");
+export const changePassword = (userId, newPassword) => {
+  return axios.put("/user/password", JSON.stringify({ userId, newPassword }));
 };
 
 export const signIn = (id, pw) => {

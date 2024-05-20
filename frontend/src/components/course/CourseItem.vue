@@ -3,20 +3,11 @@ defineProps({
   course: Object,
 });
 
-import { useRouter } from "vue-router";
-const router = useRouter();
-
 import { useRouteStore } from "@/stores/route";
 const routeStore = useRouteStore();
 
 import { storeToRefs } from "pinia";
 const { route } = storeToRefs(routeStore);
-
-const goEdit = () => {
-  router.push({
-    name: "travel",
-  });
-};
 </script>
 
 <template>
@@ -28,14 +19,6 @@ const goEdit = () => {
     }">
     <h5>{{ course.tripPlan.name }}</h5>
     <span>생성자 : {{ course.tripPlan.userId }}</span>
-    <div class="actions" v-show="route.tripPlan.id === course.tripPlan.id">
-      <button id="edit" @click="goEdit">
-        <i class="bi bi-pencil"></i>
-      </button>
-      <button id="delete">
-        <i class="bi bi-trash"></i>
-      </button>
-    </div>
   </div>
 </template>
 

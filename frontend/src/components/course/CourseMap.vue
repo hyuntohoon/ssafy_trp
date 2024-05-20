@@ -20,21 +20,21 @@ const mouseOut = () => {
 };
 
 watch(getLatLngList, () => {
-  let midLat = 0;
-  let midLng = 0;
+  if (getLatLngList.value.length === 0) {
+    focus.value = { lat: 37.5665, lng: 126.978, level: 8 };
+    return;
+  }
   let max = { lat: -90, lng: -180 };
   let min = { lat: 90, lng: 180 };
   for (let i = 0; i < getLatLngList.value.length; i++) {
     console.log(getLatLngList.value[i]);
-    midLat += getLatLngList.value[i].lat;
-    midLng += getLatLngList.value[i].lng;
     max.lat = Math.max(max.lat, getLatLngList.value[i].lat);
     max.lng = Math.max(max.lng, getLatLngList.value[i].lng);
     min.lat = Math.min(min.lat, getLatLngList.value[i].lat);
     min.lng = Math.min(min.lng, getLatLngList.value[i].lng);
   }
-  focus.value.lat = midLat / getLatLngList.value.length;
-  focus.value.lng = midLng / getLatLngList.value.length;
+  focus.value.lat = (max.lat + min.lat) / 2;
+  focus.value.lng = (max.lng + min.lng) / 2;
 
   const distance = Math.max(max.lat - min.lat, max.lng - min.lng);
 

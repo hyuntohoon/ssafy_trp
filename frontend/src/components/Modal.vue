@@ -43,6 +43,13 @@ const doSignUp = () => {
   userStore.doSignUp();
   modalClose();
 };
+
+const doUpdate = () => {
+  const res = doChangePassword();
+  if (res) {
+    modalClose();
+  }
+};
 </script>
 
 <template>
@@ -109,11 +116,10 @@ const doSignUp = () => {
           <span>아이디</span>
           <span>{{ id }}</span>
         </div>
-        <div class="my-page-content">
+        <!-- <div class="my-page-content">
           <span>이름</span>
           <span>{{ name }}</span>
-        </div>
-        <!-- change password form that shows only text btn first, but if clicked, it expanded and shows input form and confirm button below -->
+        </div> -->
         <div class="my-page-content">
           <span>비밀번호 변경</span>
           <a href="#" @click="isChangePassword = !isChangePassword">변경</a>
@@ -131,7 +137,7 @@ const doSignUp = () => {
             placeholder="비밀번호 확인"
             :value="pwCheck"
             @change="setPwCheck($event.target.value)" />
-          <GlassButton :isColored="true" :onClick="doChangePassword">
+          <GlassButton :isColored="true" :onClick="doUpdate">
             <template v-slot:content>확인</template>
           </GlassButton>
         </div>

@@ -9,8 +9,7 @@ import GlassButton from "@/components/common/GlassButton.vue";
     </GlassButton>
     <GlassButton
       :onClick="() => $emit('loginGroupEvent', 'register')"
-      style="margin: 0 0 0 0.5rem"
-    >
+      :style="'margin: 0 0 0 0.5rem'">
       <template v-slot:content> 회원가입 </template>
     </GlassButton>
   </div>

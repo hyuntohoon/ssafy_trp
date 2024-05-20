@@ -30,3 +30,9 @@ spring:
 
 server:
   port: 80
+
+openai:
+  model: gpt-4o
+  api:
+    key: sk-proj-anYCJixL0n0sYbiRCTSHT3BlbkFJupIRPXx2l6pPsBSvcbYC
+    url: https://api.openai.com/v1/chat/completions

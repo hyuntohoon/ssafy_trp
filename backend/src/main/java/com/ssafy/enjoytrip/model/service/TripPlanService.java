@@ -17,4 +17,6 @@ public interface TripPlanService {
     Optional<TripPlanWithPlaces> getTripPlanById(int id);
 
     List<TripPlanWithPlaces> getTripPlansWithPlacesByUserId(String userId);
+
+    void inviteUserToTripPlan(Integer tripPlanId, String userId);
 }

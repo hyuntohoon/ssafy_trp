@@ -1,15 +1,20 @@
 import { ref, computed } from "vue";
 import { defineStore, storeToRefs } from "pinia";
-import Swal from "sweetalert2";
 
 import { useUserStore } from "./user";
 import { postTripPlan } from "@/api/route";
 
 export const useRouteStore = defineStore("route", () => {
-  const placeList = ref([]);
+  const route = ref({
+    id: 0,
+    name: null,
+    userId: null,
+    places: [],
+  });
+  const routeList = ref([]);
 
   const getLatLngList = computed(() => {
-    return placeList.value.map((place) => {
+    return route.value.places.map((place) => {
       return {
         lat: place.latitude,
         lng: place.longitude,
@@ -19,7 +24,7 @@ export const useRouteStore = defineStore("route", () => {
 
   // Action
   const postPlace = async (name) => {
-    if (placeList.value.length === 0) {
+    if (route.value.places.length === 0) {
       return;
     }
 
@@ -28,7 +33,7 @@ export const useRouteStore = defineStore("route", () => {
     const userId = id.value;
 
     const places = [];
-    for (const place of placeList.value) {
+    for (const place of route.value.places) {
       places.push(place.contentId);
     }
 
@@ -40,20 +45,18 @@ export const useRouteStore = defineStore("route", () => {
         throw new Error(response.status);
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "여행 계획을 저장하는데 실패했습니다.",
-      });
       return false;
     }
   };
 
   const flush = () => {
-    placeList.value = [];
+    route.value.places = [];
   };
 
   return {
-    placeList,
+    route,
+    routeList,
+
     getLatLngList,
 
     postPlace,

@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -19,7 +20,11 @@ public class TripPlan {
     @Column(name = "user_id", nullable = false, length = 255)
     private String userId;
 
+    @OneToMany(mappedBy = "tripPlan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TripPlanPlace> places;
+
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "trip_plan_users",
             joinColumns = @JoinColumn(name = "trip_plan_id"),
@@ -33,6 +38,7 @@ public class TripPlan {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", userId='" + userId + '\'' +
+                ", places=" + places +
                 ", users=" + users +
                 '}';
     }
@@ -61,6 +67,14 @@ public class TripPlan {
         this.userId = userId;
     }
 
+    public List<TripPlanPlace> getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(List<TripPlanPlace> places) {
+        this.places = places;
+    }
+
     public List<User> getUsers() {
         return users;
     }
@@ -72,10 +86,11 @@ public class TripPlan {
     public TripPlan() {
     }
 
-    public TripPlan(Integer id, String name, String userId, List<User> users) {
+    public TripPlan(Integer id, String name, String userId, List<TripPlanPlace> places, List<User> users) {
         this.id = id;
         this.name = name;
         this.userId = userId;
+        this.places = places;
         this.users = users;
     }
 }

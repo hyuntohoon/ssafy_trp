@@ -1,8 +1,10 @@
 package com.ssafy.enjoytrip.model.service;
 
-import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
-import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
+import com.ssafy.enjoytrip.model.dto.*;
 import com.ssafy.enjoytrip.model.entity.*;
+import com.ssafy.enjoytrip.model.entity.AttractionInfo;
+import com.ssafy.enjoytrip.model.entity.TripPlan;
+import com.ssafy.enjoytrip.model.entity.User;
 import com.ssafy.enjoytrip.model.repository.AttractionInfoRepository;
 import com.ssafy.enjoytrip.model.repository.TripPlanRepository;
 import com.ssafy.enjoytrip.model.repository.TripPlanPlaceRepository;
@@ -106,6 +108,23 @@ public class TripPlanServiceImpl implements TripPlanService {
 		}).collect(Collectors.toList());
 	}
 
+	public List<PlaceDTO> getTripPlansByUserId(String userId) {
+		List<TripPlan> tripPlans = tripPlanRepository.findByUserId(userId);
+
+		return tripPlans.stream().flatMap(tripPlan -> tripPlan.getPlaces().stream().map(place -> {
+			TripPlanDTO tripPlanDTO = new TripPlanDTO();
+			tripPlanDTO.setId(tripPlan.getId());
+			tripPlanDTO.setName(tripPlan.getName());
+			tripPlanDTO.setUserId(tripPlan.getUserId());
+
+			PlaceDTO placeDTO = new PlaceDTO();
+			placeDTO.setTripPlan(tripPlanDTO);
+			placeDTO.setAttractionInfo(place.getAttractionInfo());
+			placeDTO.setOrder(place.getOrder());
+			return placeDTO;
+		})).collect(Collectors.toList());
+	}
+
 	private void addPlacesToTripPlan(TripPlan tripPlan, List<Integer> attractionIds) {
 		// 각 attractionId에 대해 TripPlanPlace를 생성하고 저장합니다.
 		for (int order = 0; order < attractionIds.size(); order++) {
@@ -119,4 +138,45 @@ public class TripPlanServiceImpl implements TripPlanService {
 			}
 		}
 	}
+
+	public List<PlaceDTO> getTripPlanPlaces(Integer tripPlanId) {
+		TripPlan tripPlan = tripPlanRepository.findById(tripPlanId).orElseThrow(() -> new RuntimeException("TripPlan not found"));
+
+		TripPlanDTO tripPlanDTO = new TripPlanDTO();
+		tripPlanDTO.setId(tripPlan.getId());
+		tripPlanDTO.setName(tripPlan.getName());
+		tripPlanDTO.setUserId(tripPlan.getUserId());
+		return tripPlan.getPlaces().stream().map(place -> {
+			PlaceDTO placeDTO = new PlaceDTO();
+			placeDTO.setTripPlan(tripPlanDTO);
+			placeDTO.setAttractionInfo(place.getAttractionInfo());
+			placeDTO.setOrder(place.getOrder());
+			return placeDTO;
+		}).collect(Collectors.toList());
+	}
+
+//	public List<TripPlanWithPlacesDTO> getTripPlansByUserId(String userId) {
+//		List<TripPlan> tripPlans = tripPlanRepository.findByUserId(userId);
+//
+//		return tripPlans.stream().map(tripPlan -> {
+//			TripPlanDTO tripPlanDTO = new TripPlanDTO();
+//			tripPlanDTO.setId(tripPlan.getId());
+//			tripPlanDTO.setName(tripPlan.getName());
+//			tripPlanDTO.setUserId(tripPlan.getUserId());
+//
+//			List<PlaceDTO> places = tripPlan.getPlaces().stream().map(place -> {
+//				PlaceDTO placeDTO = new PlaceDTO();
+//				placeDTO.setTripPlan(null); // 중복 방지를 위해 null로 설정
+//				placeDTO.setAttractionInfo(place.getAttractionInfo());
+//				placeDTO.setOrder(place.getOrder());
+//				return placeDTO;
+//			}).collect(Collectors.toList());
+//
+//			TripPlanWithPlacesDTO tripPlanWithPlacesDTO = new TripPlanWithPlacesDTO();
+//			tripPlanWithPlacesDTO.setTripPlan(tripPlanDTO);
+//			tripPlanWithPlacesDTO.setPlaces(places);
+//
+//			return tripPlanWithPlacesDTO;
+//		}).collect(Collectors.toList());
+//	}
 }

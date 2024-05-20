@@ -1,5 +1,7 @@
 package com.ssafy.enjoytrip.controller;
 
+import com.ssafy.enjoytrip.model.dto.PlaceDTO;
+import com.ssafy.enjoytrip.model.dto.TripPlanWithPlacesDTO;
 import com.ssafy.enjoytrip.model.entity.TripPlan;
 import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
@@ -78,5 +80,10 @@ public class TripPlanRestController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/tripPlans/places")
+    public List<PlaceDTO> getTripPlansByUserId(@RequestParam String userId) {
+        return tripPlanService.getTripPlansByUserId(userId);
     }
 }

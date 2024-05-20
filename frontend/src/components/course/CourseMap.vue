@@ -39,8 +39,6 @@ watch(getLatLngList, () => {
   const distance = Math.max(max.lat - min.lat, max.lng - min.lng);
 
   console.log(distance);
-  // distance 0.1989699099999953 == 9
-  // distance 0.026144900000005578 == 6
 
   if (distance < 0.03) {
     focus.value.level = 6;

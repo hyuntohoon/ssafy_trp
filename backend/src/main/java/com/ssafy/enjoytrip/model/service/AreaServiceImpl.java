@@ -1,30 +1,30 @@
 package com.ssafy.enjoytrip.model.service;
 
-import java.util.List;
-
+import com.ssafy.enjoytrip.model.entity.Gugun;
+import com.ssafy.enjoytrip.model.entity.Sido;
+import com.ssafy.enjoytrip.model.repository.GugunRepository;
+import com.ssafy.enjoytrip.model.repository.SidoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.enjoytrip.model.dao.AreaDao;
-import com.ssafy.enjoytrip.model.dto.Gugun;
-import com.ssafy.enjoytrip.model.dto.Sido;
+import java.util.List;
 
 @Service
 public class AreaServiceImpl implements AreaService {
 
-	private AreaDao areaDao;
+	@Autowired
+	private SidoRepository sidoRepository;
 
-	public AreaServiceImpl(AreaDao areaDao) {
-		this.areaDao = areaDao;
-	}
+	@Autowired
+	private GugunRepository gugunRepository;
 
 	@Override
 	public List<Sido> getSidoList() {
-		return areaDao.getSidoList();
+		return sidoRepository.findAll();
 	}
 
 	@Override
-	public List<Gugun> getGugunList(int sidoCode) {
-		return areaDao.getGugunList(sidoCode);
+	public List<Gugun> getGugunListBySidoCode(Integer sidoCode) {
+		return gugunRepository.findBySidoCode(sidoCode);
 	}
-
 }

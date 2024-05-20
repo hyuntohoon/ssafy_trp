@@ -1,14 +1,11 @@
 package com.ssafy.enjoytrip.model.service;
 
+import com.ssafy.enjoytrip.model.entity.Gugun;
+import com.ssafy.enjoytrip.model.entity.Sido;
+
 import java.util.List;
 
-import com.ssafy.enjoytrip.model.dto.Gugun;
-import com.ssafy.enjoytrip.model.dto.Sido;
-
 public interface AreaService {
-
-  public List<Sido> getSidoList();
-
-  public List<Gugun> getGugunList(int sidoCode);
-
+  List<Sido> getSidoList();
+  List<Gugun> getGugunListBySidoCode(Integer sidoCode);
 }

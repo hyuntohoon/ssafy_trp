@@ -1,13 +1,13 @@
 package com.ssafy.config;
 
-import org.mybatis.spring.annotation.MapperScan;
+//import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@MapperScan(basePackages = { "com.ssafy.*.model.dao" })
+//@MapperScan(basePackages = { "com.ssafy.*.model.dao" })
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
 	// TODO: 10. Interceptor 등록

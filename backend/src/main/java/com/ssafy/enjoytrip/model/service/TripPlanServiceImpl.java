@@ -2,13 +2,11 @@ package com.ssafy.enjoytrip.model.service;
 
 import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
-import com.ssafy.enjoytrip.model.entity.AttractionInfo;
-import com.ssafy.enjoytrip.model.entity.TripPlan;
-import com.ssafy.enjoytrip.model.entity.TripPlanPlace;
-import com.ssafy.enjoytrip.model.entity.TripPlanPlaceId;
+import com.ssafy.enjoytrip.model.entity.*;
 import com.ssafy.enjoytrip.model.repository.AttractionInfoRepository;
 import com.ssafy.enjoytrip.model.repository.TripPlanRepository;
 import com.ssafy.enjoytrip.model.repository.TripPlanPlaceRepository;
+import com.ssafy.enjoytrip.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +27,9 @@ public class TripPlanServiceImpl implements TripPlanService {
 	@Autowired
 	private AttractionInfoRepository attractionInfoRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@Override
 	@Transactional
 	public TripPlan createTripPlan(String name, String userId, List<Integer> attractionIds) {
@@ -43,6 +44,18 @@ public class TripPlanServiceImpl implements TripPlanService {
 		return tripPlan;
 	}
 
+	@Override
+	@Transactional
+	public void inviteUserToTripPlan(Integer tripPlanId, String userId) {
+		TripPlan tripPlan = tripPlanRepository.findById(tripPlanId)
+				.orElseThrow(() -> new RuntimeException("TripPlan not found"));
+
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("User not found"));
+
+		tripPlan.getUsers().add(user);
+		tripPlanRepository.save(tripPlan);
+	}
 	@Override
 	@Transactional
 	public boolean updateTripPlan(int id, TripPlanRequest tripPlanRequest) {

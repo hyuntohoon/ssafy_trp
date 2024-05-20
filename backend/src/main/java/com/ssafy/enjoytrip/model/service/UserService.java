@@ -35,7 +35,6 @@ public interface UserService {
    * @param pw the new password
    * @return true if the password was successfully changed, false otherwise
    */
-  boolean changePW(User user, String pw);
 
   /**
    * Deletes a user from the database.
@@ -44,9 +43,10 @@ public interface UserService {
    * @return true if the user was successfully deleted, false otherwise
    */
   boolean delete(User user);
-
+  boolean changePW(User user, String newPassword);
   /**
    * Deletes all users from the database.
    */
   void deleteAllUsers();
+  String generateTemporaryPassword(String userId, String name);
 }

@@ -29,7 +29,7 @@ const goCourse = () => {
         </div>
       </template>
       <template v-slot:action>
-        <GlassButton style="width: 3rem; height: 3rem" :onClick="goTravel">
+        <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goTravel">
           <template v-slot:content>
             <i class="bi bi-map"></i>
           </template>
@@ -45,7 +45,7 @@ const goCourse = () => {
         </div>
       </template>
       <template v-slot:action>
-        <GlassButton style="width: 3rem; height: 3rem" :onClick="goCourse">
+        <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goCourse">
           <template v-slot:content>
             <i class="bi bi-geo-alt"></i>
           </template>
@@ -60,7 +60,7 @@ const goCourse = () => {
         </div>
       </template>
       <template v-slot:action>
-        <GlassButton style="width: 3rem; height: 3rem" :onClick="goBoard">
+        <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goBoard">
           <template v-slot:content>
             <i class="bi bi-chat-left"></i>
           </template>

@@ -24,32 +24,36 @@ const mouseOut = () => {
 // check resultData change, if change, update focus with avg lat, lng
 watch(resultData, () => {
   if (resultData.value.length > 0) {
-    let minLat = resultData.value[0].latitude;
-    let maxLat = resultData.value[0].latitude;
-    let minLng = resultData.value[0].longitude;
-    let maxLng = resultData.value[0].longitude;
-    let level = 8;
-    const distance = Math.sqrt(Math.pow(maxLat - minLat, 2) + Math.pow(maxLng - minLng, 2));
-    if (distance < 0.1) focus.value.level = 8;
-    else if (distance < 0.5) focus.value.level = 7;
-    else if (distance < 1) focus.value.level = 6;
-    else if (distance < 2) focus.value.level = 5;
-    else if (distance < 4) focus.value.level = 4;
-    else if (distance < 8) focus.value.level = 3;
-    else if (distance < 16) focus.value.level = 2;
-    else if (distance < 32) focus.value.level = 1;
-    const lat =
-      resultData.value.reduce((acc, cur) => acc + cur.latitude, 0) / resultData.value.length;
-    const lng =
-      resultData.value.reduce((acc, cur) => acc + cur.longitude, 0) / resultData.value.length;
-    // get proper level by distance
-    resultData.value.forEach((result) => {
-      if (result.latitude < minLat) minLat = result.latitude;
-      if (result.latitude > maxLat) maxLat = result.latitude;
-      if (result.longitude < minLng) minLng = result.longitude;
-      if (result.longitude > maxLng) maxLng = result.longitude;
-    });
-    focus.value = { lat, lng, level };
+    let midLat = 0;
+    let midLng = 0;
+    let max = { lat: -90, lng: -180 };
+    let min = { lat: 90, lng: 180 };
+    for (let i = 0; i < resultData.value.length; i++) {
+      midLat += resultData.value[i].latitude;
+      midLng += resultData.value[i].longitude;
+      max.lat = Math.max(max.lat, resultData.value[i].latitude);
+      max.lng = Math.max(max.lng, resultData.value[i].longitude);
+      min.lat = Math.min(min.lat, resultData.value[i].latitude);
+      min.lng = Math.min(min.lng, resultData.value[i].longitude);
+    }
+    focus.value.lat = midLat / resultData.value.length;
+    focus.value.lng = midLng / resultData.value.length;
+
+    const distance = Math.max(max.lat - min.lat, max.lng - min.lng);
+
+    if (distance < 0.03) {
+      focus.value.level = 6;
+    } else if (distance < 0.05) {
+      focus.value.level = 7;
+    } else if (distance < 0.1) {
+      focus.value.level = 8;
+    } else if (distance < 0.2) {
+      focus.value.level = 9;
+    } else {
+      focus.value.level = 10;
+    }
+
+    focus.value.level = 8;
   }
 });
 </script>

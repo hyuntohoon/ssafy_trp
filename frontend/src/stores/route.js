@@ -62,7 +62,6 @@ export const useRouteStore = defineStore("route", () => {
       const response = await getTripPlans(userId);
       if (response.status === 200) {
         routeList.value = refineRouteList(response.data);
-        console.log(routeList.value);
         return true;
       } else {
         throw new Error(response.status);

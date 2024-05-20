@@ -23,16 +23,11 @@ const onInput = (event) => {
   <div>
     <GlassSelect
       placeHolder="검색 조건"
-      :options="['제목', '작성자']"
+      :options="['제목', '작성자', '내용']"
       :value="selected"
-      @change="onChange"
-    />
+      @change="onChange" />
     <span style="margin-left: 0.5rem"></span>
-    <GlassInput
-      placeHolder="검색어를 입력하세요"
-      :value="search"
-      @input="onInput"
-    />
+    <GlassInput placeHolder="검색어를 입력하세요" :value="search" @input="onInput" />
     <span style="margin-left: 0.5rem"></span>
     <GlassButton>
       <template v-slot:content>

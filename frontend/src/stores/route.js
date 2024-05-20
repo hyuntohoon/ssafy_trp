@@ -39,7 +39,7 @@ export const useRouteStore = defineStore("route", () => {
 
     try {
       const response = await postTripPlan(name, userId, places);
-      if (response.status === 200) {
+      if (response.status === 201) {
         return true;
       } else {
         throw new Error(response.status);

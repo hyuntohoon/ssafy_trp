@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,11 +37,12 @@ public class TripPlanServiceImpl implements TripPlanService {
 
 	@Override
 	@Transactional
-	public TripPlan createTripPlan(String name, String userId, List<Integer> attractionIds) {
+	public TripPlan createTripPlan(String name, String userId, List<Integer> attractionIds, Date tripDate) {
 		// TripPlan을 생성하고 저장합니다.
 		TripPlan tripPlan = new TripPlan();
 		tripPlan.setName(name);
 		tripPlan.setUserId(userId);
+		tripPlan.setTripDate(tripDate);
 		tripPlanRepository.save(tripPlan);
 
 		// TripPlan에 장소를 추가합니다.
@@ -68,6 +70,7 @@ public class TripPlanServiceImpl implements TripPlanService {
 			TripPlan tripPlan = optionalTripPlan.get();
 			tripPlan.setName(tripPlanRequest.getName());
 			tripPlan.setUserId(tripPlanRequest.getUserId());
+			tripPlan.setTripDate(tripPlanRequest.getTripDate());
 			tripPlanRepository.save(tripPlan);
 			// 기존 장소를 삭제합니다.
 			tripPlanPlaceRepository.deleteByTripPlanId(id);

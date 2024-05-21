@@ -138,6 +138,7 @@ public class TripPlanServiceImpl implements TripPlanService {
 			placeDTO.setTripPlan(tripPlanDTO);
 			placeDTO.setAttractionInfo(place.getAttractionInfo());
 			placeDTO.setOrder(place.getOrder());
+			placeDTO.setTripDate(tripPlan.getTripDate());
 			return placeDTO;
 		})).collect(Collectors.toList());
 	}
@@ -168,6 +169,7 @@ public class TripPlanServiceImpl implements TripPlanService {
 			placeDTO.setTripPlan(tripPlanDTO);
 			placeDTO.setAttractionInfo(place.getAttractionInfo());
 			placeDTO.setOrder(place.getOrder());
+			placeDTO.setTripDate(tripPlan.getTripDate());
 			return placeDTO;
 		}).collect(Collectors.toList());
 	}

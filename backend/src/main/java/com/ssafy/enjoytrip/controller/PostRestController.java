@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.controller;
 
+import com.ssafy.enjoytrip.model.dto.PostRequestDTO;
 import com.ssafy.enjoytrip.model.entity.Post;
 import com.ssafy.enjoytrip.model.service.PostService;
 
@@ -19,9 +20,9 @@ public class PostRestController {
 
     // 게시글 생성
     @PostMapping
-    public ResponseEntity<?> createPost(@RequestBody Post post) {
-        System.out.println(post);
-        boolean result = postService.createPost(post);
+    public ResponseEntity<?> createPost(@RequestBody PostRequestDTO postRequestDTO) {
+        System.out.println(postRequestDTO);
+        boolean result = postService.createPost(postRequestDTO);
         if (result)
             return ResponseEntity.ok("createdPost");
         else
@@ -51,7 +52,7 @@ public class PostRestController {
     public ResponseEntity<?> updatePost(@RequestBody Post post, @PathVariable String postId) {
         // post.set
         System.out.println(post);
-        post.setPostId(Integer.parseInt(postId));
+        post.setPostID(Integer.parseInt(postId));
         boolean result = postService.updatePost(post);
         if (result) {
             return ResponseEntity.ok("updatedPost");
@@ -87,9 +88,9 @@ public class PostRestController {
             @RequestParam(required = false) String UserID,
             @RequestParam(required = false) String content,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int pageSize) {
-        System.out.println(UserID);
-        List<Post> posts = postService.searchPosts(title, UserID, content, page, pageSize);
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = true) int postTypeId) {
+        List<Post> posts = postService.searchPosts(title, UserID, content, page, pageSize,postTypeId);
         return ResponseEntity.ok(posts);
     }
 }

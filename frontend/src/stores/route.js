@@ -27,6 +27,7 @@ export const useRouteStore = defineStore("route", () => {
     const selectedRoute = routeList.value.find((val) => val.tripPlan.id === routeId);
     route.value.tripPlan = selectedRoute.tripPlan;
     route.value.places = selectedRoute.places;
+    route.value.tripDate = selectedRoute.tripDate;
   };
 
   const postPlace = async (name) => {
@@ -144,6 +145,11 @@ export const useRouteStore = defineStore("route", () => {
       }
       map[id].places.push(place.attractionInfo);
       map[id].places[map[id].places.length - 1].order = place.order;
+      if (place.tripDate !== null) {
+        map[id].tripDate = new Date(place.tripDate).toISOString().slice(0, 10);
+      } else {
+        map[id].tripDate = "";
+      }
     }
 
     const result = [];

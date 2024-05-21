@@ -3,6 +3,7 @@ import Navigator from "@/components/Navigator.vue";
 import CourseMap from "@/components/course/CourseMap.vue";
 import CourseList from "@/components/course/CourseList.vue";
 import CourseDetail from "@/components/course/CourseDetail.vue";
+import CourseGpt from "@/components/course/CourseGpt.vue";
 </script>
 
 <template>
@@ -17,6 +18,7 @@ import CourseDetail from "@/components/course/CourseDetail.vue";
       <CourseList />
     </div>
     <CourseDetail />
+    <CourseGpt />
   </div>
 </template>
 

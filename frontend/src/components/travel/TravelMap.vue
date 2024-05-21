@@ -6,10 +6,13 @@ import { useSearchStore } from "@/stores/search";
 import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
 
+const { fetchMobilityRoutes } = useRouteStore();
+const { mobilityRoutes } = storeToRefs(useRouteStore());
+
 const searchStore = useSearchStore();
 const routeStore = useRouteStore();
 const { resultData, focus } = storeToRefs(searchStore);
-const { getLatLngList, route } = storeToRefs(routeStore);
+const { route } = storeToRefs(routeStore);
 
 const currentFocus = ref(null);
 
@@ -65,6 +68,11 @@ if (route !== null) {
 watch(resultData, () => {
   calcFocus();
 });
+
+// fetch mobility routes
+watch(routeStore.route, () => {
+  fetchMobilityRoutes();
+});
 </script>
 
 <template>
@@ -109,7 +117,7 @@ watch(resultData, () => {
       @mouseOverKakaoMapMarker="mouseOver(result.contentId)"
       @mouseOutKakaoMapMarker="mouseOut" />
     <KakaoMapPolyline
-      :latLngList="getLatLngList"
+      :latLngList="mobilityRoutes"
       :endArrow="true"
       :strokeWeight="6"
       :strokeOpacity="1" />

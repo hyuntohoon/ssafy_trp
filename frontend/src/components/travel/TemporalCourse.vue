@@ -10,7 +10,7 @@ const routeStore = useRouteStore();
 
 import { storeToRefs } from "pinia";
 const { focus } = storeToRefs(searchStore);
-const { route, isEditing } = storeToRefs(routeStore);
+const { route, isEditing, mobilityCosts } = storeToRefs(routeStore);
 const { postPlace, putPlace, flush } = routeStore;
 
 import Swal from "sweetalert2";
@@ -128,6 +128,24 @@ const doPut = () => {
         </button>
       </div>
     </div>
+    <div class="row-wrap">
+      <div class="cost-item">
+        <i class="bi bi-taxi-front"></i>
+        <span style="margin-left: 0.5rem"> {{ mobilityCosts.taxi }}원</span>
+      </div>
+      <div class="cost-item">
+        <i class="bi bi-credit-card"></i>
+        <span style="margin-left: 0.5rem"> {{ mobilityCosts.toll }}원</span>
+      </div>
+      <div class="cost-item">
+        <i class="bi bi-geo-alt"></i>
+        <span style="margin-left: 0.5rem"> {{ Math.round(mobilityCosts.distance / 1000) }}km</span>
+      </div>
+      <div class="cost-item">
+        <i class="bi bi-clock"></i>
+        <span style="margin-left: 0.5rem"> {{ Math.round(mobilityCosts.duration / 60) }}분</span>
+      </div>
+    </div>
     <hr />
     <div style="display: flex; justify-content: space-between; align-items: center">
       <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
@@ -189,6 +207,18 @@ const doPut = () => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+.row-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cost-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
 }
 
 button {

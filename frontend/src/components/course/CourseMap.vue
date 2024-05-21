@@ -6,7 +6,7 @@ import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
 
 const routeStore = useRouteStore();
-const { getLatLngList, route } = storeToRefs(routeStore);
+const { getLatLngList, route, mobilityRoutes } = storeToRefs(routeStore);
 
 const currentFocus = ref(null);
 const focus = ref({ lat: 37.5665, lng: 126.978, level: 8 });
@@ -27,7 +27,6 @@ watch(getLatLngList, () => {
   let max = { lat: Number.MIN_SAFE_INTEGER, lng: Number.MIN_SAFE_INTEGER };
   let min = { lat: Number.MAX_SAFE_INTEGER, lng: Number.MAX_SAFE_INTEGER };
   for (let i = 0; i < getLatLngList.value.length; i++) {
-    console.log(getLatLngList.value[i]);
     max.lat = Math.max(max.lat, getLatLngList.value[i].lat);
     max.lng = Math.max(max.lng, getLatLngList.value[i].lng);
     min.lat = Math.min(min.lat, getLatLngList.value[i].lat);
@@ -37,8 +36,6 @@ watch(getLatLngList, () => {
   focus.value.lng = ((max.lng + min.lng) * 10000) / 20000;
 
   const distance = Math.max(max.lat - min.lat, max.lng - min.lng);
-
-  console.log(distance);
 
   if (distance < 0.03) {
     focus.value.level = 6;
@@ -96,7 +93,7 @@ watch(getLatLngList, () => {
       @mouseOverKakaoMapMarker="mouseOver(result.contentId)"
       @mouseOutKakaoMapMarker="mouseOut" />
     <KakaoMapPolyline
-      :latLngList="getLatLngList"
+      :latLngList="mobilityRoutes"
       :endArrow="true"
       :strokeWeight="6"
       :strokeOpacity="1" />

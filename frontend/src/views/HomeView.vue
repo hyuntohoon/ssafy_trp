@@ -4,6 +4,7 @@ import GlassButton from "@/components/common/GlassButton.vue";
 
 import { useRouteStore } from "@/stores/route";
 import { useSearchStore } from "@/stores/search";
+import { useGptStore } from "@/stores/gpt";
 
 import { useRouter } from "vue-router";
 
@@ -20,6 +21,7 @@ const goBoard = () => {
 };
 
 const goCourse = () => {
+  useGptStore().flush();
   router.push({ name: "course" });
 };
 </script>

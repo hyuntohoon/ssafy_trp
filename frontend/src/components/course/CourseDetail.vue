@@ -6,7 +6,10 @@ import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
 
 const routeStore = useRouteStore();
-const { route, isEditing } = storeToRefs(routeStore);
+const { route, isEditing, mobilityCosts } = storeToRefs(routeStore);
+
+import { useSearchStore } from "@/stores/search";
+const { typeData } = storeToRefs(useSearchStore());
 
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -14,23 +17,25 @@ const router = useRouter();
 const { deletePlace } = routeStore;
 
 import { getWeather } from "@/api/weather";
-import { ref, watch } from "vue";
+
+import { useGptStore } from "@/stores/gpt";
+const gptStore = useGptStore();
+const { getResponse, setPrompt } = gptStore;
+const { isLoading } = storeToRefs(gptStore);
 
 const getWeatherData = async (lat, lon) => {
   const weather = await getWeather(lat, lon);
   return weather;
 };
 
-const weather = ref([]);
-
-watch(routeStore.route, async (newValue) => {
-  weather.value = [];
-  for (const place of newValue.places) {
+const getWeatherInfo = async () => {
+  let result = [];
+  for (const place of route.value.places) {
     const data = await getWeatherData(place.latitude, place.longitude);
-    weather.value.push(data);
+    result.push(data);
   }
-  console.log(weather.value);
-});
+  return result;
+};
 
 const goEdit = () => {
   isEditing.value = true;
@@ -58,6 +63,62 @@ const deleteCourse = () => {
     }
   });
 };
+
+const getPrompt = async () => {
+  isLoading.value = true;
+  let promptObj = [];
+  // check if route.value.tripDate in today + 16 days
+  let today = new Date();
+  let tripDate = new Date(route.value.tripDate);
+  let diff = Math.ceil((tripDate - today) / (1000 * 60 * 60 * 24));
+  let weather = {};
+  console.log(diff);
+  if (diff > 0 && diff < 16) {
+    // 16일 이내 여행이면 날씨 정보 추가
+    weather = await getWeatherInfo();
+  }
+  // index and place iterate
+  for (const [index, place] of route.value.places.entries()) {
+    // find type of place by contentTypeId in place in typeData
+    let type = typeData.value.find((type) => type.typeCode === place.contentTypeId).typeName;
+    let placeData = {
+      title: place.title,
+      addr: place.addr1,
+      type: type,
+    };
+    // 날짜 확인 로직 추가
+    if (diff > 0 && diff < 16) {
+      // 16일 이내 여행이면 날씨 정보 추가
+      console.log(weather[index]);
+      promptObj.push({
+        place: placeData,
+        weather: {
+          precipitation_sum:
+            weather[index].daily.precipitation_sum[diff] +
+            weather[index].daily_units.precipitation_sum,
+          temperature_2m_max:
+            weather[index].daily.temperature_2m_max[diff] +
+            weather[index].daily_units.temperature_2m_max,
+          temperature_2m_min:
+            weather[index].daily.temperature_2m_min[diff] +
+            weather[index].daily_units.temperature_2m_min,
+          time: weather[index].daily.time[diff],
+        },
+      });
+    } else {
+      promptObj.push({
+        place: placeData,
+      });
+    }
+    console.log(promptObj);
+  }
+
+  let promptString = JSON.stringify(promptObj) + " 답변을 HTML 문법으로 작성해줘";
+  console.log(promptString);
+
+  setPrompt(promptString);
+  getResponse();
+};
 </script>
 
 <template>
@@ -67,6 +128,10 @@ const deleteCourse = () => {
         <h2>여행 계획</h2>
       </div>
       <div class="action-wrap">
+        <!-- magic stick icon button -->
+        <button id="gpt" @click="getPrompt">
+          <i class="bi bi-magic"></i>
+        </button>
         <button id="save" @click="goEdit">
           <span>코스 수정 </span>
           <i class="bi bi-pencil"></i>
@@ -77,6 +142,24 @@ const deleteCourse = () => {
         </button>
       </div>
     </div>
+    <div class="row-wrap">
+      <div class="cost-item">
+        <i class="bi bi-taxi-front"></i>
+        <span style="margin-left: 0.5rem"> {{ mobilityCosts.taxi }}원</span>
+      </div>
+      <div class="cost-item">
+        <i class="bi bi-credit-card"></i>
+        <span style="margin-left: 0.5rem"> {{ mobilityCosts.toll }}원</span>
+      </div>
+      <div class="cost-item">
+        <i class="bi bi-geo-alt"></i>
+        <span style="margin-left: 0.5rem"> {{ Math.round(mobilityCosts.distance / 1000) }}km</span>
+      </div>
+      <div class="cost-item">
+        <i class="bi bi-clock"></i>
+        <span style="margin-left: 0.5rem"> {{ Math.round(mobilityCosts.duration / 60) }}분</span>
+      </div>
+    </div>
     <hr />
     <div style="display: flex; justify-content: space-between; align-items: center">
       <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
@@ -85,7 +168,7 @@ const deleteCourse = () => {
     </div>
     <div class="row">
       <div class="col-6 card-wrap" v-for="place in route.places" :key="place.id">
-        <PlaceCard :data="place" @remove="removePlace">
+        <PlaceCard :data="place">
           <template v-slot:actions>
             <div style="display: flex; justify-content: space-between; align-items: end">
               <!-- show index of this element -->
@@ -113,6 +196,18 @@ const deleteCourse = () => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+.row-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cost-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
 }
 
 button {
@@ -160,6 +255,7 @@ button:active {
 #save {
   border: 1px solid var(--primary-color);
   color: var(--primary-color-dark-8);
+  margin-left: 1rem;
   padding: 0.5rem 1rem;
   border-radius: 10px;
   font-size: 1rem;
@@ -169,6 +265,27 @@ button:active {
   background-color: var(--primary-color);
   color: white;
   transition: background-color 0.5s, color 0.5s;
+}
+
+#gpt {
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color-dark-8);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+#gpt:hover {
+  /* change color rainbow */
+  background-image: linear-gradient(90deg, #8dcce1 0%, #efe09a 49%, #ffa6a6 80%, #8dcce1 100%);
+  animation: slidebg 8s linear infinite;
+  color: white;
+}
+
+@keyframes slidebg {
+  to {
+    background-position: 20vw;
+  }
 }
 
 @keyframes scale-in-center {

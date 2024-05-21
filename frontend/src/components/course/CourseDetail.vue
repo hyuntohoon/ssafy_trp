@@ -14,19 +14,22 @@ const router = useRouter();
 const { deletePlace } = routeStore;
 
 import { getWeather } from "@/api/weather";
-import { watch } from "vue";
+import { ref, watch } from "vue";
 
 const getWeatherData = async (lat, lon) => {
   const weather = await getWeather(lat, lon);
   return weather;
 };
 
+const weather = ref([]);
+
 watch(routeStore.route, async (newValue) => {
-  console.log("route changed", newValue);
+  weather.value = [];
   for (const place of newValue.places) {
-    const weather = await getWeatherData(place.latitude, place.longitude);
-    place.weather = weather;
+    const data = await getWeatherData(place.latitude, place.longitude);
+    weather.value.push(data);
   }
+  console.log(weather.value);
 });
 
 const goEdit = () => {
@@ -75,7 +78,11 @@ const deleteCourse = () => {
       </div>
     </div>
     <hr />
-    <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
+      <span v-else>총 {{ route.places.length }}개의 장소가 있습니다.</span>
+      <span> 여행 날짜: {{ route.tripDate }} </span>
+    </div>
     <div class="row">
       <div class="col-6 card-wrap" v-for="place in route.places" :key="place.id">
         <PlaceCard :data="place" @remove="removePlace">
@@ -83,9 +90,6 @@ const deleteCourse = () => {
             <div style="display: flex; justify-content: space-between; align-items: end">
               <!-- show index of this element -->
               <div class="number-icon">{{ route.places.indexOf(place) + 1 }}</div>
-              <span>
-                {{ place.weather }}
-              </span>
             </div>
           </template>
         </PlaceCard>
@@ -202,5 +206,9 @@ button:active {
   justify-content: center;
   align-items: center;
   font-weight: bold;
+}
+
+.weather-icon {
+  font-size: 1.5rem;
 }
 </style>

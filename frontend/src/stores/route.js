@@ -8,6 +8,7 @@ export const useRouteStore = defineStore("route", () => {
   const route = ref({
     tripPlan: {},
     places: [],
+    tripDate: "",
   });
   const routeList = ref([]);
   const isEditing = ref(false);
@@ -43,7 +44,12 @@ export const useRouteStore = defineStore("route", () => {
     }
 
     try {
-      const response = await postTripPlan(name, userId, places);
+      const response = await postTripPlan(
+        name,
+        userId,
+        places,
+        new Date(route.value.tripDate).toISOString()
+      );
       if (response.status === 201) {
         return true;
       } else {
@@ -69,7 +75,13 @@ export const useRouteStore = defineStore("route", () => {
     }
 
     try {
-      const response = await putTripPlan(route.value.tripPlan.id, name, userId, places);
+      const response = await putTripPlan(
+        route.value.tripPlan.id,
+        name,
+        userId,
+        places,
+        new Date(route.value.tripDate).toISOString()
+      );
       if (response.status === 200) {
         isEditing.value = false;
         return true;
@@ -146,6 +158,7 @@ export const useRouteStore = defineStore("route", () => {
   const flush = () => {
     route.value.places = [];
     route.value.tripPlan = {};
+    route.value.tripDate = "";
     routeList.value = [];
 
     isEditing.value = false;

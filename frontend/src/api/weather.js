@@ -1,17 +1,25 @@
-import { localAxios } from "@/utils/http-commons";
+import axios from "axios";
 
-const axios = localAxios();
+const proxy = "https://proxy.cors.sh/";
+const url = "https://api.open-meteo.com/v1/forecast";
+const key = "temp_711cd64c8d914013ff5f0ca7728832a1";
 
-const appid = "9b777b0e8cc09624c486825532b1a2dd";
+// timezone=Asia%2FTokyo&forecast_days=16
+export const getWeather = async (lat, lon) => {
+  const params = {
+    latitude: lat,
+    longitude: lon,
+    daily: "temperature_2m_max,temperature_2m_min,precipitation_sum",
+    timezone: "Asia/Tokyo",
+    forecast_days: 16,
+  };
 
-// export const getWeather = (lat, lon) => {
-//   let url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${appid}`;
-//   url = "https://proxy.cors.sh/" + url;
-//   return axios.get(url, { headers: { "x-cors-api-key": "temp_ff36ce26a398c32bd713f5ebf2d14052" } });
-// };
+  const response = await axios.get(proxy + url, {
+    params: params,
+    headers: {
+      "x-cors-api-key": key,
+    },
+  });
 
-// export const getWeather = (lat, lon) => {
-//   let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appid}&units=metric&lang=kr`;
-//   url = "https://proxy.cors.sh/" + url;
-//   return axios.get(url, { headers: { "x-cors-api-key": "temp_ff36ce26a398c32bd713f5ebf2d14052" } });
-// };
+  return response.data;
+};

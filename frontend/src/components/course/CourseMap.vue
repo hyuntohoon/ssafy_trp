@@ -24,8 +24,8 @@ watch(getLatLngList, () => {
     focus.value = { lat: 37.5665, lng: 126.978, level: 8 };
     return;
   }
-  let max = { lat: -90, lng: -180 };
-  let min = { lat: 90, lng: 180 };
+  let max = { lat: Number.MIN_SAFE_INTEGER, lng: Number.MIN_SAFE_INTEGER };
+  let min = { lat: Number.MAX_SAFE_INTEGER, lng: Number.MAX_SAFE_INTEGER };
   for (let i = 0; i < getLatLngList.value.length; i++) {
     console.log(getLatLngList.value[i]);
     max.lat = Math.max(max.lat, getLatLngList.value[i].lat);
@@ -33,8 +33,8 @@ watch(getLatLngList, () => {
     min.lat = Math.min(min.lat, getLatLngList.value[i].lat);
     min.lng = Math.min(min.lng, getLatLngList.value[i].lng);
   }
-  focus.value.lat = (max.lat + min.lat) / 2;
-  focus.value.lng = (max.lng + min.lng) / 2;
+  focus.value.lat = ((max.lat + min.lat) * 10000) / 20000;
+  focus.value.lng = ((max.lng + min.lng) * 10000) / 20000;
 
   const distance = Math.max(max.lat - min.lat, max.lng - min.lng);
 

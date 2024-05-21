@@ -46,6 +46,16 @@ const flushPlaces = () => {
 
 const doPost = () => {
   // prompt swal that gets name of the course
+  if (route.value.places.length === 0) {
+    Swal.fire("코스에 장소를 추가해주세요.", "", "warning");
+    return;
+  } else if (!route.value.tripDate) {
+    Swal.fire("여행 날짜를 입력해주세요.", "", "warning");
+    return;
+  } else if (route.value.tripDate < new Date().toISOString().split("T")[0]) {
+    Swal.fire("시간 여행은 현재 금지되어 있습니다.", "", "warning");
+    return;
+  }
   Swal.fire({
     title: "코스 이름을 입력하세요",
     input: "text",
@@ -123,7 +133,15 @@ const doPut = () => {
       </div>
     </div>
     <hr />
-    <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
+      <span v-else>총 {{ route.places.length }}개의 장소가 추가되었습니다.</span>
+      <div style="display: flex; align-items: center">
+        <label for="date">여행 날짜</label>
+        <div style="width: 1rem"></div>
+        <input type="date" id="date" v-model="route.tripDate" />
+      </div>
+    </div>
     <div class="row">
       <draggable
         class="row card-wrap"
@@ -267,5 +285,11 @@ button:active {
   justify-content: center;
   align-items: center;
   font-weight: bold;
+}
+
+input[type="date"] {
+  padding: 0.3rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
 }
 </style>

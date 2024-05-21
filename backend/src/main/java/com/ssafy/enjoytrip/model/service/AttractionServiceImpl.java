@@ -40,4 +40,9 @@ public class AttractionServiceImpl implements AttractionService {
 
 		return attractionInfoRepository.findAll(spec);
 	}
+
+	@Override
+	public List<AttractionInfo> searchAttractions(String keyword, int contentTypeId) {
+		return attractionInfoRepository.findTop8ByKeywordAndContentTypeIdOrderByReadcountDesc(keyword, contentTypeId);
+	}
 }

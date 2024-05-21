@@ -34,5 +34,17 @@ public class AttractionRestController {
 			return ResponseEntity.noContent().build(); // 204
 		}
 	}
+	@GetMapping("/recommended")
+	public ResponseEntity<?> getRecommendedAttractions(
+			@RequestParam String keyword,
+			@RequestParam int contentTypeId) {
 
+		List<AttractionInfo> recommendedAttractions = attractionService.searchAttractions(keyword, contentTypeId);
+
+		if (recommendedAttractions != null && !recommendedAttractions.isEmpty()) {
+			return ResponseEntity.ok(recommendedAttractions); // 200
+		} else {
+			return ResponseEntity.noContent().build(); // 204
+		}
+	}
 }

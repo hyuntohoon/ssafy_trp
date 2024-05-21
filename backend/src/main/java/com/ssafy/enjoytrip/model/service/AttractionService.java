@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AttractionService {
   List<AttractionInfo> getAttractionList(String sidoCode, String gugunCode, String type, String keyword);
+  List<AttractionInfo> searchAttractions(String keyword, int contentTypeId);
 }

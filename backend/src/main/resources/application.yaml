@@ -34,5 +34,5 @@ server:
 openai:
   model: gpt-4o
   api:
-    key: sk-proj-anYCJixL0n0sYbiRCTSHT3BlbkFJupIRPXx2l6pPsBSvcbYC
+    key: sk-proj-H4QcZBnQSriDCZHcqqXqT3BlbkFJ3Wy2Li6xyTYzx5qYiXhX
     url: https://api.openai.com/v1/chat/completions

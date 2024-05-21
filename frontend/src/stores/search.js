@@ -143,6 +143,7 @@ export const useSearchStore = defineStore("search", () => {
     keyword.value = null;
 
     resultData.value = [];
+    recommendedData.value = [];
     focus.value = { lat: 37.56682, lng: 126.97865, level: 8 };
   };
 

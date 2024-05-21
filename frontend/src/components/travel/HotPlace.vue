@@ -1,61 +1,86 @@
 <script setup>
+import PlaceCard from "@/components/common/PlaceCard.vue";
+
 import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
 
 const routeStore = useRouteStore();
 const { route } = routeStore;
+const routeData = storeToRefs(routeStore).route;
 
 import { useSearchStore } from "@/stores/search";
 import { watch } from "vue";
 const searchStore = useSearchStore();
 
-const { recommendedData } = storeToRefs(searchStore);
+const { recommendedData, focus } = storeToRefs(searchStore);
 const { fetchRecommendation } = searchStore;
 
-// watch(route, async (newValue) => {
-//   if (newValue.places.length === 0) {
-//     return;
-//   }
-//   console.log("update suggestions");
-//   let keywordCount = {};
-//   let contentIdCount = {};
-//   for (const place of newValue.places) {
-//     const keywords = place.split(" ");
-//     for (let i = 1; i < keywords.length; i++) {
-//       if (keywordCount[keywords[i]]) {
-//         keywordCount[keywords[i]]++;
-//       } else {
-//         keywordCount[keywords[i]] = 1;
-//       }
-//     }
-//     if (contentIdCount[place.contentId]) {
-//       contentIdCount[place.contentId]++;
-//     } else {
-//       contentIdCount[place.contentId] = 1;
-//     }
-//   }
+const moveFocus = (data) => {
+  focus.value = { lat: data.latitude, lng: data.longitude, level: 3 };
+};
 
-//   // get the most frequent keyword and contentId
-//   let maxKeyword = "";
-//   let maxKeywordCount = 0;
-//   let maxContentId = "";
-//   let maxContentIdCount = 0;
-//   for (const [key, value] of Object.entries(keywordCount)) {
-//     if (value > maxKeywordCount) {
-//       maxKeyword = key;
-//       maxKeywordCount = value;
-//     }
-//   }
-//   for (const [key, value] of Object.entries(contentIdCount)) {
-//     if (value > maxContentIdCount) {
-//       maxContentId = key;
-//       maxContentIdCount = value;
-//     }
-//   }
+const addPlace = (data) => {
+  const index = recommendedData.value.findIndex((place) => place.contentId === data.contentId);
+  routeData.value.places.push(recommendedData.value[index]);
 
-//   // fetch recommendations based on the most frequent keyword and contentId
-//   await fetchRecommendation(maxKeyword, maxContentId);
-// });
+  // remove the place from the recommended list
+  recommendedData.value.splice(index, 1);
+};
+
+watch(route, async (newValue) => {
+  recommendedData.value = [];
+  if (newValue.places.length <= 1) {
+    return;
+  }
+  let keywordCount = {};
+  let contentIdCount = {};
+  for (const place of newValue.places) {
+    const keywords = place.addr1.split(" ");
+    for (let i = 1; i < keywords.length; i++) {
+      if (keywordCount[keywords[i]]) {
+        keywordCount[keywords[i]]++;
+      } else {
+        keywordCount[keywords[i]] = 1;
+      }
+    }
+    if (contentIdCount[place.contentTypeId]) {
+      contentIdCount[place.contentTypeId]++;
+    } else {
+      contentIdCount[place.contentTypeId] = 1;
+    }
+  }
+
+  // get the most frequent keyword and contentId
+  let maxKeyword = "";
+  let maxKeywordCount = 0;
+  let maxContentId = "";
+  let maxContentIdCount = 0;
+  for (const [key, value] of Object.entries(keywordCount)) {
+    if (value > maxKeywordCount) {
+      maxKeyword = key;
+      maxKeywordCount = value;
+    }
+  }
+  for (const [key, value] of Object.entries(contentIdCount)) {
+    if (value > maxContentIdCount) {
+      maxContentId = key;
+      maxContentIdCount = value;
+    }
+  }
+
+  // fetch recommendations based on the most frequent keyword and contentId
+  await fetchRecommendation(maxKeyword, maxContentId);
+
+  // remove the places that are already in the course
+  for (const place of newValue.places) {
+    const index = recommendedData.value.findIndex(
+      (element) => element.contentId === place.contentId
+    );
+    if (index !== -1) {
+      recommendedData.value.splice(index, 1);
+    }
+  }
+});
 </script>
 
 <template>
@@ -64,12 +89,24 @@ const { fetchRecommendation } = searchStore;
     <hr />
     <h5 v-if="recommendedData.length === 0">여행 장소를 선택 해 주세요!</h5>
     <div v-else>
-      <div v-for="place in suggestions" :key="place.id">
-        <h3>{{ place.name }}</h3>
-        <p>{{ place.address }}</p>
-        <p>{{ place.category }}</p>
-        <p>{{ place.phone }}</p>
-        <p>{{ place.description }}</p>
+      <div v-for="place in recommendedData" :key="place.id">
+        <PlaceCard :data="place">
+          <template v-slot:actions>
+            <div style="display: flex; justify-content: end; align-items: end">
+              <div class="button-wrap">
+                <button @click="moveFocus(place)">
+                  <i class="bi bi-geo-alt"></i>
+                </button>
+                <button>
+                  <i class="bi bi-heart"></i>
+                </button>
+                <button @click="addPlace(place)">
+                  <i class="bi bi-plus-circle"></i>
+                </button>
+              </div>
+            </div>
+          </template>
+        </PlaceCard>
       </div>
     </div>
   </div>
@@ -85,7 +122,28 @@ const { fetchRecommendation } = searchStore;
   border-radius: 10px;
   overflow-y: auto;
   overflow-x: hidden;
-  width: 20vw;
+  width: 40vw;
   height: 100%;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+button:hover {
+  color: var(--accent-color);
+  transition: color 0.5s;
+}
+
+button:active {
+  color: var(--accent-color-dark-8);
+}
+
+.button-wrap {
+  display: flex;
+  justify-content: end;
 }
 </style>

@@ -112,10 +112,6 @@ const doPut = () => {
     <div class="nav-wrap">
       <div class="text">
         <h2>여행 계획</h2>
-        <h5>
-          <i class="bi bi-plus-circle" /> 아이콘을 눌러 장소를 추가하고, 드래그하여 순서를 변경할 수
-          있습니다.
-        </h5>
       </div>
       <div class="action-wrap">
         <button id="save" @click="doPost" v-if="!isEditing">
@@ -150,7 +146,7 @@ const doPut = () => {
         @start="drag = true"
         @end="drag = false">
         <template #item="{ element }">
-          <div class="col-6">
+          <div class="col-12">
             <PlaceCard :data="element">
               <template v-slot:actions>
                 <div style="display: flex; justify-content: space-between; align-items: end">
@@ -186,6 +182,7 @@ const doPut = () => {
   border-radius: 10px;
   overflow-y: auto;
   overflow-x: hidden;
+  width: 60vw;
 }
 
 .nav-wrap {
@@ -213,7 +210,6 @@ button:active {
 .button-wrap {
   display: flex;
   justify-content: end;
-  margin-top: 1rem;
 }
 
 .action-wrap {

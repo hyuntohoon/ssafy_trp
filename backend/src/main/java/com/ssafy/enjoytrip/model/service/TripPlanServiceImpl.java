@@ -15,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,6 +60,7 @@ public class TripPlanServiceImpl implements TripPlanService {
 		tripPlan.getUsers().add(user);
 		tripPlanRepository.save(tripPlan);
 	}
+
 	@Override
 	@Transactional
 	public boolean updateTripPlan(int id, TripPlanRequest tripPlanRequest) {
@@ -81,7 +80,6 @@ public class TripPlanServiceImpl implements TripPlanService {
 			tripPlan.setId(id);
 			for (Integer attractionId : newAttractionIds) {
 				TripPlanPlace newTripPlanPlace = new TripPlanPlace();
-
 				newTripPlanPlace.setTripPlan(tripPlan);
 				AttractionInfo attractionInfo = attractionInfoRepository.findById(attractionId)
 						.orElseThrow(() -> new IllegalArgumentException("Invalid attraction ID: " + attractionId));
@@ -94,8 +92,6 @@ public class TripPlanServiceImpl implements TripPlanService {
 		}
 		return false;
 	}
-
-
 
 	@Override
 	@Transactional
@@ -175,5 +171,4 @@ public class TripPlanServiceImpl implements TripPlanService {
 			return placeDTO;
 		}).collect(Collectors.toList());
 	}
-
 }

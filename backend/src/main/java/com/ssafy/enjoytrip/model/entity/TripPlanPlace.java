@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 
@@ -10,6 +11,7 @@ public class TripPlanPlace {
 
     @Id
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "trip_plan_id", insertable = false, updatable = false)
     private TripPlan tripPlan;
 

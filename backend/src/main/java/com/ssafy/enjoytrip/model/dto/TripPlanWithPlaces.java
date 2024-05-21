@@ -9,11 +9,6 @@ public class TripPlanWithPlaces {
     private TripPlan tripPlan;
     private List<TripPlanPlace> places;
 
-    public TripPlanWithPlaces(TripPlan tripPlan, List<TripPlanPlace> places) {
-        this.tripPlan = tripPlan;
-        this.places = places;
-    }
-
     @Override
     public String toString() {
         return "TripPlanWithPlaces{" +
@@ -35,6 +30,14 @@ public class TripPlanWithPlaces {
     }
 
     public void setPlaces(List<TripPlanPlace> places) {
+        this.places = places;
+    }
+
+    public TripPlanWithPlaces() {
+    }
+
+    public TripPlanWithPlaces(TripPlan tripPlan, List<TripPlanPlace> places) {
+        this.tripPlan = tripPlan;
         this.places = places;
     }
 }

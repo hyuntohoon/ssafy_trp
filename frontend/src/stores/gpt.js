@@ -17,7 +17,6 @@ export const useGptStore = defineStore("gpt", () => {
 
   const getResponse = async () => {
     try {
-      isLoading.value = true;
       const response = await postBotChat(gpt.value.prompt);
       if (response.status === 200) {
         gpt.value.response = response.data;

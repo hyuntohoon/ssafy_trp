@@ -21,6 +21,7 @@ import { getWeather } from "@/api/weather";
 import { useGptStore } from "@/stores/gpt";
 const gptStore = useGptStore();
 const { getResponse, setPrompt } = gptStore;
+const { isLoading } = storeToRefs(gptStore);
 
 const getWeatherData = async (lat, lon) => {
   const weather = await getWeather(lat, lon);
@@ -64,6 +65,7 @@ const deleteCourse = () => {
 };
 
 const getPrompt = async () => {
+  isLoading.value = true;
   let promptObj = [];
   // check if route.value.tripDate in today + 16 days
   let today = new Date();

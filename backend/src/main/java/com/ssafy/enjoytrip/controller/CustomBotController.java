@@ -25,7 +25,7 @@ public class CustomBotController {
     private RestTemplate restTemplate;
     @PostMapping("/chat")
     public String chat(@RequestBody String prompt){
-        String defaultPromt = "당신은 여행계획를 돕은 여행 계획 도우미입니다. 아래의 여행 정보와 날씨 정보를 제공할테니, 여행 계획 설립에 도움을 주세요.";
+        String defaultPromt = "당신은 여행계획를 돕은 여행 계획 도우미입니다. 아래의 여행 정보와 날씨 정보를 제공할테니, 1. 여행계획 정리 2. 여행 계획 평가 3. 여행 계획 조언을 해주세요.";
         prompt+=defaultPromt;
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
@@ -312,7 +312,7 @@ public class CustomBotController {
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
         String content = chatGPTResponse.getChoices().get(0).getMessage().getContent();
-
+        System.out.println(content);
         // If the content is a URL, send a GET request to that URL
         ResponseEntity<String> response = restTemplate.getForEntity(content, String.class);
 

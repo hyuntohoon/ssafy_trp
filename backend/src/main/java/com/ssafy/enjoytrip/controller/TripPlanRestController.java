@@ -37,7 +37,7 @@ public class TripPlanRestController {
 
     @PostMapping
     public ResponseEntity<TripPlan> createTripPlan(@RequestBody TripPlanRequest tripPlanRequest) {
-        TripPlan tripPlan = tripPlanService.createTripPlan(tripPlanRequest.getName(),tripPlanRequest.getUserId(),tripPlanRequest.getAttractionIds());
+        TripPlan tripPlan = tripPlanService.createTripPlan(tripPlanRequest.getName(),tripPlanRequest.getUserId(),tripPlanRequest.getAttractionIds(),tripPlanRequest.getTripDate());
         if (tripPlan == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

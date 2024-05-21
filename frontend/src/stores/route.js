@@ -4,6 +4,8 @@ import { defineStore, storeToRefs } from "pinia";
 import { useUserStore } from "./user";
 import { postTripPlan, putTripPlan, getTripPlans, deleteTripPlan } from "@/api/route";
 
+import { getMobilityRoutes } from "@/api/route";
+
 export const useRouteStore = defineStore("route", () => {
   const route = ref({
     tripPlan: {},
@@ -12,6 +14,13 @@ export const useRouteStore = defineStore("route", () => {
   });
   const routeList = ref([]);
   const isEditing = ref(false);
+  const mobilityRoutes = ref([]);
+  const mobilityCosts = ref({
+    taxi: 0,
+    toll: 0,
+    distance: 0,
+    duration: 0,
+  });
 
   const getLatLngList = computed(() => {
     return route.value.places.map((place) => {
@@ -22,12 +31,53 @@ export const useRouteStore = defineStore("route", () => {
     });
   });
 
+  const fetchMobilityRoutes = () => {
+    mobilityRoutes.value = [];
+    mobilityCosts.value = {
+      taxi: 0,
+      toll: 0,
+      distance: 0,
+      duration: 0,
+    };
+    for (let i = 0; i < route.value.places.length - 1; i++) {
+      const origin = `${route.value.places[i].longitude},${route.value.places[i].latitude}`;
+      const destination = `${route.value.places[i + 1].longitude},${
+        route.value.places[i + 1].latitude
+      }`;
+      try {
+        getMobilityRoutes(origin, destination).then((response) => {
+          if (response.status === 200) {
+            const guides = response.data.routes[0].sections[0].guides;
+            for (const guide of guides) {
+              const route = {
+                lat: guide.y,
+                lng: guide.x,
+              };
+              mobilityRoutes.value.push(route);
+            }
+            const fare = response.data.routes[0].summary.fare;
+            mobilityCosts.value.taxi += fare.taxi;
+            mobilityCosts.value.toll += fare.toll;
+            mobilityCosts.value.distance += response.data.routes[0].summary.distance;
+            mobilityCosts.value.duration += response.data.routes[0].summary.duration;
+          } else {
+            throw new Error(response.status);
+          }
+        });
+      } catch (error) {
+        return false;
+      }
+    }
+  };
+
   // Action
   const selectRoute = (routeId) => {
     const selectedRoute = routeList.value.find((val) => val.tripPlan.id === routeId);
     route.value.tripPlan = selectedRoute.tripPlan;
     route.value.places = selectedRoute.places;
     route.value.tripDate = selectedRoute.tripDate;
+
+    fetchMobilityRoutes();
   };
 
   const postPlace = async (name) => {
@@ -167,6 +217,14 @@ export const useRouteStore = defineStore("route", () => {
     route.value.tripDate = "";
     routeList.value = [];
 
+    mobilityRoutes.value = [];
+    mobilityCosts.value = {
+      taxi: 0,
+      toll: 0,
+      distance: 0,
+      duration: 0,
+    };
+
     isEditing.value = false;
   };
 
@@ -174,8 +232,11 @@ export const useRouteStore = defineStore("route", () => {
     route,
     routeList,
     isEditing,
+    mobilityRoutes,
+    mobilityCosts,
 
     getLatLngList,
+    fetchMobilityRoutes,
 
     selectRoute,
     postPlace,

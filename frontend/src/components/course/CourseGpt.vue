@@ -11,11 +11,19 @@ const loadingTexts = [
   "소라고동님의 답변을 기다리는 중...",
   "소라고동님의 답변을 번역하는 중...",
   "이해하지 못한 부분을 다시 물어보는 중...",
+  "모니터에 색칠하는 중...",
+  "삶, 우주, 그리고 모든 것에 대한 궁극적인 질문에 대한 해답을 찾는 중...",
+  "Null Safe한 여정을 떠나는 중...",
 ];
 const curIdx = ref(0);
 
 setInterval(() => {
-  curIdx.value = (curIdx.value + 1) % loadingTexts.length;
+  // random
+  let tmp;
+  do {
+    tmp = Math.floor(Math.random() * loadingTexts.length);
+  } while (curIdx.value === tmp);
+  curIdx.value = tmp;
 }, 3000);
 </script>
 

@@ -2,10 +2,13 @@ package com.ssafy.enjoytrip.model.dto;
 
 import com.ssafy.enjoytrip.model.entity.AttractionInfo;
 
+import java.util.Date;
+
 public class PlaceDTO {
     private TripPlanDTO tripPlan;
     private AttractionInfo attractionInfo;
     private int order;
+    private Date tripDate;
 
     // Getters and Setters
     public TripPlanDTO getTripPlan() {
@@ -30,5 +33,13 @@ public class PlaceDTO {
 
     public void setOrder(int order) {
         this.order = order;
+    }
+
+    public Date getTripDate() {
+        return tripDate;
+    }
+
+    public void setTripDate(Date tripDate) {
+        this.tripDate = tripDate;
     }
 }

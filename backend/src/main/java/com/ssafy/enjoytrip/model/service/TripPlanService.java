@@ -6,11 +6,12 @@ import com.ssafy.enjoytrip.model.entity.TripPlan;
 import com.ssafy.enjoytrip.model.dto.TripPlanRequest;
 import com.ssafy.enjoytrip.model.dto.TripPlanWithPlaces;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public interface TripPlanService {
-    TripPlan createTripPlan(String name, String userId, List<Integer> attractionIds);
+    TripPlan createTripPlan(String name, String userId, List<Integer> attractionIds, Date tripDate);
 
     boolean deleteTripPlan(int id);
 

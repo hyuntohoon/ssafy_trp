@@ -35,18 +35,9 @@ public class TripPlanRestController {
         }
     }
 
-//    @GetMapping("/user/{userId}")
-//    public ResponseEntity<List<TripPlanWithPlaces>> getTripPlansWithPlacesByUserId(@PathVariable String userId) {
-//        List<TripPlanWithPlaces> tripPlans = tripPlanService.getTripPlansWithPlacesByUserId(userId);
-//        if (tripPlans == null || tripPlans.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//        return ResponseEntity.ok(tripPlans);
-//    }
-
     @PostMapping
     public ResponseEntity<TripPlan> createTripPlan(@RequestBody TripPlanRequest tripPlanRequest) {
-        TripPlan tripPlan = tripPlanService.createTripPlan(tripPlanRequest.getName(),tripPlanRequest.getUserId(),tripPlanRequest.getAttractionIds());
+        TripPlan tripPlan = tripPlanService.createTripPlan(tripPlanRequest.getName(),tripPlanRequest.getUserId(),tripPlanRequest.getAttractionIds(),tripPlanRequest.getTripDate());
         if (tripPlan == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

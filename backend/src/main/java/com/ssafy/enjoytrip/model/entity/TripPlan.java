@@ -1,8 +1,10 @@
 package com.ssafy.enjoytrip.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,7 +22,12 @@ public class TripPlan {
     @Column(name = "user_id", nullable = false, length = 255)
     private String userId;
 
+    @Column(name = "trip_date", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date tripDate;
+
     @OneToMany(mappedBy = "tripPlan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<TripPlanPlace> places;
 
     @ManyToMany
@@ -32,12 +39,16 @@ public class TripPlan {
     )
     private List<User> users;
 
+    public TripPlan() {
+    }
+
     @Override
     public String toString() {
         return "TripPlan{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", userId='" + userId + '\'' +
+                ", tripDate=" + tripDate +
                 ", places=" + places +
                 ", users=" + users +
                 '}';
@@ -67,6 +78,14 @@ public class TripPlan {
         this.userId = userId;
     }
 
+    public Date getTripDate() {
+        return tripDate;
+    }
+
+    public void setTripDate(Date tripDate) {
+        this.tripDate = tripDate;
+    }
+
     public List<TripPlanPlace> getPlaces() {
         return places;
     }
@@ -83,13 +102,11 @@ public class TripPlan {
         this.users = users;
     }
 
-    public TripPlan() {
-    }
-
-    public TripPlan(Integer id, String name, String userId, List<TripPlanPlace> places, List<User> users) {
+    public TripPlan(Integer id, String name, String userId, Date tripDate, List<TripPlanPlace> places, List<User> users) {
         this.id = id;
         this.name = name;
         this.userId = userId;
+        this.tripDate = tripDate;
         this.places = places;
         this.users = users;
     }

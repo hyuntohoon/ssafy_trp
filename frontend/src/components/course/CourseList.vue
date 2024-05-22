@@ -6,6 +6,10 @@ import { onMounted } from "vue";
 import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
 
+import { useGptStore } from "@/stores/gpt";
+const gptStore = useGptStore();
+const { flush: flushGpt } = gptStore;
+
 const routeStore = useRouteStore();
 const { routeList } = storeToRefs(routeStore);
 const { getRouteList, selectRoute } = routeStore;
@@ -15,6 +19,7 @@ onMounted(async () => {
 });
 
 const select = (course) => {
+  flushGpt();
   selectRoute(course);
 };
 </script>

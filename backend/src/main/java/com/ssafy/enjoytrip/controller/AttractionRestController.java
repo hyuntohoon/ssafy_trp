@@ -47,4 +47,18 @@ public class AttractionRestController {
 			return ResponseEntity.noContent().build(); // 204
 		}
 	}
+	@GetMapping("/gpt")
+	public ResponseEntity<?> forGpt(
+			@RequestParam(required = false) String sidoCode,
+			@RequestParam(required = false) String gugunCode,
+			@RequestParam(required = false) String type,
+			@RequestParam(required = false) String keyword) {
+
+		List<AttractionInfo> attractions = attractionService.getAttractionListTopTen(sidoCode, gugunCode, type, keyword);
+		if (attractions != null && !attractions.isEmpty()) {
+			return ResponseEntity.ok(attractions); // 200
+		} else {
+			return ResponseEntity.noContent().build(); // 204
+		}
+	}
 }

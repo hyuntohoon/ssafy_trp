@@ -3,21 +3,19 @@ import GlassInput from "@/components/common/GlassInput.vue";
 import GlassButton from "@/components/common/GlassButton.vue";
 
 import { useSearchStore } from "@/stores/search";
+import { storeToRefs } from "pinia";
 const storeSearch = useSearchStore();
 
-const { keyWord, setKeyWord, search } = storeSearch;
-
-const input = (e) => {
-  setKeyWord(e.target.value);
-};
+const { keyword } = storeToRefs(storeSearch);
+const { search } = storeSearch;
 </script>
 
 <template>
   <div class="input-wrap">
     <GlassInput
       style="margin-right: 0.5rem"
-      :value="keyWord"
-      @input="input"
+      :value="keyword"
+      @input="keyword = $event.target.value"
       placeholder="검색어를 입력하세요" />
     <GlassButton :isColored="true" @click="search">
       <template v-slot:content>

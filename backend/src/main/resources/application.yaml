@@ -8,7 +8,6 @@ spring:
     jdbc-url: jdbc:mysql://192.168.204.102:3306/ssafytrip?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: ssafy
     password: ssafy
-
     hikari:
       maximum-pool-size: 10
       minimum-idle: 10
@@ -26,13 +25,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect # 변경된 부분
 
 server:
   port: 80
-
-openai:
-  model: gpt-3.5-turbo-16k
-  api:
-    key: sk-proj-H4QcZBnQSriDCZHcqqXqT3BlbkFJ3Wy2Li6xyTYzx5qYiXhX
-    url: https://api.openai.com/v1/chat/completions

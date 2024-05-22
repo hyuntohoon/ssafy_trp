@@ -2,6 +2,9 @@ package com.ssafy.enjoytrip.model.service;
 
 import com.ssafy.enjoytrip.model.entity.AttractionInfo;
 import com.ssafy.enjoytrip.model.repository.AttractionInfoRepository;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -79,4 +82,15 @@ public class AttractionServiceImpl implements AttractionService {
 		return pageResult.getContent();
 	}
 
+	@Override
+	public List<AttractionInfo> searchAttractionsByLocation(Point location, double distanceKm) {
+		double distanceMeters = distanceKm * 1000; // 거리 값을 미터로 변환
+		return attractionInfoRepository.findWithinDistance(location, distanceMeters);
+	}
+
+	public List<AttractionInfo> searchAttractionsByCoordinates(double latitude, double longitude, double distanceKm) {
+		GeometryFactory geometryFactory = new GeometryFactory();
+		Point location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+		return searchAttractionsByLocation(location, distanceKm);
+	}
 }

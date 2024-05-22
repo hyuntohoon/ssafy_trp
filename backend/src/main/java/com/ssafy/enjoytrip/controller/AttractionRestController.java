@@ -61,4 +61,14 @@ public class AttractionRestController {
 			return ResponseEntity.noContent().build(); // 204
 		}
 	}
+
+	@GetMapping("/nearby")
+	public ResponseEntity<List<AttractionInfo>> searchAttractionsByCoordinates(
+			@RequestParam double latitude,
+			@RequestParam double longitude,
+			@RequestParam double distanceKm) {
+
+		List<AttractionInfo> attractions = attractionService.searchAttractionsByCoordinates(latitude, longitude, distanceKm);
+		return ResponseEntity.ok(attractions);
+	}
 }

@@ -1,8 +1,9 @@
 package com.ssafy.enjoytrip.model.entity;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.util.Set;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+
 @Entity
 @Table(name = "attraction_info")
 public class AttractionInfo {
@@ -16,7 +17,7 @@ public class AttractionInfo {
 
     @Column(name = "gugun_code")
     private Integer gugunCode;
-    // 다른 컬럼들
+
     @Column(name = "addr1")
     private String addr1;
 
@@ -53,26 +54,10 @@ public class AttractionInfo {
     @Column(name = "zipcode")
     private String zipcode;
 
-    @Override
-    public String toString() {
-        return "AttractionInfo{" +
-                "contentId=" + contentId +
-                ", sidoCode=" + sidoCode +
-                ", gugunCode=" + gugunCode +
-                ", addr1='" + addr1 + '\'' +
-                ", addr2='" + addr2 + '\'' +
-                ", contentTypeId=" + contentTypeId +
-                ", firstImage='" + firstImage + '\'' +
-                ", firstImage2='" + firstImage2 + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", mlevel='" + mlevel + '\'' +
-                ", readcount=" + readcount +
-                ", tel='" + tel + '\'' +
-                ", title='" + title + '\'' +
-                ", zipcode='" + zipcode + '\'' +
-                '}';
-    }
+    @Column(name = "location", nullable = false, columnDefinition = "POINT SRID 4326")
+    private Point location;
+
+    // Getters and setters
 
     public int getContentId() {
         return contentId;
@@ -194,6 +179,14 @@ public class AttractionInfo {
         this.zipcode = zipcode;
     }
 
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
     public AttractionInfo() {
     }
 
@@ -213,5 +206,27 @@ public class AttractionInfo {
         this.tel = tel;
         this.title = title;
         this.zipcode = zipcode;
+    }
+
+    @Override
+    public String toString() {
+        return "AttractionInfo{" +
+                "contentId=" + contentId +
+                ", sidoCode=" + sidoCode +
+                ", gugunCode=" + gugunCode +
+                ", addr1='" + addr1 + '\'' +
+                ", addr2='" + addr2 + '\'' +
+                ", contentTypeId=" + contentTypeId +
+                ", firstImage='" + firstImage + '\'' +
+                ", firstImage2='" + firstImage2 + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", mlevel='" + mlevel + '\'' +
+                ", readcount=" + readcount +
+                ", tel='" + tel + '\'' +
+                ", title='" + title + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", location=" + location +
+                '}';
     }
 }

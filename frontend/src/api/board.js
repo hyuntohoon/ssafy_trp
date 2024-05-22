@@ -13,12 +13,10 @@ export const searchBoardList = async (key, value, page, pageSize, postTypeId) =>
     pageSize,
     postTypeId,
   };
-  console.log(params);
   return await axios.get("/post/search", { params });
 };
 
 export const postBoard = async (params) => {
-  console.log(params);
   return await axios.post("/post", params);
 };
 

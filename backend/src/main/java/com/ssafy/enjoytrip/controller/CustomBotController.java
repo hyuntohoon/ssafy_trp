@@ -117,7 +117,7 @@ public class CustomBotController {
 
         String tempPrompt = "아래 정보를 토대로";
         tempPrompt+=temp;
-        tempPrompt+="컨셉의 여행 계획을 하루에 갈 수 있도록 반드시 5개의 여행지만 선택하여 JSON으로 contentId만 참조하여 tripPlan에 작성하여 저에게 다시 주세요. 또한 json에 전체 tripPurpose과 tripOverview,tripCaution 및 전체 tripPlan를 추가해서 작성해주세요.";
+        tempPrompt+="컨셉의 여행 계획을 하루에 갈 수 있도록 반드시 5개의 여행지만 선택하여 JSON으로 contentId만 참조하여 저에게 다시 주세요. 또한 json에 전체 여행 목적과 개요,주의사항 및 전체 여행 계획를 적어주세요.";
         tempPrompt+= response;
         System.out.println(tempPrompt);
         request = new ChatGPTRequest(model, tempPrompt);

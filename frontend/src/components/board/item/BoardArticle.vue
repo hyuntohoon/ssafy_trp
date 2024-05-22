@@ -1,5 +1,6 @@
 <script setup>
 import ImageSlider from "@/components/common/ImageSlider.vue";
+import PlaceCard from "@/components/common/PlaceCard.vue";
 
 const props = defineProps({
   article: Object,
@@ -11,6 +12,21 @@ try {
 } catch (error) {
   images = [];
 }
+
+import { useSearchStore } from "@/stores/search";
+import { ref, onMounted } from "vue";
+const useSearch = useSearchStore();
+
+const { getAttraction } = useSearch;
+
+const place = ref(null);
+
+onMounted(async () => {
+  if (props.article.contentId !== null) {
+    place.value = await getAttraction(props.article.contentId);
+    console.log(place.value);
+  }
+});
 </script>
 
 <template>
@@ -33,7 +49,8 @@ try {
         :images="images"
         style="margin-right: 2rem" />
       <div class="column-wrap">
-        <p>{{ article.content }}</p>
+        <PlaceCard v-if="place !== null" :data="place" style="margin: 0" />
+        <p style="padding: 1rem">{{ article.content }}</p>
       </div>
     </div>
   </div>

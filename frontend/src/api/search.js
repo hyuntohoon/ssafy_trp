@@ -23,3 +23,7 @@ export const getAttractions = (sido, gugun, type, keyword) => {
 export const getRecommendation = (keyWord, contentTypeId) => {
   return axios.get(`/attractions/recommended?keyword=${keyWord}&contentTypeId=${contentTypeId}`);
 };
+
+export const getAttractionByContentID = (contentId) => {
+  return axios.get(`/attractions/id?id=${contentId}`);
+};

@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.model.repository;
 
 import com.ssafy.enjoytrip.model.entity.AttractionInfo;
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,7 @@ public interface AttractionInfoRepository extends JpaRepository<AttractionInfo, 
     // 추가적인 쿼리 메서드가 필요하다면 여기에 정의
     @Query("SELECT a FROM AttractionInfo a WHERE a.addr1 LIKE %:keyword% AND a.contentTypeId = :contentTypeId ORDER BY a.readcount DESC limit 8")
     List<AttractionInfo> findTop8ByKeywordAndContentTypeIdOrderByReadcountDesc(@Param("keyword") String keyword, @Param("contentTypeId") int contentTypeId);
+
+    @Query("SELECT ai FROM AttractionInfo ai WHERE ST_Contains(ST_Buffer(:point, :distance), ai.location) = true")
+    List<AttractionInfo> findAttractionsWithinDistance(@Param("point") Point point, @Param("distance") double distance);
 }

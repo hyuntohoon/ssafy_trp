@@ -80,34 +80,52 @@ const upload = () => {
 };
 
 const write = async () => {
-  const urls = await uploadImages(tmpImages.value);
-  board.value.photo = JSON.stringify(urls);
-  console.log(board.value.photo);
-  const res = await writeBoard(id.value);
-
-  if (res) {
-    Swal.fire({
-      icon: "success",
-      title: "글쓰기 성공",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    board.value = {
-      title: "",
-      content: "",
-      photo: "[]",
-    };
-    router.replace({
-      name: "board-list",
-    });
-  } else {
+  if (!board.value.title) {
     Swal.fire({
       icon: "error",
-      title: "글쓰기 실패",
+      title: "제목을 입력하세요",
       showConfirmButton: false,
       timer: 1500,
     });
+    return;
+  } else if (!board.value.content) {
+    Swal.fire({
+      icon: "error",
+      title: "내용을 입력하세요",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
   }
+  Swal.fire({
+    title: "게시글을 작성하시겠습니까?",
+    showCancelButton: true,
+    confirmButtonText: "네",
+    cancelButtonText: "아니요",
+    showLoaderOnConfirm: true,
+    preConfirm: async () => {
+      const urls = await uploadImages(tmpImages.value);
+      board.value.photo = JSON.stringify(urls);
+      const res = await writeBoard(id.value);
+      console.log(res);
+      if (res) {
+        Swal.fire({
+          icon: "success",
+          title: "게시글이 작성되었습니다.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        router.push({ name: "BoardDetail", query: { contentId: res } });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "게시글 작성에 실패했습니다.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    },
+  });
 };
 </script>
 

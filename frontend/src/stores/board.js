@@ -37,11 +37,16 @@ export const useBoardStore = defineStore("board", () => {
     if (board.value.photo) params.photo = board.value.photo;
     if (board.value.contentId) params.contentId = board.value.contentId;
 
-    const response = await postBoard(params);
+    try {
+      const response = await postBoard(params);
+      console.log(response);
 
-    if (response.status === 200) {
-      return true;
-    } else {
+      if (response.status === 200) {
+        return true;
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
       return false;
     }
   };

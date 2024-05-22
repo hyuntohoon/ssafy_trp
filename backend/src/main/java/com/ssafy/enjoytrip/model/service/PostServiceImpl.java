@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
@@ -47,15 +48,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getPost(Integer postId) {
-        Optional<Post> post = postRepository.findById(postId);
+    @Transactional(readOnly = true)
+    public Post getPost(Integer postID) {
+        System.out.println("sasa"+postID);
+        Optional<Post> post = postRepository.findById(postID);
         return post.orElse(null);
     }
 
     @Override
-    public boolean deletePost(Integer postId) {
-        if (postRepository.existsById(postId)) {
-            postRepository.deleteById(postId);
+    public boolean deletePost(Integer postID) {
+        if (postRepository.existsById(postID)) {
+            postRepository.deleteById(postID);
             return true;
         }
         return false;
@@ -77,9 +80,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getPosts(String order, int page, int numItems) {
-        PageRequest pageRequest = PageRequest.of(page - 1, numItems, Sort.by("postId").ascending());
+        PageRequest pageRequest = PageRequest.of(page - 1, numItems, Sort.by("postID").ascending());
         if ("DESC".equalsIgnoreCase(order)) {
-            pageRequest = PageRequest.of(page - 1, numItems, Sort.by("postId").descending());
+            pageRequest = PageRequest.of(page - 1, numItems, Sort.by("postID").descending());
         }
         return postRepository.findAll(pageRequest).getContent();
     }
@@ -95,12 +98,17 @@ public class PostServiceImpl implements PostService {
 
         if (StringUtils.hasText(userId)) {
             spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.like(root.get("user").get("id"), "%" + userId + "%"));
+                    criteriaBuilder.like(root.get("userID"), "%" + userId + "%"));
         }
 
         if (StringUtils.hasText(content)) {
             spec = spec.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.like(root.get("content"), "%" + content + "%"));
+        }
+
+        if (postTypeId > 0) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("postType").get("id"), postTypeId));
         }
 
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by("createTimeStamp").descending());

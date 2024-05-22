@@ -1,5 +1,9 @@
 <script setup>
 import PlaceCard from "@/components/common/PlaceCard.vue";
+import Swal from "sweetalert2";
+
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
@@ -25,6 +29,27 @@ const addPlace = (data) => {
 
   // remove the place from the recommended list
   recommendedData.value.splice(index, 1);
+};
+
+const goWrite = (place) => {
+  Swal.fire({
+    title: "장소 후기 작성",
+    text: "장소와 관련된 후기를 작성하러 이동하시겠습니까?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "이동",
+    cancelButtonText: "취소",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      router.push({
+        name: "board-create",
+        query: {
+          contentId: place.contentId,
+          title: place.title,
+        },
+      });
+    }
+  });
 };
 
 watch(route, async (newValue) => {
@@ -97,7 +122,7 @@ watch(route, async (newValue) => {
                 <button @click="moveFocus(place)">
                   <i class="bi bi-geo-alt"></i>
                 </button>
-                <button>
+                <button @click="goWrite(place)">
                   <i class="bi bi-heart"></i>
                 </button>
                 <button @click="addPlace(place)">

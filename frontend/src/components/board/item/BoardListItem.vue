@@ -1,37 +1,18 @@
 <script setup>
-import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { getBoardList } from "@/api/board";
 
 const router = useRouter();
 
-// const props = defineProps({
-//   data: Array,
-// });
+import { useBoardStore } from "@/stores/board";
+import { storeToRefs } from "pinia";
 
-const data = ref([]);
+const useBoard = useBoardStore();
+const { boardList, board } = storeToRefs(useBoard);
 
-const success = (response) => {
-  if (response.status !== 200) {
-    alert("문제가 발생했습니다.");
-    return;
-  } else {
-    data.value = response.data;
-    data.value.forEach((item) => {
-      item.date = new Date(item.createTimeStamp).toLocaleDateString();
-    });
-  }
-};
-const fail = (error) => {
-  alert("문제가 발생했습니다 : " + error);
-};
-
-getBoardList(success, fail);
-
-const goDetail = (id) => {
+const goDetail = (idx) => {
+  board.value = boardList.value[idx];
   router.push({
     name: "board-detail",
-    params: { id },
   });
 };
 </script>
@@ -48,13 +29,13 @@ const goDetail = (id) => {
         </tr>
       </thead>
       <tbody>
-        <tr class="items" v-for="item in data" :key="item.id" @click="goDetail(item.postId)">
+        <tr class="items" v-for="(item, idx) in boardList" :key="item.id" @click="goDetail(idx)">
           <td>
-            {{ item.postId }}
+            {{ item.postID }}
           </td>
           <td>{{ item.title }}</td>
-          <td>{{ item.userId }}</td>
-          <td>{{ item.date }}</td>
+          <td>{{ item.userID }}</td>
+          <td>{{ new Date(item.createTimeStamp).toISOString().substring(0, 10) }}</td>
         </tr>
       </tbody>
     </table>

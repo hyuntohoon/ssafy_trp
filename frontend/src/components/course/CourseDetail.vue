@@ -65,6 +65,10 @@ const deleteCourse = () => {
 };
 
 const getPrompt = async () => {
+  if (route.value.places.length === 0) {
+    Swal.fire("코스에 장소가 없습니다.", "", "error");
+    return;
+  }
   isLoading.value = true;
   let promptObj = [];
   // check if route.value.tripDate in today + 16 days

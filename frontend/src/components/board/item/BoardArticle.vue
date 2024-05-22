@@ -9,9 +9,7 @@ defineProps({
     <div class="info-wrap">
       <h3>{{ article.title }}</h3>
       <div class="info">
-        <span style="margin-right: 1rem"
-          >작성자 : {{ article.user.name }} ({{ article.user.id }})</span
-        >
+        <span style="margin-right: 1rem">작성자 : {{ article.userID }}</span>
         <span style="margin-right: 1rem"
           >작성일 : {{ new Date(article.createTimeStamp).toLocaleDateString() }}</span
         >
@@ -21,6 +19,7 @@ defineProps({
       </div>
     </div>
     <div class="content-wrap">
+      <img v-if="article.photo" :src="article.photo" alt="article photo" />
       <p>{{ article.content }}</p>
     </div>
   </div>

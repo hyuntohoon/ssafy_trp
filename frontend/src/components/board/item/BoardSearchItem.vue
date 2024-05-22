@@ -3,19 +3,22 @@ import GlassButton from "@/components/common/GlassButton.vue";
 import GlassInput from "@/components/common/GlassInput.vue";
 import GlassSelect from "@/components/common/GlassSelect.vue";
 
-import { ref } from "vue";
+import { useBoardStore } from "@/stores/board";
+import { storeToRefs } from "pinia";
 
-const search = ref("");
-const selected = ref("");
+const useBoard = useBoardStore();
+const { fetchBoardList, fetchSearchBoardList } = useBoard;
+const { search, page } = storeToRefs(useBoard);
 
-const onChange = (event) => {
-  selected.value = event.target.value;
-  console.log(selected.value);
-};
-
-const onInput = (event) => {
-  search.value = event.target.value;
-  console.log(search.value);
+const fetch = async () => {
+  page.value = 1;
+  if (search.value.key === "" || search.value.word === "") {
+    search.value.key = "";
+    search.value.word = "";
+    await fetchBoardList(page.value, 10);
+  } else {
+    await fetchSearchBoardList(page.value, 10);
+  }
 };
 </script>
 
@@ -24,12 +27,15 @@ const onInput = (event) => {
     <GlassSelect
       placeHolder="검색 조건"
       :options="['제목', '작성자', '내용']"
-      :value="selected"
-      @change="onChange" />
+      :value="search.key"
+      @change="search.key = $event.target.value" />
     <span style="margin-left: 0.5rem"></span>
-    <GlassInput placeHolder="검색어를 입력하세요" :value="search" @input="onInput" />
+    <GlassInput
+      placeHolder="검색어를 입력하세요"
+      :value="search.word"
+      @input="search.word = $event.target.value" />
     <span style="margin-left: 0.5rem"></span>
-    <GlassButton>
+    <GlassButton @click="fetch()">
       <template v-slot:content>
         <i class="bi bi-search"></i>
       </template>

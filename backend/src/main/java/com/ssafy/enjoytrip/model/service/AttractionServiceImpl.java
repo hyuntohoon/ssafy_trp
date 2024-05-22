@@ -10,6 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Coordinate;
 
 import java.util.List;
 @Service
@@ -84,4 +87,9 @@ public class AttractionServiceImpl implements AttractionService {
 		return attractionInfoRepository.findById(id).orElse(null);
 	}
 
+	public List<AttractionInfo> getAttractionsWithinDistance(double latitude, double longitude, double distance) {
+		GeometryFactory geometryFactory = new GeometryFactory();
+		Point point = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+		return attractionInfoRepository.findAttractionsWithinDistance(point, distance);
+	}
 }

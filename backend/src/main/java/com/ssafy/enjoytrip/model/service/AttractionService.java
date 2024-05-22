@@ -9,4 +9,5 @@ public interface AttractionService {
   List<AttractionInfo> searchAttractions(String keyword, int contentTypeId);
   List<AttractionInfo> getAttractionListTopTen(String sidoCode, String gugunCode, String type, String keyword);
   AttractionInfo getAttractionById(Integer id);
+  List<AttractionInfo> getAttractionsWithinDistance(double latitude, double longitude, double distance);
 }

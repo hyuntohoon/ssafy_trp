@@ -117,7 +117,9 @@ const getPrompt = async () => {
     console.log(promptObj);
   }
 
-  let promptString = JSON.stringify(promptObj) + " 답변을 HTML 문법으로 작성해줘";
+  let promptString =
+    JSON.stringify(promptObj) +
+    " 답변을 HTML 문법에 맞게 div 태그 하나로 감싸서 출력하고, 마크다운 문법은 아예 작성하지 말아줘";
   console.log(promptString);
 
   setPrompt(promptString);

@@ -62,7 +62,7 @@ public class AttractionRestController {
 		}
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/id")
 	public ResponseEntity<?> getAttractionById(
 			@RequestParam int id) {
 		AttractionInfo attractionInfo = attractionService.getAttractionById(id);

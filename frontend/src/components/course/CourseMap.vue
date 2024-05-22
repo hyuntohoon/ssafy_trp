@@ -6,7 +6,8 @@ import { useRouteStore } from "@/stores/route";
 import { storeToRefs } from "pinia";
 
 const routeStore = useRouteStore();
-const { getLatLngList, route, mobilityRoutes } = storeToRefs(routeStore);
+const { route, mobilityRoutes } = storeToRefs(routeStore);
+const { route: routeData } = routeStore;
 
 const currentFocus = ref(null);
 const focus = ref({ lat: 37.5665, lng: 126.978, level: 8 });
@@ -19,35 +20,25 @@ const mouseOut = () => {
   currentFocus.value = null;
 };
 
-watch(getLatLngList, () => {
-  if (getLatLngList.value.length === 0) {
+watch(routeData, () => {
+  if (route.value.places.length === 0) {
     focus.value = { lat: 37.5665, lng: 126.978, level: 8 };
     return;
   }
   let max = { lat: Number.MIN_SAFE_INTEGER, lng: Number.MIN_SAFE_INTEGER };
   let min = { lat: Number.MAX_SAFE_INTEGER, lng: Number.MAX_SAFE_INTEGER };
-  for (let i = 0; i < getLatLngList.value.length; i++) {
-    max.lat = Math.max(max.lat, getLatLngList.value[i].lat);
-    max.lng = Math.max(max.lng, getLatLngList.value[i].lng);
-    min.lat = Math.min(min.lat, getLatLngList.value[i].lat);
-    min.lng = Math.min(min.lng, getLatLngList.value[i].lng);
+  for (const place of route.value.places) {
+    max.lat = Math.max(max.lat, place.latitude);
+    max.lng = Math.max(max.lng, place.longitude);
+    min.lat = Math.min(min.lat, place.latitude);
+    min.lng = Math.min(min.lng, place.longitude);
   }
-  focus.value.lat = ((max.lat + min.lat) * 10000) / 20000;
-  focus.value.lng = ((max.lng + min.lng) * 10000) / 20000;
-
-  const distance = Math.max(max.lat - min.lat, max.lng - min.lng);
-
-  if (distance < 0.03) {
-    focus.value.level = 6;
-  } else if (distance < 0.05) {
-    focus.value.level = 7;
-  } else if (distance < 0.1) {
-    focus.value.level = 8;
-  } else if (distance < 0.2) {
-    focus.value.level = 9;
-  } else {
-    focus.value.level = 10;
-  }
+  // calc level based on the distance between max and min
+  focus.value = {
+    lat: (max.lat + min.lat) / 2,
+    lng: (max.lng + min.lng) / 2,
+    level: 8,
+  };
 });
 </script>
 

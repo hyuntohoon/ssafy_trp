@@ -35,22 +35,22 @@ public class CustomBotController {
     @GetMapping("/autoPlan")
     public String test(@RequestParam(name = "prompt")String prompt){
         String temp = prompt;
-        String defaultPromt = "당신은 여행계획를 돕은 여행 계획 도우미입니다. 여행 컨셉 또는 여행 지역을 제공할테니 제 db에 get 요청을 url를 작성해주세요. 제 http://http://192.168.204.102/attractions?sidoCode=1&gugunCode=1&type=1입니다. type과  sidoCode, gugunCode 파라미터를 수정해서 작성해주세요. type은 아래의 typename 정보를 사용해주세요. 다른 말은 설명도 필요 없습니다. url만 딱 주세요 " +
-                "@GetMapping\n" +
-        "public ResponseEntity<?> getList(\n" +
-                "   @RequestParam(required = false) String sidoCode,\n" +
-                "   @RequestParam(required = false) String gugunCode,\n" +
-                "   @RequestParam(required = false) String type,\n" +
-                "   @RequestParam(required = false) String keyword) {\n" +
+        String defaultPromt = "당신은 여행계획를 돕은 여행 계획 도우미입니다. 여행 컨셉 또는 여행 지역을 제공할테니 제 반드시 db에 get 요청 url만 작성해주세요. 다른 말은 필요 없습니다.제 http://192.168.204.102/attractions/gpt?sidoCode=1&gugunCode=1&type=1입니다. type과  sidoCode, gugunCode 파라미터를 수정해서 작성해주세요. type은 아래의 typename 정보를 사용해주세요. 다른 말은 설명도 필요 없습니다. url만 딱 주세요 " +
+                "@GetMapping(\"/attractions/gpt\")\n" +
+                "public ResponseEntity<?> forGpt(\n" +
+                "    @RequestParam(required = false) String sidoCode,\n" +
+                "    @RequestParam(required = false) String gugunCode,\n" +
+                "    @RequestParam(required = false) String type,\n" +
+                "    @RequestParam(required = false) String keyword) {\n" +
                 "\n" +
-                "   System.out.println(sidoCode + ' ' + gugunCode + ' ' + type + ' ' + keyword);\n" +
-                "   List<AttractionInfo> attractions = attractionService.getAttractionList(sidoCode, gugunCode, type, keyword);\n" +
-                "   if (attractions != null && !attractions.isEmpty()) {\n" +
-                "       return ResponseEntity.ok(attractions); // 200\n" +
-                "   } else {\n" +
-                "       return ResponseEntity.noContent().build(); // 204\n" +
-                "   }\n" +
-                "}\n" +
+                "    System.out.println(sidoCode + ' ' + gugunCode + ' ' + type + ' ' + keyword);\n" +
+                "    List<AttractionInfo> attractions = attractionService.getAttractionListTopTen(sidoCode, gugunCode, type, keyword);\n" +
+                "    if (attractions != null && !attractions.isEmpty()) {\n" +
+                "        return ResponseEntity.ok(attractions); // 200\n" +
+                "    } else {\n" +
+                "        return ResponseEntity.noContent().build(); // 204\n" +
+                "    }\n" +
+                "}"+
                 "{ typeName: '관광지', typeCode: 12 },\n" +
                 "{ typeName: '문화시설', typeCode: 14 },\n" +
                 "{ typeName: '행사', typeCode: 15 },\n" +
@@ -117,7 +117,7 @@ public class CustomBotController {
 
         String tempPrompt = "아래 정보를 토대로";
         tempPrompt+=temp;
-        tempPrompt+="컨셉의 여행 계획을 하루에 갈 수 있도록 반드시 5개의 여행지만 선택하여 JSON으로 contentId만 참조하여 저에게 다시 주세요. 또한 json에 해당 여행 목적과 개요를 적어주세요.";
+        tempPrompt+="컨셉의 여행 계획을 하루에 갈 수 있도록 반드시 5개의 여행지만 선택하여 JSON으로 contentId만 참조하여 저에게 다시 주세요. 또한 json에 전체 여행 목적과 개요,주의사항 및 전체 여행 계획를 적어주세요.";
         tempPrompt+= response;
         System.out.println(tempPrompt);
         request = new ChatGPTRequest(model, tempPrompt);

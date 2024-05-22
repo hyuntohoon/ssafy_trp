@@ -1,6 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Swal from "sweetalert2";
+
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+const route = useRoute();
 
 import GlassButton from "@/components/common/GlassButton.vue";
 import GlassInput from "@/components/common/GlassInput.vue";
@@ -16,6 +20,17 @@ const useBoard = useBoardStore();
 
 const { id } = storeToRefs(useUser);
 const { board } = storeToRefs(useBoard);
+
+const query = route.query;
+
+onMounted(() => {
+  board.value = {
+    title: "",
+    content: "",
+    photo: "[]",
+    contentId: parseInt(query.contentId),
+  };
+});
 
 const { writeBoard } = useBoard;
 
@@ -77,6 +92,14 @@ const write = async () => {
       showConfirmButton: false,
       timer: 1500,
     });
+    board.value = {
+      title: "",
+      content: "",
+      photo: "[]",
+    };
+    router.replace({
+      name: "board-list",
+    });
   } else {
     Swal.fire({
       icon: "error",
@@ -90,6 +113,12 @@ const write = async () => {
 
 <template>
   <div class="main-wrap">
+    <div style="text-align: end" v-if="query.contentId">
+      <h2>
+        {{ query.title }}
+        후기 작성
+      </h2>
+    </div>
     <GlassInput
       placeHolder="제목을 입력하세요"
       :value="board.title"
@@ -121,7 +150,7 @@ const write = async () => {
 .main-wrap {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.5);

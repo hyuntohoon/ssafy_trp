@@ -23,19 +23,21 @@ public class CustomBotController {
     private RestTemplate template;
     @Autowired
     private RestTemplate restTemplate;
+
     @PostMapping("/chat")
-    public String chat(@RequestBody String prompt){
+    public String chat(@RequestBody String prompt) {
         String defaultPromt = "당신은 여행계획를 돕은 여행 계획 도우미입니다. 아래의 여행 정보와 날씨 정보를 제공할테니, 1. 여행계획 정리 2. 여행 계획 평가 3. 여행 계획 조언을 해주세요.";
-        prompt+=defaultPromt;
+        prompt += defaultPromt;
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
-        ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
+        ChatGPTResponse chatGPTResponse = template.postForObject(apiURL, request, ChatGPTResponse.class);
         return chatGPTResponse.getChoices().get(0).getMessage().getContent();
     }
 
     @GetMapping("/autoPlan")
-    public String test(@RequestParam(name = "prompt")String prompt){
+    public String test(@RequestParam(name = "prompt") String prompt) {
         String temp = prompt;
-        String defaultPromt = "당신은 여행계획를 돕은 여행 계획 도우미입니다. 여행 컨셉 또는 여행 지역을 제공할테니 제 반드시 db에 get 요청 url만 작성해주세요. 다른 말은 필요 없습니다.제 http://192.168.204.102/attractions/gpt?sidoCode=1&gugunCode=1&type=1입니다. type과  sidoCode, gugunCode 파라미터를 수정해서 작성해주세요. type은 아래의 typename 정보를 사용해주세요. 다른 말은 설명도 필요 없습니다. url만 딱 주세요 " +
+        String defaultPromt = "당신은 여행계획를 돕은 여행 계획 도우미입니다. 여행 컨셉 또는 여행 지역을 제공할테니 제 반드시 db에 get 요청 url만 작성해주세요. 다른 말은 필요 없습니다.제 http://localhost/attractions/gpt?sidoCode=1&gugunCode=1&type=1입니다. type과  sidoCode, gugunCode 파라미터를 수정해서 작성해주세요. type은 아래의 typename 정보를 사용해주세요. 다른 말은 설명도 필요 없습니다. url만 딱 주세요 "
+                +
                 "@GetMapping(\"/attractions/gpt\")\n" +
                 "public ResponseEntity<?> forGpt(\n" +
                 "    @RequestParam(required = false) String sidoCode,\n" +
@@ -44,13 +46,14 @@ public class CustomBotController {
                 "    @RequestParam(required = false) String keyword) {\n" +
                 "\n" +
                 "    System.out.println(sidoCode + ' ' + gugunCode + ' ' + type + ' ' + keyword);\n" +
-                "    List<AttractionInfo> attractions = attractionService.getAttractionListTopTen(sidoCode, gugunCode, type, keyword);\n" +
+                "    List<AttractionInfo> attractions = attractionService.getAttractionListTopTen(sidoCode, gugunCode, type, keyword);\n"
+                +
                 "    if (attractions != null && !attractions.isEmpty()) {\n" +
                 "        return ResponseEntity.ok(attractions); // 200\n" +
                 "    } else {\n" +
                 "        return ResponseEntity.noContent().build(); // 204\n" +
                 "    }\n" +
-                "}"+
+                "}" +
                 "{ typeName: '관광지', typeCode: 12 },\n" +
                 "{ typeName: '문화시설', typeCode: 14 },\n" +
                 "{ typeName: '행사', typeCode: 15 },\n" +
@@ -107,21 +110,21 @@ public class CustomBotController {
                 "39\t서귀포시\t3\n" +
                 "39\t제주시\t4\n";
 
-        prompt+=defaultPromt;
+        prompt += defaultPromt;
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
-        ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
+        ChatGPTResponse chatGPTResponse = template.postForObject(apiURL, request, ChatGPTResponse.class);
         String content = chatGPTResponse.getChoices().get(0).getMessage().getContent();
         System.out.println(content);
         // If the content is a URL, send a GET request to that URL
         ResponseEntity<String> response = restTemplate.getForEntity(content, String.class);
 
         String tempPrompt = "아래 정보를 토대로";
-        tempPrompt+=temp;
-        tempPrompt+="컨셉의 여행 계획을 하루에 갈 수 있도록 반드시 5개의 여행지만 선택하여 JSON으로 contentId만 참조하여 저에게 다시 주세요. 또한 json에 전체 여행 목적과 개요,주의사항 및 전체 여행 계획를 적어주세요.";
-        tempPrompt+= response;
+        tempPrompt += temp;
+        tempPrompt += "컨셉의 여행 계획을 하루에 갈 수 있도록 반드시 5개의 여행지만 선택하여 다음과 같은 형식으로 JSON을 출력해. {tripPurpose:String, tripOverview:String, tripCaution:String, tripPlan:Array(contentId:Number)}. 다른 데이터나 markdown 문법을 포함시키지 않고, JSON 텍스트만 출력해 줘";
+        tempPrompt += response;
         System.out.println(tempPrompt);
         request = new ChatGPTRequest(model, tempPrompt);
-        ChatGPTResponse chatGPTResponseSecond =  template.postForObject(apiURL, request, ChatGPTResponse.class);
+        ChatGPTResponse chatGPTResponseSecond = template.postForObject(apiURL, request, ChatGPTResponse.class);
         String contentSecond = chatGPTResponseSecond.getChoices().get(0).getMessage().getContent();
         System.out.println(contentSecond);
         return contentSecond;

@@ -48,6 +48,7 @@ const router = createRouter({
       path: "/course",
       name: "course",
       component: CourseView,
+      beforeEnter: onlyAuthUser,
     },
     {
       path: "/board",

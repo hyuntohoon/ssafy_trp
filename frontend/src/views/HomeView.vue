@@ -1,6 +1,7 @@
 <script setup>
 import Card from "@/components/common/Card.vue";
 import GlassButton from "@/components/common/GlassButton.vue";
+import ImageAutoSlider from "@/components/common/ImageAutoSlider.vue";
 
 import { useRouteStore } from "@/stores/route";
 import { useSearchStore } from "@/stores/search";
@@ -28,53 +29,62 @@ const goCourse = () => {
 </script>
 
 <template>
-  <div class="row">
-    <Card>
-      <template v-slot:content>
-        <div>
-          <h2>여행지 찾으러 가기</h2>
-          <p>다양한 방법으로 여행지를 검색하고, 나만의 코스를 만들자!</p>
-        </div>
-      </template>
-      <template v-slot:action>
-        <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goTravel">
-          <template v-slot:content>
-            <i class="bi bi-map"></i>
-          </template>
-        </GlassButton>
-      </template>
-    </Card>
+  <div>
+    <ImageAutoSlider
+      :images="[
+        'https://picsum.photos/1920/1080?random=1',
+        'https://picsum.photos/1920/1080?random=2',
+        'https://picsum.photos/1920/1080?random=3',
+        'https://picsum.photos/1920/1080?random=4',
+      ]" />
+    <div class="row">
+      <Card>
+        <template v-slot:content>
+          <div>
+            <h2>여행지 찾으러 가기</h2>
+            <p>여행지를 검색하고, 나만의 코스를 만들자!</p>
+          </div>
+        </template>
+        <template v-slot:action>
+          <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goTravel">
+            <template v-slot:content>
+              <i class="bi bi-map"></i>
+            </template>
+          </GlassButton>
+        </template>
+      </Card>
 
-    <Card>
-      <template v-slot:content>
-        <div>
-          <h2>코스 탐색하기</h2>
-          <p>내가 생성한 코스를 관리하고, AI에게 평가도 받아보자!</p>
-        </div>
-      </template>
-      <template v-slot:action>
-        <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goCourse">
-          <template v-slot:content>
-            <i class="bi bi-geo-alt"></i>
-          </template>
-        </GlassButton>
-      </template>
-    </Card>
-    <Card>
-      <template v-slot:content>
-        <div>
-          <h2>게시판 가기</h2>
-          <p>자기가 만든 계획을 보여주고, 다른 사람 계획을 알아보자!</p>
-        </div>
-      </template>
-      <template v-slot:action>
-        <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goBoard">
-          <template v-slot:content>
-            <i class="bi bi-chat-left"></i>
-          </template>
-        </GlassButton>
-      </template>
-    </Card>
+      <Card>
+        <template v-slot:content>
+          <div>
+            <h2>코스 탐색하기</h2>
+            <p>코스를 관리하고, AI에게 평가도 받아보자!</p>
+          </div>
+        </template>
+        <template v-slot:action>
+          <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goCourse">
+            <template v-slot:content>
+              <i class="bi bi-geo-alt"></i>
+            </template>
+          </GlassButton>
+        </template>
+      </Card>
+      <Card>
+        <template v-slot:content>
+          <div>
+            <h2>게시판 가기</h2>
+            <p>여행지 사진과 함께 이야기를 나눠보자!</p>
+          </div>
+        </template>
+        <template v-slot:action>
+          <GlassButton :style="'width: 3rem; height: 3rem'" :onClick="goBoard">
+            <template v-slot:content>
+              <i class="bi bi-chat-left"></i>
+            </template>
+          </GlassButton>
+        </template>
+      </Card>
+    </div>
   </div>
 </template>
 

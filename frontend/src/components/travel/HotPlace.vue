@@ -87,7 +87,7 @@ watch(route, async (newValue) => {
   <div id="wrap">
     <h2>가볼만한 장소</h2>
     <hr />
-    <h5 v-if="recommendedData.length === 0">여행 장소를 선택 해 주세요!</h5>
+    <h5 v-if="recommendedData.length === 0">여행 장소를 2곳 이상 선택 해 주세요!</h5>
     <div v-else>
       <div v-for="place in recommendedData" :key="place.id">
         <PlaceCard :data="place">

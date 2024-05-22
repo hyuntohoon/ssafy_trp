@@ -1,8 +1,8 @@
 package com.ssafy.enjoytrip.model.entity;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.util.Set;
+import org.locationtech.jts.geom.Point;
+
 @Entity
 @Table(name = "attraction_info")
 public class AttractionInfo {
@@ -53,6 +53,8 @@ public class AttractionInfo {
     @Column(name = "zipcode")
     private String zipcode;
 
+    @Column(columnDefinition = "geometry(Point, 4326)")
+    private Point location;
     @Override
     public String toString() {
         return "AttractionInfo{" +

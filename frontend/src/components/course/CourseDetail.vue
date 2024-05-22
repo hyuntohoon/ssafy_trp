@@ -120,11 +120,9 @@ const getPrompt = async () => {
   let promptString =
     JSON.stringify(promptObj) +
     " 여행 계획 평가, 주의점을 HTML 문법에 맞게 div 태그 하나로 감싸서 출력해줘";
-  console.log(promptString);
 
   setPrompt(promptString);
   getResponse();
-  console.log(gptStore.response);
 };
 </script>
 

@@ -134,7 +134,6 @@ const getPrompt = async () => {
         <h2>여행 계획</h2>
       </div>
       <div class="action-wrap">
-        <!-- magic stick icon button -->
         <button id="gpt" @click="getPrompt">
           <i class="bi bi-magic"></i>
         </button>

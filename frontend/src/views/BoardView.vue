@@ -1,7 +1,14 @@
 <script setup>
 import { useRouter } from "vue-router";
 
-// import { deleteBoard } from "@/api/board";
+import { useBoardStore } from "@/stores/board";
+const useBoard = useBoardStore();
+
+import { storeToRefs } from "pinia";
+const { board } = storeToRefs(useBoard);
+const { removeBoard } = useBoard;
+
+import Swal from "sweetalert2";
 
 import Navigator from "@/components/Navigator.vue";
 import GlassButton from "@/components/common/GlassButton.vue";
@@ -14,14 +21,51 @@ const goCreate = () => {
   });
 };
 
-const goEdit = () => {
-  router.push({
-    name: "board-edit",
-    params: {
-      id: router.currentRoute.value.params.id,
-    },
+const remove = async () => {
+  const targetId = board.value.postID;
+
+  Swal.fire({
+    title: "게시글을 삭제하시겠습니까?",
+    text: "삭제된 게시글은 복구할 수 없습니다.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "삭제",
+    cancelButtonText: "취소",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const response = await removeBoard(targetId);
+      if (response) {
+        Swal.fire({
+          title: "삭제 완료",
+          text: "게시글이 삭제되었습니다.",
+          icon: "success",
+          confirmButtonText: "확인",
+        });
+        router.replace({
+          name: "board-list",
+        });
+      } else {
+        Swal.fire({
+          title: "삭제 실패",
+          text: "게시글 삭제에 실패했습니다.",
+          icon: "error",
+          confirmButtonText: "확인",
+        });
+      }
+    }
   });
 };
+
+// const goEdit = () => {
+//   router.push({
+//     name: "board-edit",
+//     params: {
+//       id: router.currentRoute.value.params.id,
+//     },
+//   });
+// };
 
 // const remove = () => {
 //   const success = (response) => {

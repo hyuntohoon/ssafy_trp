@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-import { getBoardList, searchBoardList, postBoard } from "@/api/board";
+import { getBoardList, searchBoardList, postBoard, deleteBoard, putBoard } from "@/api/board";
 
 export const useBoardStore = defineStore("board", () => {
   const boardList = ref([]);
@@ -46,6 +46,33 @@ export const useBoardStore = defineStore("board", () => {
     }
   };
 
+  const removeBoard = async (postId) => {
+    const response = await deleteBoard(postId);
+    if (response.status === 204) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const modifyBoard = async (userID, postId) => {
+    const params = {
+      userId: userID,
+      title: board.value.title,
+      content: board.value.content,
+      postTypeId: 2,
+    };
+    if (board.value.photo) params.photo = board.value.photo;
+    if (board.value.contentId) params.contentId = board.value.contentId;
+
+    const response = await putBoard(postId, params);
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return {
     boardList,
     board,
@@ -57,5 +84,7 @@ export const useBoardStore = defineStore("board", () => {
     fetchBoardList,
     fetchSearchBoardList,
     writeBoard,
+    removeBoard,
+    modifyBoard,
   };
 });

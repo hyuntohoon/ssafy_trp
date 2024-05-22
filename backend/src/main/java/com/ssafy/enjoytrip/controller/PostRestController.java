@@ -33,6 +33,7 @@ public class PostRestController {
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPost(@PathVariable int postId) {
         Post post = postService.getPost(postId);
+        System.out.println(post);
         if (post != null) {
             return ResponseEntity.ok(post);
         } else {

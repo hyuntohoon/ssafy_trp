@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "postID")
     private int postID;
 
     @Column(name = "UserID", length = 10, nullable = false)
@@ -19,18 +20,21 @@ public class Post {
     @Column(name = "Content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(name = "photo", columnDefinition = "LONGTEXT")
+    private String photo;
+
     @Column(name = "create_time_stamp", nullable = false)
     private Timestamp createTimeStamp;
 
     @Column(name = "update_time_stamp")
     private Timestamp updateTimeStamp;
 
-    @Column(name = "photo", columnDefinition = "LONGTEXT")
-    private String photo;
-
     @ManyToOne
     @JoinColumn(name = "post_type_id", nullable = false)
     private PostType postType;
+
+    @Column(name = "content_id")
+    private Integer contentId; // 필드를 Integer로 변경
 
     // Getters and Setters
     public int getPostID() {
@@ -95,5 +99,13 @@ public class Post {
 
     public void setPostType(PostType postType) {
         this.postType = postType;
+    }
+
+    public Integer getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(Integer contentId) {
+        this.contentId = contentId;
     }
 }

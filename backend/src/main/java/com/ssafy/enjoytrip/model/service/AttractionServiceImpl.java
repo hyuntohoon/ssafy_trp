@@ -87,9 +87,8 @@ public class AttractionServiceImpl implements AttractionService {
 		return attractionInfoRepository.findById(id).orElse(null);
 	}
 
-	public List<AttractionInfo> getAttractionsWithinDistance(double latitude, double longitude, double distance) {
-		GeometryFactory geometryFactory = new GeometryFactory();
-		Point point = geometryFactory.createPoint(new Coordinate(longitude, latitude));
-		return attractionInfoRepository.findAttractionsWithinDistance(point, distance);
+	@Override
+	public List<AttractionInfo> getAttractionsWithinDistance(Double longitude, Double latitude, Integer distance) {
+		return attractionInfoRepository.findAttractionsWithinDistance(longitude, latitude, distance);
 	}
 }

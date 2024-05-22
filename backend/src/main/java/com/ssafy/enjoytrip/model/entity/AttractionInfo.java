@@ -1,11 +1,13 @@
 package com.ssafy.enjoytrip.model.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Point;
 
 @Entity
 @Table(name = "attraction_info")
 public class AttractionInfo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "content_id")
@@ -16,7 +18,7 @@ public class AttractionInfo {
 
     @Column(name = "gugun_code")
     private Integer gugunCode;
-    // 다른 컬럼들
+
     @Column(name = "addr1")
     private String addr1;
 
@@ -53,28 +55,10 @@ public class AttractionInfo {
     @Column(name = "zipcode")
     private String zipcode;
 
-    @Column(columnDefinition = "geometry(Point, 4326)")
+    @Column(name = "location", columnDefinition = "POINT")
     private Point location;
-    @Override
-    public String toString() {
-        return "AttractionInfo{" +
-                "contentId=" + contentId +
-                ", sidoCode=" + sidoCode +
-                ", gugunCode=" + gugunCode +
-                ", addr1='" + addr1 + '\'' +
-                ", addr2='" + addr2 + '\'' +
-                ", contentTypeId=" + contentTypeId +
-                ", firstImage='" + firstImage + '\'' +
-                ", firstImage2='" + firstImage2 + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", mlevel='" + mlevel + '\'' +
-                ", readcount=" + readcount +
-                ", tel='" + tel + '\'' +
-                ", title='" + title + '\'' +
-                ", zipcode='" + zipcode + '\'' +
-                '}';
-    }
+
+    // Getters and setters
 
     public int getContentId() {
         return contentId;
@@ -196,10 +180,38 @@ public class AttractionInfo {
         this.zipcode = zipcode;
     }
 
-    public AttractionInfo() {
+    public Point getLocation() {
+        return location;
     }
 
-    public AttractionInfo(int contentId, Integer sidoCode, Integer gugunCode, String addr1, String addr2, int contentTypeId, String firstImage, String firstImage2, double latitude, double longitude, String mlevel, int readcount, String tel, String title, String zipcode) {
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return "AttractionInfo{" +
+                "contentId=" + contentId +
+                ", sidoCode=" + sidoCode +
+                ", gugunCode=" + gugunCode +
+                ", addr1='" + addr1 + '\'' +
+                ", addr2='" + addr2 + '\'' +
+                ", contentTypeId=" + contentTypeId +
+                ", firstImage='" + firstImage + '\'' +
+                ", firstImage2='" + firstImage2 + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", mlevel='" + mlevel + '\'' +
+                ", readcount=" + readcount +
+                ", tel='" + tel + '\'' +
+                ", title='" + title + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", location=" + location +
+                '}';
+    }
+
+    // Constructor with parameters
+    public AttractionInfo(int contentId, Integer sidoCode, Integer gugunCode, String addr1, String addr2, int contentTypeId, String firstImage, String firstImage2, double latitude, double longitude, String mlevel, int readcount, String tel, String title, String zipcode, Point location) {
         this.contentId = contentId;
         this.sidoCode = sidoCode;
         this.gugunCode = gugunCode;
@@ -215,5 +227,9 @@ public class AttractionInfo {
         this.tel = tel;
         this.title = title;
         this.zipcode = zipcode;
+        this.location = location;
+    }
+
+    public AttractionInfo() {
     }
 }

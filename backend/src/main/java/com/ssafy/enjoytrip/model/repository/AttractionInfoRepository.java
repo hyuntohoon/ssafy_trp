@@ -14,6 +14,6 @@ public interface AttractionInfoRepository extends JpaRepository<AttractionInfo, 
     @Query("SELECT a FROM AttractionInfo a WHERE a.addr1 LIKE %:keyword% AND a.contentTypeId = :contentTypeId ORDER BY a.readcount DESC limit 8")
     List<AttractionInfo> findTop8ByKeywordAndContentTypeIdOrderByReadcountDesc(@Param("keyword") String keyword, @Param("contentTypeId") int contentTypeId);
 
-    @Query("SELECT ai FROM AttractionInfo ai WHERE ST_Contains(ST_Buffer(:point, :distance), ai.location) = true")
-    List<AttractionInfo> findAttractionsWithinDistance(@Param("point") Point point, @Param("distance") double distance);
+    @Query(value = "SELECT ai FROM AttractionInfo ai WHERE ST_Distance_Sphere(ST_GeomFromText(CONCAT('POINT(', :longitude, ' ', :latitude, ')'), 4326), ai.location) <= :distance")
+    List<AttractionInfo> findAttractionsWithinDistance(@Param("longitude") Double longitude, @Param("latitude") Double latitude, @Param("distance") Integer distance);
 }

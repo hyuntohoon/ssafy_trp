@@ -126,14 +126,14 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
-            <version>6.5.2.Final</version>
+            <version>6.1.7.Final</version>
             <type>pom</type>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.5.2.Final</version>
+            <version>6.1.7.Final</version>
             <type>pom</type>
         </dependency>
 

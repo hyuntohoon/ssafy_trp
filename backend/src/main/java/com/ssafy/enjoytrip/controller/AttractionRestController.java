@@ -76,9 +76,9 @@ public class AttractionRestController {
 
 	@GetMapping("/within")
 	public List<AttractionInfo> getAttractionsWithinDistance(
-			@RequestParam double latitude,
-			@RequestParam double longitude,
-			@RequestParam double distance) {
-		return attractionService.getAttractionsWithinDistance(latitude, longitude, distance);
+			@RequestParam("longitude") Double longitude,
+			@RequestParam("latitude") Double latitude,
+			@RequestParam("distance") Integer distance) {
+		return attractionService.getAttractionsWithinDistance(longitude, latitude, distance);
 	}
 }

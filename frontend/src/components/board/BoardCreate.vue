@@ -5,7 +5,7 @@ import GlassTextArea from "@/components/common/GlassTextArea.vue";
 
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { writeBoard } from "@/api/board";
+// import { writeBoard } from "@/api/board";
 import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
@@ -21,24 +21,24 @@ const article = ref({
   content: "",
 });
 
-const write = () => {
-  const success = (response) => {
-    if (response.status !== 200) {
-      alert("문제가 발생했습니다.");
-      console.log(response.status);
-      return;
-    } else {
-      router.replace({
-        name: "board-list",
-      });
-    }
-  };
-  const fail = (error) => {
-    alert("문제가 발생했습니다 : " + error);
-    console.log(error);
-  };
-  writeBoard(userId.value, article.value.title, article.value.content, success, fail);
-};
+// const write = () => {
+//   const success = (response) => {
+//     if (response.status !== 200) {
+//       alert("문제가 발생했습니다.");
+//       console.log(response.status);
+//       return;
+//     } else {
+//       router.replace({
+//         name: "board-list",
+//       });
+//     }
+//   };
+//   const fail = (error) => {
+//     alert("문제가 발생했습니다 : " + error);
+//     console.log(error);
+//   };
+//   writeBoard(userId.value, article.value.title, article.value.content, success, fail);
+// };
 </script>
 
 <template>

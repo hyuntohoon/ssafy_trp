@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
         post.setPhoto(postRequestDTO.getPhoto());
         post.setCreateTimeStamp(new Timestamp(System.currentTimeMillis()));
         post.setUpdateTimeStamp(new Timestamp(System.currentTimeMillis()));
-
+        post.setContentId(postRequestDTO.getContentId());
         // PostType 설정
         PostType postType = postTypeRepository.findById(postRequestDTO.getPostTypeId())
                 .orElseThrow(() -> new RuntimeException("PostType not found"));

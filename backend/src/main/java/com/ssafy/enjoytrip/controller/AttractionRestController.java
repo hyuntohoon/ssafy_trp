@@ -61,4 +61,16 @@ public class AttractionRestController {
 			return ResponseEntity.noContent().build(); // 204
 		}
 	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getAttractionById(
+			@RequestParam int id) {
+		AttractionInfo attractionInfo = attractionService.getAttractionById(id);
+
+		if (attractionInfo != null) {
+			return ResponseEntity.ok(attractionInfo); // 200
+		} else {
+			return ResponseEntity.noContent().build(); // 204
+		}
+	}
 }

@@ -79,4 +79,9 @@ public class AttractionServiceImpl implements AttractionService {
 		return pageResult.getContent();
 	}
 
+	@Override
+	public AttractionInfo getAttractionById(Integer id) {
+		return attractionInfoRepository.findById(id).orElse(null);
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.controller;
 
 import com.ssafy.enjoytrip.model.dto.PostRequestDTO;
+import com.ssafy.enjoytrip.model.dto.UpdatePostDTO;
 import com.ssafy.enjoytrip.model.entity.Post;
 import com.ssafy.enjoytrip.model.service.PostService;
 
@@ -32,7 +33,8 @@ public class PostRestController {
     // 게시글 ID로 조회
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPost(@PathVariable int postId) {
-        Post post = postService.getPost(postId);
+        System.out.println(postId);
+        Post post = postService.getPostById(postId);
         System.out.println(post);
         if (post != null) {
             return ResponseEntity.ok(post);
@@ -50,11 +52,9 @@ public class PostRestController {
 
     // 게시글 업데이트
     @PutMapping("/{postId}")
-    public ResponseEntity<?> updatePost(@RequestBody Post post, @PathVariable String postId) {
-        // post.set
-        System.out.println(post);
-        post.setPostID(Integer.parseInt(postId));
-        boolean result = postService.updatePost(post);
+    public ResponseEntity<?> updatePost(@PathVariable String postId, @RequestBody UpdatePostDTO updatePostDTO) {
+        updatePostDTO.setPostID(Integer.parseInt(postId));
+        boolean result = postService.updatePost(updatePostDTO);
         if (result) {
             return ResponseEntity.ok("updatedPost");
         } else {

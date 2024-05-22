@@ -1,10 +1,13 @@
 package com.ssafy.enjoytrip.model.service;
 
 import com.ssafy.enjoytrip.model.dto.PostRequestDTO;
+import com.ssafy.enjoytrip.model.dto.UpdatePostDTO;
 import com.ssafy.enjoytrip.model.entity.Post;
 import com.ssafy.enjoytrip.model.entity.PostType;
 import com.ssafy.enjoytrip.model.repository.PostRepository;
 import com.ssafy.enjoytrip.model.repository.PostTypeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,7 +29,7 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostTypeRepository postTypeRepository;
 
-
+    private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
 
     public boolean createPost(PostRequestDTO postRequestDTO) {
         // DTO를 엔티티로 변환
@@ -49,9 +52,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public Post getPost(Integer postID) {
-        System.out.println("sasa"+postID);
-        Optional<Post> post = postRepository.findById(postID);
+    public Post getPostById(Integer postId) {
+        logger.info("Fetching post with ID: " + postId);
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isPresent()) {
+            logger.info("Post found: " + post.get());
+        } else {
+            logger.warn("Post not found with ID: " + postId);
+        }
         return post.orElse(null);
     }
 
@@ -65,12 +73,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean updatePost(Post post) {
-        if (postRepository.existsById(post.getPostID())) {
+    @Transactional
+    public boolean updatePost(UpdatePostDTO updatePostDTO) {
+        Optional<Post> optionalPost = postRepository.findById(updatePostDTO.getPostID());
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            post.setUserID(updatePostDTO.getUserID());
+            post.setTitle(updatePostDTO.getTitle());
+            post.setContent(updatePostDTO.getContent());
+            post.setPhoto(updatePostDTO.getPhoto());
+            post.setCreateTimeStamp(updatePostDTO.getCreateTimeStamp());
+            post.setUpdateTimeStamp(updatePostDTO.getUpdateTimeStamp());
+            post.setContentId(updatePostDTO.getContentId());
             postRepository.save(post);
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Override

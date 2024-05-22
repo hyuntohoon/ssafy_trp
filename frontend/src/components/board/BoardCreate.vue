@@ -1,59 +1,113 @@
 <script setup>
+import { ref } from "vue";
+import Swal from "sweetalert2";
+
 import GlassButton from "@/components/common/GlassButton.vue";
 import GlassInput from "@/components/common/GlassInput.vue";
 import GlassTextArea from "@/components/common/GlassTextArea.vue";
 
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-// import { writeBoard } from "@/api/board";
 import { useUserStore } from "@/stores/user";
-
-const userStore = useUserStore();
+import { useBoardStore } from "@/stores/board";
 
 import { storeToRefs } from "pinia";
-const userId = storeToRefs(userStore).id;
 
-const router = useRouter();
+const useUser = useUserStore();
+const useBoard = useBoardStore();
 
-const article = ref({
-  userId: userId.value,
-  title: "",
-  content: "",
-});
+const { id } = storeToRefs(useUser);
+const { board } = storeToRefs(useBoard);
 
-// const write = () => {
-//   const success = (response) => {
-//     if (response.status !== 200) {
-//       alert("문제가 발생했습니다.");
-//       console.log(response.status);
-//       return;
-//     } else {
-//       router.replace({
-//         name: "board-list",
-//       });
-//     }
-//   };
-//   const fail = (error) => {
-//     alert("문제가 발생했습니다 : " + error);
-//     console.log(error);
-//   };
-//   writeBoard(userId.value, article.value.title, article.value.content, success, fail);
-// };
+const { writeBoard } = useBoard;
+
+const tmpImages = ref([]);
+
+const uploadImages = async (images) => {
+  let urls = [];
+  for (const image of images) {
+    const formData = new FormData();
+    const decoded = atob(image.split(",")[1]);
+    const array = new Uint8Array(decoded.length);
+    for (let i = 0; i < decoded.length; i++) {
+      array[i] = decoded.charCodeAt(i);
+    }
+    const blob = new Blob([array], { type: "image/jpeg" });
+    formData.append("image", blob);
+    const res = await fetch("https://image.ssafy.picel.net", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    urls.push(data.url);
+  }
+  return urls;
+};
+
+const upload = () => {
+  if (tmpImages.value.length > 10) {
+    alert("이미지는 최대 10개까지 업로드 가능합니다.");
+    return;
+  }
+
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.onchange = (e) => {
+    const files = e.target.files;
+    for (const file of files) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        tmpImages.value.push(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  input.click();
+};
+
+const write = async () => {
+  const urls = await uploadImages(tmpImages.value);
+  board.value.photo = JSON.stringify(urls);
+  console.log(board.value.photo);
+  const res = await writeBoard(id.value);
+
+  if (res) {
+    Swal.fire({
+      icon: "success",
+      title: "글쓰기 성공",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "글쓰기 실패",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  }
+};
 </script>
 
 <template>
   <div class="main-wrap">
-    <!-- write article -->
     <GlassInput
       placeHolder="제목을 입력하세요"
-      :value="article.title"
-      @input="article.title = $event.target.value" />
+      :value="board.title"
+      @input="board.title = $event.target.value" />
     <div style="margin-bottom: 1rem"></div>
     <GlassTextArea
       placeHolder="내용을 입력하세요"
-      :value="article.content"
-      @input="article.content = $event.target.value" />
+      :value="board.content"
+      @input="board.content = $event.target.value" />
     <div style="margin-bottom: 1rem"></div>
+    <div class="upload-wrap">
+      <button class="upload-btn" @click="upload">
+        <i class="bi bi-plus-circle" style="font-size: 2rem"></i>
+      </button>
+      <div class="preview-wrap">
+        <img v-for="image in tmpImages" :src="image" :key="image" />
+      </div>
+    </div>
     <GlassButton @click="write">
       <template v-slot:content>
         <i class="bi bi-pencil"></i>&nbsp;
@@ -75,5 +129,43 @@ const article = ref({
   border-radius: 1rem;
   padding: 1rem;
   margin-bottom: 1rem;
+}
+
+.upload-wrap {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  width: 100%;
+  height: 100px;
+  overflow-x: auto;
+}
+
+.preview-wrap {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.preview-wrap img {
+  width: 80px;
+  height: 80px;
+  margin: 0.5rem;
+  border-radius: 1rem;
+  object-fit: contain;
+}
+
+.upload-btn {
+  width: 100px;
+  height: 100px;
+  border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 </style>

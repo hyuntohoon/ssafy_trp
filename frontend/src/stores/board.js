@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-import { getBoardList, searchBoardList } from "@/api/board";
+import { getBoardList, searchBoardList, postBoard } from "@/api/board";
 
 export const useBoardStore = defineStore("board", () => {
   const boardList = ref([]);
@@ -22,8 +22,28 @@ export const useBoardStore = defineStore("board", () => {
     if (key === "제목") key = "title";
     if (key === "내용") key = "content";
     if (key === "작성자") key = "writer";
-    const response = await searchBoardList(key, word, page, pageSize, 1);
+    const response = await searchBoardList(key, word, page, pageSize, 2);
     boardList.value = response.data;
+  };
+
+  const writeBoard = async (userID) => {
+    const params = {
+      userId: userID,
+      title: board.value.title,
+      content: board.value.content,
+      postTypeId: 2,
+    };
+    console.log(board.value.photo);
+    if (board.value.photo) params.photo = board.value.photo;
+    if (board.value.contentId) params.contentId = board.value.contentId;
+
+    const response = await postBoard(params);
+
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   return {
@@ -36,5 +56,6 @@ export const useBoardStore = defineStore("board", () => {
 
     fetchBoardList,
     fetchSearchBoardList,
+    writeBoard,
   };
 });

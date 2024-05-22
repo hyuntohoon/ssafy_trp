@@ -1,8 +1,6 @@
 <script setup>
-import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { useUserStore } from "@/stores/user";
 // import { deleteBoard } from "@/api/board";
 
 import Navigator from "@/components/Navigator.vue";
@@ -10,24 +8,20 @@ import GlassButton from "@/components/common/GlassButton.vue";
 
 const router = useRouter();
 
-const userStore = useUserStore();
+const goCreate = () => {
+  router.push({
+    name: "board-create",
+  });
+};
 
-const userId = ref(userStore.getUserId);
-
-// const goCreate = () => {
-//   router.push({
-//     name: "board-create",
-//   });
-// };
-
-// const goEdit = () => {
-//   router.push({
-//     name: "board-edit",
-//     params: {
-//       id: router.currentRoute.value.params.id,
-//     },
-//   });
-// };
+const goEdit = () => {
+  router.push({
+    name: "board-edit",
+    params: {
+      id: router.currentRoute.value.params.id,
+    },
+  });
+};
 
 // const remove = () => {
 //   const success = (response) => {

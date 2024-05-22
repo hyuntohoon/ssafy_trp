@@ -2,7 +2,7 @@
 <script setup></script>
 
 <template>
-  <div class="col-lg-6" style="padding: 10px">
+  <div class="col-lg-4" style="padding: 10px">
     <div
       class="blur-box"
       style="

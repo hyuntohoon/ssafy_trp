@@ -1,6 +1,12 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { getSido, getGugun, getAttractions, getRecommendation } from "@/api/search";
+import {
+  getSido,
+  getGugun,
+  getAttractions,
+  getRecommendation,
+  getAttractionByContentID,
+} from "@/api/search";
 import Swal from "sweetalert2";
 
 export const useSearchStore = defineStore("search", () => {
@@ -136,6 +142,19 @@ export const useSearchStore = defineStore("search", () => {
     }
   };
 
+  const getAttraction = async (contentId) => {
+    try {
+      const response = await getAttractionByContentID(contentId);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(response.status);
+      }
+    } catch (error) {
+      return null;
+    }
+  };
+
   const flush = () => {
     sido.value = null;
     gugun.value = null;
@@ -167,6 +186,7 @@ export const useSearchStore = defineStore("search", () => {
     fetchSido,
     fetchGugun,
     fetchRecommendation,
+    getAttraction,
 
     search,
     flush,

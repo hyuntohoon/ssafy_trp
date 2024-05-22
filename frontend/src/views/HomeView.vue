@@ -13,6 +13,7 @@ const router = useRouter();
 const goTravel = () => {
   useRouteStore().flush();
   useSearchStore().flush();
+  useGptStore().flush();
   router.push({ name: "travel" });
 };
 

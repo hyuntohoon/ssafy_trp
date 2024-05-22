@@ -5,14 +5,22 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+import { storeToRefs } from "pinia";
+
 import { useSearchStore } from "@/stores/search";
 const searchStore = useSearchStore();
 
 import { useRouteStore } from "@/stores/route";
 const routeStore = useRouteStore();
 
-import { storeToRefs } from "pinia";
+import { useGptStore } from "@/stores/gpt";
+const gptStore = useGptStore();
+
+const { getPlan } = gptStore;
+const { autoPlan } = storeToRefs(gptStore);
+
 const { focus } = storeToRefs(searchStore);
+const { getAttraction } = searchStore;
 const { route, isEditing, mobilityCosts } = storeToRefs(routeStore);
 const { postPlace, putPlace, flush } = routeStore;
 
@@ -78,6 +86,7 @@ const doPost = () => {
     allowOutsideClick: () => !Swal.isLoading(),
   }).then((result) => {
     if (result.isConfirmed) {
+      console.log(autoPlan.value);
       Swal.fire("저장 완료", "", "success");
     }
   });
@@ -129,6 +138,42 @@ const goWrite = (place) => {
     }
   });
 };
+
+const openGPTMenu = () => {
+  // swal get text input
+  Swal.fire({
+    title: "AI를 이용한 코스 생성",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off",
+    },
+    showCancelButton: true,
+    confirmButtonText: "생성",
+    cancelButtonText: "취소",
+    showLoaderOnConfirm: true,
+    preConfirm: async (prompt) => {
+      const res = await getPlan(prompt);
+      if (!res) {
+        Swal.showValidationMessage("코스 생성에 실패했습니다.");
+      }
+    },
+    allowOutsideClick: () => !Swal.isLoading(),
+  }).then((result) => {
+    if (result.isConfirmed) {
+      for (const data of autoPlan.value.tripPlan) {
+        let contentId = data.contentId;
+
+        getAttraction(contentId).then((res) => {
+          console.log(res);
+          if (res) {
+            route.value.places.push(res);
+          }
+        });
+      }
+      Swal.fire("생성 완료", "", "success");
+    }
+  });
+};
 </script>
 
 <template>
@@ -138,6 +183,9 @@ const goWrite = (place) => {
         <h2>여행 계획</h2>
       </div>
       <div class="action-wrap">
+        <button id="gpt" @click="openGPTMenu">
+          <i class="bi bi-magic"></i>
+        </button>
         <button id="save" @click="doPost" v-if="!isEditing">
           <span>코스 저장 </span>
           <i class="bi bi-save"></i>
@@ -171,7 +219,13 @@ const goWrite = (place) => {
       </div>
     </div>
     <hr />
-    <div style="display: flex; justify-content: space-between; align-items: center">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        align-items: center;
+      ">
       <span v-if="route.places.length === 0">코스에 장소가 없습니다.</span>
       <span v-else>총 {{ route.places.length }}개의 장소가 추가되었습니다.</span>
       <div style="display: flex; align-items: center">
@@ -181,6 +235,11 @@ const goWrite = (place) => {
       </div>
     </div>
     <div class="row">
+      <div v-if="autoPlan">
+        <p>{{ autoPlan.tripPurpose }}</p>
+        <p>{{ autoPlan.tripOverview }}</p>
+        <p>{{ autoPlan.tripCaution }}</p>
+      </div>
       <draggable
         class="row card-wrap"
         v-model="route.places"
@@ -289,6 +348,7 @@ button:active {
 #save {
   border: 1px solid var(--primary-color);
   color: var(--primary-color-dark-8);
+  margin-left: 1rem;
   padding: 0.5rem 1rem;
   border-radius: 10px;
   font-size: 1rem;
@@ -298,6 +358,27 @@ button:active {
   background-color: var(--primary-color);
   color: white;
   transition: background-color 0.5s, color 0.5s;
+}
+
+#gpt {
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color-dark-8);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+#gpt:hover {
+  /* change color rainbow */
+  background-image: linear-gradient(90deg, #8dcce1 0%, #efe09a 49%, #ffa6a6 80%, #8dcce1 100%);
+  animation: slidebg 8s linear infinite;
+  color: white;
+}
+
+@keyframes slidebg {
+  to {
+    background-position: 20vw;
+  }
 }
 
 @keyframes scale-in-center {

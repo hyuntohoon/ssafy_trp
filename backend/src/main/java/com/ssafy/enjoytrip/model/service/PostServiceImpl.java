@@ -34,9 +34,11 @@ public class PostServiceImpl implements PostService {
     public boolean createPost(PostRequestDTO postRequestDTO) {
         // DTO를 엔티티로 변환
         Post post = new Post();
+        System.out.println(postRequestDTO.getPhoto());
         post.setUserID(postRequestDTO.getUserId());
         post.setTitle(postRequestDTO.getTitle());
         post.setContent(postRequestDTO.getContent());
+        post.setPhoto(postRequestDTO.getPhoto());
         post.setCreateTimeStamp(new Timestamp(System.currentTimeMillis()));
         post.setUpdateTimeStamp(new Timestamp(System.currentTimeMillis()));
 

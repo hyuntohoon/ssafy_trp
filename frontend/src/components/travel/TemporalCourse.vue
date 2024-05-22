@@ -1,6 +1,9 @@
 <script setup>
 import PlaceCard from "@/components/common/PlaceCard.vue";
 import draggable from "vuedraggable";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 import { useSearchStore } from "@/stores/search";
 const searchStore = useSearchStore();
@@ -105,6 +108,27 @@ const doPut = () => {
     }
   });
 };
+
+const goWrite = (place) => {
+  Swal.fire({
+    title: "장소 후기 작성",
+    text: "장소와 관련된 후기를 작성하러 이동하시겠습니까?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "이동",
+    cancelButtonText: "취소",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      router.push({
+        name: "board-create",
+        query: {
+          contentId: place.contentId,
+          title: place.title,
+        },
+      });
+    }
+  });
+};
 </script>
 
 <template>
@@ -174,7 +198,7 @@ const doPut = () => {
                     <button @click="moveFocus(element)">
                       <i class="bi bi-geo-alt"></i>
                     </button>
-                    <button>
+                    <button @click="goWrite(element)">
                       <i class="bi bi-heart"></i>
                     </button>
                     <button @click="removePlace(element)">

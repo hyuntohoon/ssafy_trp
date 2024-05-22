@@ -77,7 +77,7 @@ const router = createRouter({
           component: BoardResult,
         },
         {
-          path: "edit/:id",
+          path: "edit",
           name: "board-edit",
           component: BoardEdit,
         },

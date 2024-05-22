@@ -21,3 +21,11 @@ export const postBoard = async (params) => {
   console.log(params);
   return await axios.post("/post", params);
 };
+
+export const deleteBoard = async (postId) => {
+  return await axios.delete(`/post/${postId}`);
+};
+
+export const putBoard = async (postId, params) => {
+  return await axios.put(`/post/${postId}`, params);
+};

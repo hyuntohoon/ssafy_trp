@@ -1,7 +1,16 @@
 <script setup>
-defineProps({
+import ImageSlider from "@/components/common/ImageSlider.vue";
+
+const props = defineProps({
   article: Object,
 });
+
+let images = [];
+try {
+  images = JSON.parse(props.article.photo);
+} catch (error) {
+  images = [];
+}
 </script>
 
 <template>
@@ -19,8 +28,13 @@ defineProps({
       </div>
     </div>
     <div class="content-wrap">
-      <img v-if="article.photo" :src="article.photo" alt="article photo" />
-      <p>{{ article.content }}</p>
+      <ImageSlider
+        v-if="images !== null && images.length > 0"
+        :images="images"
+        style="margin-right: 2rem" />
+      <div class="column-wrap">
+        <p>{{ article.content }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -59,6 +73,16 @@ defineProps({
 .content-wrap {
   width: 100%;
   padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+img {
+  width: 300px;
+  height: 300px;
+  height: auto;
   margin-bottom: 1rem;
 }
 </style>

@@ -48,7 +48,7 @@ const goCourse = () => {
       <template v-slot:content>
         <div>
           <h2>코스 탐색하기</h2>
-          <p>내가 생성한 코스를 관리하고, 다른 사용자들의 코스도 구경 해 보자!</p>
+          <p>내가 생성한 코스를 관리하고, AI에게 평가도 받아보자!</p>
         </div>
       </template>
       <template v-slot:action>
@@ -63,7 +63,7 @@ const goCourse = () => {
       <template v-slot:content>
         <div>
           <h2>게시판 가기</h2>
-          <p>다양한 게시판을 통해 여행 정보를 공유하고, 소통하자!</p>
+          <p>자기가 만든 계획을 보여주고, 다른 사람 계획을 알아보자!</p>
         </div>
       </template>
       <template v-slot:action>

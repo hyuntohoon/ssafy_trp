@@ -66,6 +66,7 @@ const upload = () => {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "image/*";
+  input.multiple = true;
   input.onchange = (e) => {
     const files = e.target.files;
     for (const file of files) {
@@ -115,7 +116,7 @@ const write = async () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        router.push({ name: "BoardDetail", query: { contentId: res } });
+        router.push({ name: "board-list" });
       } else {
         Swal.fire({
           icon: "error",

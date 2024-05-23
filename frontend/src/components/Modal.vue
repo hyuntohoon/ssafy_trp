@@ -35,20 +35,27 @@ const modalClose = () => {
 };
 
 const doSignIn = () => {
-  userStore.doSignIn();
-  modalClose();
+  userStore.doSignIn().then((res) => {
+    if (res) {
+      modalClose();
+    }
+  });
 };
 
 const doSignUp = () => {
-  userStore.doSignUp();
-  modalClose();
+  userStore.doSignUp().then((res) => {
+    if (res) {
+      modalClose();
+    }
+  });
 };
 
 const doUpdate = () => {
-  const res = doChangePassword();
-  if (res) {
-    modalClose();
-  }
+  doChangePassword().then((res) => {
+    if (res) {
+      modalClose();
+    }
+  });
 };
 </script>
 
@@ -98,7 +105,8 @@ const doUpdate = () => {
             type="password"
             class="form-control"
             placeholder="비밀번호 확인"
-            v-model="pwCheck" />
+            :value="pwCheck"
+            @change="setPwCheck($event.target.value)" />
         </div>
         <div class="input-group mb-3">
           <input
@@ -116,10 +124,6 @@ const doUpdate = () => {
           <span>아이디</span>
           <span>{{ id }}</span>
         </div>
-        <!-- <div class="my-page-content">
-          <span>이름</span>
-          <span>{{ name }}</span>
-        </div> -->
         <div class="my-page-content">
           <span>비밀번호 변경</span>
           <a href="#" @click="isChangePassword = !isChangePassword">변경</a>

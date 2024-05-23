@@ -25,6 +25,14 @@ export const useUserStore = defineStore(
 
     // Actions
     const doSignIn = async () => {
+      if (!id.value || !pw.value) {
+        Swal.fire({
+          icon: "warning",
+          title: "빈 칸을 모두 채워주세요.",
+          text: "다시 확인해주세요.",
+        });
+        return false;
+      }
       try {
         const response = await signIn(id.value, pw.value);
         if (response.status === 200) {
@@ -66,19 +74,33 @@ export const useUserStore = defineStore(
     };
 
     const doSignUp = async () => {
-      console.log("signUp");
+      if (!id.value || !pw.value || !pwCheck.value || !name.value) {
+        Swal.fire({
+          icon: "warning",
+          title: "빈 칸을 모두 채워주세요.",
+          text: "다시 확인해주세요.",
+        });
+        return false;
+      }
       if (pw.value !== pwCheck.value) {
+        console.log(pw.value, pwCheck.value);
         Swal.fire({
           icon: "warning",
           title: "비밀번호가 일치하지 않습니다.",
           text: "다시 확인해주세요.",
         });
+        return false;
       }
 
       try {
         const response = await signUp(id.value, pw.value, name.value);
         if (response.status === 200) {
           flush();
+          Swal.fire({
+            icon: "success",
+            title: "회원가입 성공",
+            text: "로그인해주세요.",
+          });
           return true;
         } else {
           throw new Error();

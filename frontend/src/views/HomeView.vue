@@ -32,10 +32,9 @@ const goCourse = () => {
   <div>
     <ImageAutoSlider
       :images="[
-        'https://picsum.photos/1920/1080?random=1',
-        'https://picsum.photos/1920/1080?random=2',
-        'https://picsum.photos/1920/1080?random=3',
-        'https://picsum.photos/1920/1080?random=4',
+        '/src/assets/banners/image1.png',
+        '/src/assets/banners/image2.png',
+        '/src/assets/banners/image3.png',
       ]" />
     <div class="row">
       <Card>

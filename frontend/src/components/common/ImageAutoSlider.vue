@@ -26,7 +26,6 @@ onMounted(() => {
 
 <style scoped>
 .slider-wrap {
-  height: 90%;
   width: 100%;
   overflow: hidden;
   display: flex;
@@ -35,16 +34,14 @@ onMounted(() => {
 
 .image-wrap {
   width: 70vw;
-  height: 60vh;
   display: flex;
   transition: transform 1s ease-in-out;
   border-radius: 1rem;
 }
 
 img {
-  width: 70vw;
-  height: 60vh;
-  object-fit: cover;
+  width: 68vw;
+  object-fit: fill;
   transition: transform 1s ease-in-out;
   border-radius: 1rem;
 }

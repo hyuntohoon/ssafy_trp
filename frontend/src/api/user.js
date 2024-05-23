@@ -3,7 +3,7 @@ import { localAxios } from "@/utils/http-commons";
 const axios = localAxios();
 
 export const signUp = (id, pw, name) => {
-  return axios.post("/user", JSON.stringify({ id, pw, name }));
+  return axios.post("/user/signup", JSON.stringify({ id, pw, name }));
 };
 
 export const changePassword = (userId, newPassword) => {

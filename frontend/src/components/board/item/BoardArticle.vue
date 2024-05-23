@@ -50,7 +50,9 @@ onMounted(async () => {
         style="margin-right: 2rem" />
       <div class="column-wrap">
         <PlaceCard v-if="place !== null" :data="place" style="margin: 0" />
-        <p style="padding: 1rem">{{ article.content }}</p>
+        <pre style="padding: 1rem; white-space: pre-wrap; word-wrap: break-word">{{
+          article.content
+        }}</pre>
       </div>
     </div>
   </div>

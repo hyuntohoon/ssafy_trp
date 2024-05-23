@@ -33,10 +33,25 @@ public class Post {
     @JoinColumn(name = "post_type_id", nullable = false)
     private PostType postType;
 
-    @Column(name = "content_id")
-    private Integer contentId; // 필드를 Integer로 변경
+    @ManyToOne
+    @JoinColumn(name = "content_id", nullable = true)
+    private AttractionInfo contentId;
 
-    // Getters and Setters
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postID=" + postID +
+                ", userID='" + userID + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", photo='" + photo + '\'' +
+                ", createTimeStamp=" + createTimeStamp +
+                ", updateTimeStamp=" + updateTimeStamp +
+                ", postType=" + postType +
+                ", contentId=" + contentId +
+                '}';
+    }
+
     public int getPostID() {
         return postID;
     }
@@ -69,6 +84,14 @@ public class Post {
         this.content = content;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public Timestamp getCreateTimeStamp() {
         return createTimeStamp;
     }
@@ -85,14 +108,6 @@ public class Post {
         this.updateTimeStamp = updateTimeStamp;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public PostType getPostType() {
         return postType;
     }
@@ -101,11 +116,26 @@ public class Post {
         this.postType = postType;
     }
 
-    public Integer getContentId() {
+    public AttractionInfo getContentId() {
         return contentId;
     }
 
-    public void setContentId(Integer contentId) {
+    public void setContentId(AttractionInfo contentId) {
+        this.contentId = contentId;
+    }
+
+    public Post() {
+    }
+
+    public Post(int postID, String userID, String title, String content, String photo, Timestamp createTimeStamp, Timestamp updateTimeStamp, PostType postType, AttractionInfo contentId) {
+        this.postID = postID;
+        this.userID = userID;
+        this.title = title;
+        this.content = content;
+        this.photo = photo;
+        this.createTimeStamp = createTimeStamp;
+        this.updateTimeStamp = updateTimeStamp;
+        this.postType = postType;
         this.contentId = contentId;
     }
 }

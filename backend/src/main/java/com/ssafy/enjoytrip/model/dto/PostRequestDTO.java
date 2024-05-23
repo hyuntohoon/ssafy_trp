@@ -6,7 +6,7 @@ public class PostRequestDTO {
     private String content;
     private Integer postTypeId;
     private String Photo;
-    private int contentId;
+    private Integer contentId;
 
     @Override
     public String toString() {
@@ -60,18 +60,18 @@ public class PostRequestDTO {
         Photo = photo;
     }
 
-    public int getContentId() {
+    public Integer getContentId() {
         return contentId;
     }
 
-    public void setContentId(int contentId) {
+    public void setContentId(Integer contentId) {
         this.contentId = contentId;
     }
 
     public PostRequestDTO() {
     }
 
-    public PostRequestDTO(String userId, String title, String content, Integer postTypeId, String photo, int contentId) {
+    public PostRequestDTO(String userId, String title, String content, Integer postTypeId, String photo, Integer contentId) {
         this.userId = userId;
         this.title = title;
         this.content = content;

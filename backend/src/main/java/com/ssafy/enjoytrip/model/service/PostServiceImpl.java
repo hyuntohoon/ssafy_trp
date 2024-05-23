@@ -2,8 +2,10 @@ package com.ssafy.enjoytrip.model.service;
 
 import com.ssafy.enjoytrip.model.dto.PostRequestDTO;
 import com.ssafy.enjoytrip.model.dto.UpdatePostDTO;
+import com.ssafy.enjoytrip.model.entity.AttractionInfo;
 import com.ssafy.enjoytrip.model.entity.Post;
 import com.ssafy.enjoytrip.model.entity.PostType;
+import com.ssafy.enjoytrip.model.repository.AttractionInfoRepository;
 import com.ssafy.enjoytrip.model.repository.PostRepository;
 import com.ssafy.enjoytrip.model.repository.PostTypeRepository;
 import org.slf4j.Logger;
@@ -27,6 +29,9 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
     @Autowired
+    private AttractionInfoRepository attractionInfoRepository;
+
+    @Autowired
     private PostTypeRepository postTypeRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
@@ -41,7 +46,14 @@ public class PostServiceImpl implements PostService {
         post.setPhoto(postRequestDTO.getPhoto());
         post.setCreateTimeStamp(new Timestamp(System.currentTimeMillis()));
         post.setUpdateTimeStamp(new Timestamp(System.currentTimeMillis()));
-        post.setContentId(postRequestDTO.getContentId());
+
+        // contentId 설정
+        if (postRequestDTO.getContentId() != null) {
+            AttractionInfo attractionInfo = attractionInfoRepository.findById(postRequestDTO.getContentId())
+                    .orElseThrow(() -> new RuntimeException("AttractionInfo not found"));
+            post.setContentId(attractionInfo);
+        }
+
         // PostType 설정
         PostType postType = postTypeRepository.findById(postRequestDTO.getPostTypeId())
                 .orElseThrow(() -> new RuntimeException("PostType not found"));
@@ -51,6 +63,7 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
         return true;
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -86,13 +99,23 @@ public class PostServiceImpl implements PostService {
             post.setPhoto(updatePostDTO.getPhoto());
             post.setCreateTimeStamp(updatePostDTO.getCreateTimeStamp());
             post.setUpdateTimeStamp(updatePostDTO.getUpdateTimeStamp());
-            post.setContentId(updatePostDTO.getContentId());
+
+            // contentId 설정
+            if (updatePostDTO.getContentId() != null) {
+                AttractionInfo attractionInfo = attractionInfoRepository.findById(updatePostDTO.getContentId())
+                        .orElseThrow(() -> new RuntimeException("AttractionInfo not found"));
+                post.setContentId(attractionInfo);
+            } else {
+                post.setContentId(null);
+            }
+
             postRepository.save(post);
             return true;
         } else {
             return false;
         }
     }
+
 
     @Override
     public List<Post> getAllPosts() {

@@ -10,9 +10,22 @@ public class UpdatePostDTO {
     private String photo;
     private Timestamp createTimeStamp;
     private Timestamp updateTimeStamp;
-    private int contentId;
+    private Integer contentId;
 
-    // Getters and Setters
+    @Override
+    public String toString() {
+        return "UpdatePostDTO{" +
+                "postID=" + postID +
+                ", userID='" + userID + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", photo='" + photo + '\'' +
+                ", createTimeStamp=" + createTimeStamp +
+                ", updateTimeStamp=" + updateTimeStamp +
+                ", contentId=" + contentId +
+                '}';
+    }
+
     public int getPostID() {
         return postID;
     }
@@ -69,11 +82,25 @@ public class UpdatePostDTO {
         this.updateTimeStamp = updateTimeStamp;
     }
 
-    public int getContentId() {
+    public Integer getContentId() {
         return contentId;
     }
 
-    public void setContentId(int contentId) {
+    public void setContentId(Integer contentId) {
+        this.contentId = contentId;
+    }
+
+    public UpdatePostDTO() {
+    }
+
+    public UpdatePostDTO(int postID, String userID, String title, String content, String photo, Timestamp createTimeStamp, Timestamp updateTimeStamp, Integer contentId) {
+        this.postID = postID;
+        this.userID = userID;
+        this.title = title;
+        this.content = content;
+        this.photo = photo;
+        this.createTimeStamp = createTimeStamp;
+        this.updateTimeStamp = updateTimeStamp;
         this.contentId = contentId;
     }
 }

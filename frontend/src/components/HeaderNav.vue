@@ -31,7 +31,7 @@ const returnHome = () => {
 
 <template>
   <div class="blur-box header-box">
-    <span class="logo" @click="returnHome">Enjoy Trip</span>
+    <span class="logo" @click="returnHome">뭉게뭉게</span>
     <div>
       <BeforeLoginGroup v-if="!isLoggedIn" @loginGroupEvent="event" />
       <AfterLoginGroup v-else @loginGroupEvent="event" />
@@ -40,6 +40,8 @@ const returnHome = () => {
 </template>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Gugi&display=swap");
+
 .blur-box {
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.5);
@@ -60,5 +62,7 @@ const returnHome = () => {
   font-size: 2rem;
   font-weight: 700;
   text-decoration: none;
+  font-family: "Gugi", cursive;
+  cursor: pointer;
 }
 </style>

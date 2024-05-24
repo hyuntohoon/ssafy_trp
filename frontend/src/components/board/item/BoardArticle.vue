@@ -23,7 +23,7 @@ const place = ref(null);
 
 onMounted(async () => {
   if (props.article.contentId !== null) {
-    place.value = await getAttraction(props.article.contentId);
+    place.value = await getAttraction(props.article.contentId.contentId);
     console.log(place.value);
   }
 });
